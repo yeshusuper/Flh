@@ -30,8 +30,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Extended">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,8 +54,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\LoginHistory.cs" />
-    <Compile Include="Data\User.cs" />
+    <Compile Include="Data\DbSetRepository.cs" />
+    <Compile Include="Data\FlhContext.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FlhContext.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\FlhContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\FlhContext.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FlhContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\LoginHistory.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\User.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inject\DataModules.cs" />
+    <Compile Include="Inject\ServiceModules.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,6 +89,32 @@
       <Project>{74b0d0e4-a867-41b6-abec-9d2ceea531d8}</Project>
       <Name>Flh</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Data\FlhContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>FlhContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="Data\FlhContext.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>FlhContext.edmx</DependentUpon>
+      <LastGenOutput>FlhContext.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Data\FlhContext.edmx.diagram">
+      <DependentUpon>FlhContext.edmx</DependentUpon>
+    </None>
+    <None Include="Data\FlhContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>FlhContext.edmx</DependentUpon>
+      <LastGenOutput>FlhContext.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

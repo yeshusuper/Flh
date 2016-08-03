@@ -36,21 +36,21 @@ namespace Flh.Business
             ExceptionHelper.ThrowIfTrue(!StringRule.VerifyPassword(info.Password), "password", "密码格式不正确，密码长度为6-20位");
             ExceptionHelper.ThrowIfNullOrWhiteSpace(info.Name, "name", "名称不能为空");
             ExceptionHelper.ThrowIfNullOrWhiteSpace(info.Company, "company", "公司不能为空");
-            ExceptionHelper.ThrowIfNullOrWhiteSpace(info.AreaNo, "areaNo", "没有选择地区");
-            ExceptionHelper.ThrowIfNullOrWhiteSpace(info.Address, "address", "地址不能为空");
-            ExceptionHelper.ThrowIfNullOrWhiteSpace(info.IndustryNo, "industryNo", "没有选择行业类别");
+            //ExceptionHelper.ThrowIfNullOrWhiteSpace(info.AreaNo, "areaNo", "没有选择地区");
+            //ExceptionHelper.ThrowIfNullOrWhiteSpace(info.Address, "address", "地址不能为空");
+            //ExceptionHelper.ThrowIfNullOrWhiteSpace(info.IndustryNo, "industryNo", "没有选择行业类别");
 
             ExceptionHelper.ThrowIfTrue(!IsUsableMobile(info.Mobile), "mobile", "此手机号已经被注册");
             ExceptionHelper.ThrowIfTrue(!IsUsableEmail(info.Email), "email", "此邮箱已经被注册");
 
             var entity = new Data.User
             {
-                address = info.Address.Trim(),
-                area_no = info.AreaNo.Trim(),
+                address = info.Address.SafeTrim(),
+                area_no = info.AreaNo.SafeTrim(),
+                industry_no = info.IndustryNo.SafeTrim(),
                 company = info.Company.Trim(),
                 email = info.Email.Trim(),
                 employees_count_type = info.EmployeesCountRange,
-                industry_no = info.IndustryNo.Trim(),
                 is_purchaser = info.IsPurchaser,
                 mobile = info.Mobile.Trim(),
                 name = info.Name.Trim(),

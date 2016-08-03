@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FlhModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="LoginHistory">
+          <Key>
+            <PropertyRef Name="uid" />
+            <PropertyRef Name="login_date" />
+          </Key>
+          <Property Name="uid" Type="bigint" Nullable="false" />
+          <Property Name="login_date" Type="datetime" Nullable="false" />
+          <Property Name="ip" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="uid" />
+          </Key>
+          <Property Name="uid" Type="bigint" Nullable="false" />
+          <Property Name="mobile" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="pwd" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="company" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="area_no" Type="varchar" MaxLength="28" />
+          <Property Name="address" Type="nvarchar" MaxLength="200" />
+          <Property Name="employees_count_type" Type="tinyint" Nullable="false" />
+          <Property Name="industry_no" Type="varchar" MaxLength="28" />
+          <Property Name="is_purchaser" Type="bit" Nullable="false" />
+          <Property Name="neet_invoice" Type="bit" Nullable="false" />
+          <Property Name="tel" Type="nvarchar" MaxLength="50" />
+          <Property Name="register_date" Type="datetime" Nullable="false" />
+          <Property Name="last_login_date" Type="datetime" Nullable="false" />
+          <Property Name="enabled" Type="bit" Nullable="false" />
+          <Property Name="enabled_memo" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityContainer Name="FlhModelStoreContainer">
+          <EntitySet Name="LoginHistory" EntityType="Self.LoginHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FlhModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="LoginHistory">
+          <Key>
+            <PropertyRef Name="uid" />
+            <PropertyRef Name="login_date" />
+          </Key>
+          <Property Name="uid" Type="Int64" Nullable="false" />
+          <Property Name="login_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ip" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="uid" />
+          </Key>
+          <Property Name="uid" Type="Int64" Nullable="false" />
+          <Property Name="mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="pwd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="company" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="area_no" Type="String" MaxLength="28" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="employees_count_type" Type="FlhModel.EmployeesCountRanges" Nullable="false" />
+          <Property Name="industry_no" Type="String" MaxLength="28" FixedLength="false" Unicode="false" />
+          <Property Name="is_purchaser" Type="Boolean" Nullable="false" />
+          <Property Name="neet_invoice" Type="Boolean" Nullable="false" />
+          <Property Name="tel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="register_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="last_login_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="enabled" Type="Boolean" Nullable="false" />
+          <Property Name="enabled_memo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="FlhContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="LoginHistory" EntityType="Self.LoginHistory" />
+          <EntitySet Name="User" EntityType="Self.User" />
+        </EntityContainer>
+        <EnumType Name="EmployeesCountRanges" UnderlyingType="Byte" a:ExternalTypeName="Flh.Business.Users.EmployeesCountRanges" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FlhModelStoreContainer" CdmEntityContainer="FlhContext">
+          <EntitySetMapping Name="LoginHistory">
+            <EntityTypeMapping TypeName="FlhModel.LoginHistory">
+              <MappingFragment StoreEntitySet="LoginHistory">
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="login_date" ColumnName="login_date" />
+                <ScalarProperty Name="ip" ColumnName="ip" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="FlhModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="pwd" ColumnName="pwd" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="company" ColumnName="company" />
+                <ScalarProperty Name="area_no" ColumnName="area_no" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="employees_count_type" ColumnName="employees_count_type" />
+                <ScalarProperty Name="industry_no" ColumnName="industry_no" />
+                <ScalarProperty Name="is_purchaser" ColumnName="is_purchaser" />
+                <ScalarProperty Name="neet_invoice" ColumnName="neet_invoice" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="register_date" ColumnName="register_date" />
+                <ScalarProperty Name="last_login_date" ColumnName="last_login_date" />
+                <ScalarProperty Name="enabled" ColumnName="enabled" />
+                <ScalarProperty Name="enabled_memo" ColumnName="enabled_memo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
