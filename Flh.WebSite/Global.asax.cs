@@ -8,8 +8,6 @@ using System.Web.Routing;
 
 namespace Flh.WebSite
 {
-    // 注意: 有关启用 IIS6 或 IIS7 经典模式的说明，
-    // 请访问 http://go.microsoft.com/?LinkId=9394801
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
@@ -19,6 +17,38 @@ namespace Flh.WebSite
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            InjectConfig.Register();
+        }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            var ex = Server.GetLastError();
+            if (ex != null)
+            {
+                var bhEx = ex as FlhException;
+                var context = new HttpContextWrapper(Context);
+                var errorCode = bhEx == null ? ErrorCode.ServerError : bhEx.ErrorCode;
+                var errorMsg = bhEx == null ? ex.ToString() : bhEx.Message;
+                if (context.Request.IsAjaxRequest())
+                {
+                    Context.Response.Write(Newtonsoft.Json.JsonConvert.SerializeObject(new Web.JsonResultEntry
+                    {
+                        Code = errorCode,
+                        Message = errorMsg
+                    }));
+                }
+                else
+                {
+                    IController ec = new Controllers.ErrorController();
+                    var routeData = new RouteData();
+                    routeData.Values["action"] = "index";
+                    routeData.Values["controller"] = "error";
+                    routeData.DataTokens["code"] = errorCode;
+                    routeData.DataTokens["msg"] = errorMsg;
+                    ec.Execute(new RequestContext(context, routeData));
+                }
+                Server.ClearError();
+            }
         }
     }
 }

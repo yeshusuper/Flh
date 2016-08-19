@@ -99,12 +99,14 @@ namespace Flh.Business
             if(!new Security.MD5().Verify(password.Trim(), user.pwd))
                 throw new FlhException(ErrorCode.ErrorUserNoOrPwd, "账号或密码错误");
 
+            ip = (ip ?? String.Empty).Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? String.Empty;
+
             user.last_login_date = DateTime.Now;
             _UserRepository.SaveChanges();
 
             var history = new Data.LoginHistory
             {
-                ip = (ip ?? String.Empty).Trim(),
+                ip = ip,
                 login_date = DateTime.Now,
                 uid = user.uid
             };

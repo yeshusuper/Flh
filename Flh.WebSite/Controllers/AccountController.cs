@@ -27,7 +27,32 @@ namespace Flh.WebSite.Controllers
         public ActionResult Register(Models.Account.RegisterModel info)
         {
             _UserManager.Register(info);
-            return JsonResult(ErrorCode.None, "注册成功");
+            return SuccessJsonResult();
+        }
+
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(Models.Account.LoginModel model)
+        {
+            var user = _UserManager.Login(model.UserName, model.Password, Request.GetCurrentIP());
+            var entry = new UserSessionEntry
+            {
+                Name = user.Name,
+                Uid = user.Uid
+            };
+            Session.SetCurrentUser(entry);
+            return SuccessJsonResult();
+        }
+
+        public ActionResult Logout()
+        {
+            Session.SetCurrentUser(null);
+            return RedirectToAction("index", "home");
         }
     }
 }

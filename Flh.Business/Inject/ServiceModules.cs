@@ -7,7 +7,7 @@ using Ninject;
 
 namespace Flh.Business.Inject
 {
-    public class ServiceModules : Ninject.Modules.NinjectModule
+    public class ServiceModule : Ninject.Modules.NinjectModule
     {
         public override void Load()
         {

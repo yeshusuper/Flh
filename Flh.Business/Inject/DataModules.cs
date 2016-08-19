@@ -8,7 +8,7 @@ using Flh.Data;
 
 namespace Flh.Business.Inject
 {
-    public class DataModules : Ninject.Modules.NinjectModule
+    public class DataModule : Ninject.Modules.NinjectModule
     {
         public override void Load()
         {
