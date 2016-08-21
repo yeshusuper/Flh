@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/Views/Layout/_header.cshtml";
+    ViewBag.Title = "登陆";
+}
+<form action="@Url.Action("Login")" method="post" enctype="application/x-www-form-urlencoded">
+    <table class="common_table">
+        <tr>
+        <tr>
+            <td>账号：</td>
+            <td><input name="UserName" placeholder="手机号/邮箱" /></td>
+        </tr>
+        <tr>
+            <td>密码：</td>
+            <td><input name="Password" /></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input value="登陆" type="submit" /></td>
+        </tr>
+    </table>
+</form>

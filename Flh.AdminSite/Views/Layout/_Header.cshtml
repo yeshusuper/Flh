@@ -1,0 +1,114 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>@ViewBag.Title</title>
+    <style>
+        .header {
+            height: 40px;
+        }
+
+            .header .nav li {
+                float: left;
+            }
+
+            .header .user_info {
+                float: right;
+            }
+
+        .manager_left_nav {
+            float: left;
+            width: 200px;
+        }
+
+        .manager_content {
+            float: left;
+            width: 960px;
+            padding: 20px;
+        }
+
+        .common_table td, .common_table th {
+            border: 1px solid #000;
+            padding: 5px 10px;
+        }
+        /*分页样式*/
+        .page {
+            margin: 20px 0;
+            line-height: 20px;
+            text-align: center;
+        }
+
+            .page a, .page b {
+                display: inline-block;
+                *display: inline;
+                *zoom: 1;
+                border: 1px #8CA9CC solid;
+                background-color: #FFF;
+                padding-left: 7px;
+                padding-right: 7px;
+                height: 20px;
+                color: #1f366d;
+                cursor: pointer;
+                margin-right: 5px;
+                font-weight: 400;
+                border-radius: 2px;
+            }
+
+                .page b, .page a.current, .page a:hover {
+                    border: 1px #4C6A8C solid;
+                    background-color: #8BBBE9;
+                    color: #fff;
+                }
+
+            .page input {
+                box-sizing: content-box;
+                line-height: 22px;
+                height: 22px;
+                border: 1px solid #8CA9CC;
+                border-radius: 2px;
+                height: 16px;
+                width: 40px;
+                line-height: 16px;
+                border-right: 0;
+                vertical-align: top;
+                border-radius: 2px 0 0 2px;
+            }
+
+                .page input:focus {
+                    box-shadow: 0 0 5px #A4C6FD;
+                    outline: -webkit-focus-ring-color auto 5px;
+                }
+
+        ._temp_border {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <script src="/Resources/Js/jQuery-3.1.0.min.js"></script>
+    <div class="main_layout">
+        <div class="header _temp_border">
+            <div class="user_info">
+                @if (this.Session.GetCurrentUser() != null)
+                {
+                    <span>欢迎你：</span>@(this.Session.GetCurrentUser().Name)
+                    <a href="@Url.Action("logout", "account")">退出</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("login", "account")">登陆</a>
+                }
+            </div>
+            <ul class="nav">
+                <li>
+                    <a href="@Url.Action("List", "Classes")" @(Url.IsCurrent("List", "Classes") ? "class=\"current\"" : String.Empty)>分类管理</a>
+                </li>
+            </ul>
+        </div>
+        @RenderBody()
+    </div>
+</body>
+</html>

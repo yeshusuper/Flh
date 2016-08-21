@@ -12,8 +12,9 @@ namespace Flh.Business.Inject
     {
         public override void Load()
         {
-            Bind<IRepository<Data.User>>().To<Data.DbSetRepository<Data.FlhContext, Data.User>>();
             Bind<IRepository<Data.LoginHistory>>().To<Data.DbSetRepository<Data.FlhContext, Data.LoginHistory>>();
+            Bind<Data.IUserRepository>().To<Data.UserRepository>();
+            Bind<Data.IAdminRepository>().To<Data.AdminRepository>();
         }
     }
 }

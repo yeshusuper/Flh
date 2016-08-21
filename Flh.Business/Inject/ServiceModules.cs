@@ -12,6 +12,8 @@ namespace Flh.Business.Inject
         public override void Load()
         {
             Bind<IUserManager>().To<UserManager>();
+
+            Bind<Admins.IAdminManager>().To<Admins.AdminManager>();
         }
     }
 }

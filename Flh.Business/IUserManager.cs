@@ -18,10 +18,10 @@ namespace Flh.Business
 
     internal class UserManager : IUserManager
     {
-        private readonly IRepository<Data.User> _UserRepository;
+        private readonly Data.IUserRepository _UserRepository;
         private readonly IRepository<Data.LoginHistory> _LoginHistoryRepository;
 
-        public UserManager(IRepository<Data.User> userRepository,
+        public UserManager(Data.IUserRepository userRepository,
             IRepository<Data.LoginHistory> loginHistoryRepository)
         {
             _UserRepository = userRepository;

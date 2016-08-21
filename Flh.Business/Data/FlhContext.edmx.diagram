@@ -7,6 +7,9 @@
       <Diagram DiagramId="9be2f2792cfd4f40a065ca63d06d5b33" Name="Diagram1">
         <EntityTypeShape EntityType="FlhModel.LoginHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="FlhModel.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FlhModel.Admin" Width="1.5" PointX="5" PointY="2.125" />
+        <AssociationConnector Association="FlhModel.FK_Admin_User" />
+        <AssociationConnector Association="FlhModel.FK_LoginHistory_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

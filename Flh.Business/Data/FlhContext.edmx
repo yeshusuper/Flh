@@ -5,6 +5,14 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="FlhModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="uid" />
+          </Key>
+          <Property Name="uid" Type="bigint" Nullable="false" />
+          <Property Name="created" Type="datetime" Nullable="false" />
+          <Property Name="enabled" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="LoginHistory">
           <Key>
             <PropertyRef Name="uid" />
@@ -36,9 +44,42 @@
           <Property Name="enabled" Type="bit" Nullable="false" />
           <Property Name="enabled_memo" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <Association Name="FK_Admin_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Admin" Type="Self.Admin" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="uid" />
+            </Principal>
+            <Dependent Role="Admin">
+              <PropertyRef Name="uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoginHistory_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="LoginHistory" Type="Self.LoginHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="uid" />
+            </Principal>
+            <Dependent Role="LoginHistory">
+              <PropertyRef Name="uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="FlhModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoginHistory" EntityType="Self.LoginHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Admin_User" Association="Self.FK_Admin_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Admin" EntitySet="Admin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoginHistory_User" Association="Self.FK_LoginHistory_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="LoginHistory" EntitySet="LoginHistory" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -52,6 +93,7 @@
           <Property Name="uid" Type="Int64" Nullable="false" />
           <Property Name="login_date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ip" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="FlhModel.FK_LoginHistory_User" FromRole="LoginHistory" ToRole="User" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -74,12 +116,56 @@
           <Property Name="last_login_date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="enabled" Type="Boolean" Nullable="false" />
           <Property Name="enabled_memo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Admin" Relationship="FlhModel.FK_Admin_User" FromRole="User" ToRole="Admin" />
+          <NavigationProperty Name="LoginHistory" Relationship="FlhModel.FK_LoginHistory_User" FromRole="User" ToRole="LoginHistory" />
         </EntityType>
         <EntityContainer Name="FlhContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="LoginHistory" EntityType="Self.LoginHistory" />
           <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="Admin" EntityType="FlhModel.Admin" />
+          <AssociationSet Name="FK_Admin_User" Association="FlhModel.FK_Admin_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Admin" EntitySet="Admin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoginHistory_User" Association="FlhModel.FK_LoginHistory_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="LoginHistory" EntitySet="LoginHistory" />
+          </AssociationSet>
         </EntityContainer>
         <EnumType Name="EmployeesCountRanges" UnderlyingType="Byte" a:ExternalTypeName="Flh.Business.Users.EmployeesCountRanges" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="uid" />
+          </Key>
+          <Property Name="uid" Type="Int64" Nullable="false" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="enabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="FlhModel.FK_Admin_User" FromRole="Admin" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Admin_User">
+          <End Type="FlhModel.User" Role="User" Multiplicity="1" />
+          <End Type="FlhModel.Admin" Role="Admin" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="uid" />
+            </Principal>
+            <Dependent Role="Admin">
+              <PropertyRef Name="uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoginHistory_User">
+          <End Type="FlhModel.User" Role="User" Multiplicity="1" />
+          <End Type="FlhModel.LoginHistory" Role="LoginHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="uid" />
+            </Principal>
+            <Dependent Role="LoginHistory">
+              <PropertyRef Name="uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -115,6 +201,15 @@
                 <ScalarProperty Name="last_login_date" ColumnName="last_login_date" />
                 <ScalarProperty Name="enabled" ColumnName="enabled" />
                 <ScalarProperty Name="enabled_memo" ColumnName="enabled_memo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Admin">
+            <EntityTypeMapping TypeName="FlhModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="enabled" ColumnName="enabled" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

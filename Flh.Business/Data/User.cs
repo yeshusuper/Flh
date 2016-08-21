@@ -14,6 +14,11 @@ namespace Flh.Business.Data
     
     public partial class User
     {
+        public User()
+        {
+            this.LoginHistory = new HashSet<LoginHistory>();
+        }
+    
         public long uid { get; set; }
         public string mobile { get; set; }
         public string email { get; set; }
@@ -31,5 +36,8 @@ namespace Flh.Business.Data
         public System.DateTime last_login_date { get; set; }
         public bool enabled { get; set; }
         public string enabled_memo { get; set; }
+    
+        public virtual Admin Admin { get; set; }
+        public virtual ICollection<LoginHistory> LoginHistory { get; set; }
     }
 }

@@ -54,6 +54,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admins\IAdmin.cs" />
+    <Compile Include="Admins\IAdminManager.cs" />
+    <Compile Include="Data\Admin.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\DbSetRepository.cs" />
     <Compile Include="Data\FlhContext.Context.cs">
       <AutoGen>True</AutoGen>
@@ -70,6 +75,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FlhContext.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Data\IAdminRepository.cs" />
+    <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="Data\LoginHistory.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
@@ -116,6 +123,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
