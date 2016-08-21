@@ -10,6 +10,9 @@
         <EntityTypeShape EntityType="FlhModel.Admin" Width="1.5" PointX="5" PointY="2.125" />
         <AssociationConnector Association="FlhModel.FK_Admin_User" />
         <AssociationConnector Association="FlhModel.FK_LoginHistory_User" />
+        <EntityTypeShape EntityType="FlhModel.Classes" Width="1.5" PointX="7.25" PointY="1.875" />
+        <AssociationConnector Association="FlhModel.FK_Classes_Admin_creater" />
+        <AssociationConnector Association="FlhModel.FK_Classes_Admin_updater" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -12,20 +12,21 @@ namespace Flh.Business.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Admin
+    public partial class Classes
     {
-        public Admin()
-        {
-            this.Classes = new HashSet<Classes>();
-            this.Classes1 = new HashSet<Classes>();
-        }
-    
-        public long uid { get; set; }
+        public string no { get; set; }
+        public string name { get; set; }
+        public string full_name { get; set; }
         public System.DateTime created { get; set; }
+        public System.DateTime updated { get; set; }
+        public long creater { get; set; }
+        public long updater { get; set; }
         public bool enabled { get; set; }
+        public int order_by { get; set; }
+        public string name_en { get; set; }
+        public string full_name_en { get; set; }
     
-        public virtual User User { get; set; }
-        public virtual ICollection<Classes> Classes { get; set; }
-        public virtual ICollection<Classes> Classes1 { get; set; }
+        public virtual Admin Admin { get; set; }
+        public virtual Admin Admin1 { get; set; }
     }
 }

@@ -41,5 +41,14 @@ namespace Flh.Web
         {
             return JsonResult(ErrorCode.None, String.Empty);
         }
+        public ActionResult SuccessJsonResult<T>(T data)
+        {
+            return Content(JsonConvert.SerializeObject(new JsonResultEntry<T>
+            {
+                Code = ErrorCode.None,
+                Data = data,
+                Message = String.Empty,
+            }));
+        }
     }
 }

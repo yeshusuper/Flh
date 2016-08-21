@@ -14,4 +14,9 @@ namespace Flh.Web
         [JsonProperty(PropertyName = "msg")]
         public string Message { get; set; }
     }
+    public class JsonResultEntry<T> : JsonResultEntry
+    {
+        [JsonProperty(PropertyName = "data")]
+        public T Data { get; set; }
+    }
 }

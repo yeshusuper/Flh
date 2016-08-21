@@ -76,8 +76,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionResultExtension.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="FlhAuthorizeAttribute.cs" />
     <Compile Include="JsonResultEntry.cs" />
     <Compile Include="NinjectDependencyResolver.cs" />
     <Compile Include="RequestBaseExtension.cs" />

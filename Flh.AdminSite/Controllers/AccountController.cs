@@ -34,7 +34,13 @@ namespace Flh.AdminSite.Controllers
                 Uid = admin.Uid
             };
             Session.SetCurrentUser(entry);
-            return SuccessJsonResult();
+            return SuccessJsonResult(Request.GetBackUrl());
+        }
+
+        public ActionResult Logout()
+        {
+            Session.SetCurrentUser(null);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -28,5 +28,6 @@ namespace Flh.Business.Data
         public virtual DbSet<LoginHistory> LoginHistory { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Admin> Admin { get; set; }
+        public virtual DbSet<Classes> Classes { get; set; }
     }
 }
