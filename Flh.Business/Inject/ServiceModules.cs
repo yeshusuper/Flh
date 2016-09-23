@@ -14,6 +14,7 @@ namespace Flh.Business.Inject
             Bind<IUserManager>().To<UserManager>();
 
             Bind<Admins.IAdminManager>().To<Admins.AdminManager>();
+            Bind<IClassesManager>().To<ClassesManager>();
         }
     }
 }

@@ -16,7 +16,9 @@ namespace Flh.Business
 
     public interface IClassesManager
     {
-        Data.Classes[] AddRange(string parentNo, IClassEditInfo[] adds);
+        Data.Classes[] AddRange(long @operator, string parentNo, IClassEditInfo[] adds);
+        IQueryable<Data.Classes> GetChildren(string parentNo);
+        Data.Classes GetEnabled(string no);
     }
 
     internal class ClassesManager : IClassesManager
@@ -88,6 +90,28 @@ namespace Flh.Business
 
                 return addEntites.ToArray();
             }
+        }
+
+        public IQueryable<Data.Classes> GetChildren(string parentNo)
+        {
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(parentNo, "parentNo");
+            parentNo = parentNo.Trim();
+            var noLength = parentNo.Length + 4;
+            return _ClassesRepository
+                            .EnabledClasses
+                            .Where(c => c.no.StartsWith(parentNo) && c.no.Length == noLength);
+        }
+
+
+        public Data.Classes GetEnabled(string no)
+        {
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(no, "no");
+            no = no.Trim();
+            var entity =  _ClassesRepository
+                            .EnabledClasses
+                            .FirstOrDefault(c => c.no == no);
+            ExceptionHelper.ThrowIfNull(entity, "no", "no不存在");
+            return entity;
         }
     }
 }

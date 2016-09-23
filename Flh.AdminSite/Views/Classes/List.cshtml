@@ -1,0 +1,6 @@
+﻿@model Flh.AdminSite.Models.Classes.ListModel
+@{
+    ViewBag.Title = "分类列表";
+    Layout = "../Layout/_Header.cshtml";
+}
+<a href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a>

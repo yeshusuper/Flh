@@ -1,0 +1,33 @@
+﻿@model Flh.AdminSite.Models.Classes.BatchAddModel
+@{
+    ViewBag.Title = "BatchAdd";
+}
+<div>
+    <h3>当前分类：@Model.ParentFullName</h3>
+    <table class="common-list" style="width:800px">
+        <thead>
+            <tr>
+                <th>中文名称</th>
+                <th>英文名称</th>
+                <th style="width:100px">排序</th>
+                <th style="width:100px">删除</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.EditModels)
+            {
+                <tr>
+                    <td><input class="input-control" name="Name" /></td>
+                    <td><input class="input-control" name="EnName" /></td>
+                    <td><input class="input-control" name="Order" style="width:100px;"/></td>
+                    <td><button>删除</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="options">
+        <a class="btn btn-primary">增加一个</a>
+        <a class="btn btn-primary">保存</a>
+    </div>
+</div>
+

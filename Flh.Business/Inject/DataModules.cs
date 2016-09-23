@@ -15,6 +15,7 @@ namespace Flh.Business.Inject
             Bind<IRepository<Data.LoginHistory>>().To<Data.DbSetRepository<Data.FlhContext, Data.LoginHistory>>();
             Bind<Data.IUserRepository>().To<Data.UserRepository>();
             Bind<Data.IAdminRepository>().To<Data.AdminRepository>();
+            Bind<Data.IClassesRepository>().To<Data.ClassesRepository>();
         }
     }
 }

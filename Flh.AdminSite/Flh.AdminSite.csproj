@@ -121,6 +121,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\LoginModel.cs" />
+    <Compile Include="Models\Classes\BatchAddModel.cs" />
+    <Compile Include="Models\Classes\ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -128,7 +130,74 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
+    <Content Include="Resources\Css\iconfont\iconfont.css" />
+    <Content Include="Resources\Css\iconfont\iconfont.svg" />
+    <Content Include="Resources\Css\jquery.datetimepicker.min.css" />
+    <Content Include="Resources\Css\magnific-popup.css" />
+    <Content Include="Resources\Css\style.css" />
+    <Content Include="Resources\Js\ckeditor\build-config.js" />
+    <Content Include="Resources\Js\ckeditor\ckeditor.js" />
+    <Content Include="Resources\Js\ckeditor\config.js" />
+    <Content Include="Resources\Js\ckeditor\contents.css" />
+    <Content Include="Resources\Js\ckeditor\lang\zh-cn.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\a11yhelp\dialogs\lang\zh-cn.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\about\dialogs\about.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\about\dialogs\hidpi\logo_ckeditor.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\about\dialogs\logo_ckeditor.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\dialog\dialogDefinition.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\icons.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\icons_hidpi.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\image\dialogs\image.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\image\images\noimage.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\link\dialogs\anchor.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\link\dialogs\link.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\link\images\anchor.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\link\images\hidpi\anchor.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\magicline\images\hidpi\icon-rtl.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\magicline\images\hidpi\icon.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\magicline\images\icon-rtl.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\magicline\images\icon.png" />
+    <Content Include="Resources\Js\ckeditor\plugins\pastefromword\filter\default.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\scayt\dialogs\options.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\scayt\dialogs\toolbar.css" />
+    <Content Include="Resources\Js\ckeditor\plugins\specialchar\dialogs\lang\zh-cn.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\specialchar\dialogs\specialchar.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\tabletools\dialogs\tableCell.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\table\dialogs\table.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\wsc\dialogs\ciframe.html" />
+    <Content Include="Resources\Js\ckeditor\plugins\wsc\dialogs\tmpFrameset.html" />
+    <Content Include="Resources\Js\ckeditor\plugins\wsc\dialogs\wsc.css" />
+    <Content Include="Resources\Js\ckeditor\plugins\wsc\dialogs\wsc.js" />
+    <Content Include="Resources\Js\ckeditor\plugins\wsc\dialogs\wsc_ie.js" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\dialog.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\dialog_ie.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\dialog_ie7.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\dialog_ie8.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\dialog_iequirks.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\editor.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\editor_gecko.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\editor_ie.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\editor_ie7.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\editor_ie8.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\editor_iequirks.css" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\icons.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\icons_hidpi.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\arrow.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\close.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\hidpi\close.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\hidpi\lock-open.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\hidpi\lock.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\hidpi\refresh.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\lock-open.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\lock.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\refresh.png" />
+    <Content Include="Resources\Js\ckeditor\skins\moono\images\spinner.gif" />
+    <Content Include="Resources\Js\ckeditor\styles.js" />
     <Content Include="Resources\Js\jquery-3.1.0.min.js" />
+    <Content Include="Resources\Js\jquery.datetimepicker.full.min.js" />
+    <Content Include="Resources\Js\jquery.magnific-popup.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -169,6 +238,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Error\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Css\iconfont\iconfont.eot" />
+    <Content Include="Resources\Css\iconfont\iconfont.ttf" />
+    <Content Include="Resources\Css\iconfont\iconfont.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Classes\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Classes\BatchAdd.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
