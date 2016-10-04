@@ -1,8 +1,9 @@
 ﻿@model Flh.AdminSite.Models.Classes.BatchAddModel
 @{
+    Layout = "../Layout/_Manager.cshtml";
     ViewBag.Title = "BatchAdd";
 }
-<div>
+<div class="common-form">
     <h3>当前分类：@Model.ParentFullName</h3>
     <table class="common-list" style="width:800px">
         <thead>
@@ -13,21 +14,75 @@
                 <th style="width:100px">删除</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="j-batch-items">
             @foreach (var item in Model.EditModels)
             {
-                <tr>
+                <tr class="j-batch-item">
                     <td><input class="input-control" name="Name" /></td>
                     <td><input class="input-control" name="EnName" /></td>
-                    <td><input class="input-control" name="Order" style="width:100px;"/></td>
-                    <td><button>删除</button></td>
+                    <td><input class="input-control" name="Order" style="width:100px;" value="0" /></td>
+                    <td><button class="j-batch-del">删除</button></td>
                 </tr>
             }
         </tbody>
     </table>
     <div class="options">
-        <a class="btn btn-primary">增加一个</a>
-        <a class="btn btn-primary">保存</a>
+        <a class="btn btn-primary j-batch-add">增加一个</a>
+        <a class="btn btn-primary j-batch-submit">保存</a>
     </div>
 </div>
+<script>
+    (function () {
+        var $itemTemplate = $(".j-batch-item").eq(0).clone(),
+            $parent = $(".j-batch-items"),
+            submiting = false;
+        $(".j-batch-add").click(function () {
+            $parent.append($itemTemplate.clone());
+        });
+        $(".j-batch-items").delegate(".j-batch-del", "click", function () {
+            $(this).parents().filter(".j-batch-item").remove();
+        });
+        $(".j-batch-submit").click(function () {
+            if (!submiting) {
+                submiting = true;
+
+                var data = {
+                    pno: '@Model.ParentNo',
+                    model: []
+                };
+
+                $(".j-batch-item").each(function (i, e) {
+                    var vals = {
+                        Name: $.trim($("[name=Name]", e).val()),
+                        EnName: $.trim($("[name=EnName]", e).val()),
+                        Order: $.trim($("[name=Order]", e).val())
+                    };
+                    if (vals.Name || vals.EnName)
+                        data.model.push(vals);
+                });
+                data.model = JSON.stringify(data.model);
+
+                $.ajax({
+                    url: '@Url.Action("BatchAdd")',
+                    type: "post",
+                    data: data,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 0) {
+                            location.href = '@Url.Action("list", new { pno = Model.ParentNo })'
+                        } else {
+                            alert(data.msg)
+                        }
+                    },
+                    error: function () {
+                        alert("网络错误，请重试");
+                    }
+                }).always(function () {
+                    submiting = false;
+                });
+            }
+            return false;
+        })
+    })();
+</script>
 

@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Admins\IAdmin.cs" />
     <Compile Include="Admins\IAdminManager.cs" />
+    <Compile Include="FlhConfig.cs" />
     <Compile Include="Data\Admin.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>

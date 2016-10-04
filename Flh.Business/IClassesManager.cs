@@ -88,6 +88,8 @@ namespace Flh.Business
                 _ClassesRepository.AddRange(addEntites);
                 _ClassesRepository.SaveChanges();
 
+                scope.Complete();
+
                 return addEntites.ToArray();
             }
         }

@@ -1,0 +1,27 @@
+﻿@{
+    Layout = "~/Views/Layout/_header.cshtml";
+}
+<div class="main_layout">
+    <div class="header _temp_border">
+        <div class="user_info">
+            @if (this.Session.GetCurrentUser() != null)
+            {
+                <span>欢迎你：</span>@(this.Session.GetCurrentUser().Name)
+                <a href="@Url.Action("logout", "account")">退出</a>
+            }
+            else
+            {
+                <a href="@Url.Action("login", "account")">登陆</a>
+            }
+        </div>
+    </div>
+    <div class="manager-area">
+        <ul class="sidebar">
+            <li><a href="@Url.Action("list", "classes", new { pno = String.Empty })" @(Url.IsCurrent("list", "classes") ? "class=\"current\"" : String.Empty)>分类管理</a></li>
+        </ul>
+        <div class="manager_content">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+

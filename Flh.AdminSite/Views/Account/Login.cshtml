@@ -1,22 +1,50 @@
 ﻿@{
-    Layout = null;
+    Layout = "../Layout/_Header.cshtml";
     ViewBag.Title = "登陆";
 }
-<form action="@Url.Action("Login")" method="post" enctype="application/x-www-form-urlencoded">
-    <input name="@Flh.Web.Config.Current.BACK_URL_KEY" type="hidden" value="@Request.GetBackUrl()"/>
+<form action="@Url.Action("Login")" method="post" enctype="application/x-www-form-urlencoded" class="common-form">
+    <input name="@Flh.Web.Config.Current.BACK_URL_KEY " type="hidden" value="@Request.GetBackUrl()" />
     <table class="common_table">
         <tr>
         <tr>
             <td>账号：</td>
-            <td><input name="UserName" placeholder="手机号/邮箱" /></td>
+            <td><input name="UserName" placeholder="手机号/邮箱" class="input-control" /></td>
         </tr>
         <tr>
             <td>密码：</td>
-            <td><input name="Password" /></td>
+            <td><input name="Password" class="input-control" type="password" /></td>
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td><input value="登陆" type="submit" /></td>
+            <td><input value="登陆" type="submit" class="btn btn-primary j-login-submit" /></td>
         </tr>
     </table>
 </form>
+<script>
+    (function () {
+        $(".j-login-submit").click(function () {
+            var data = {
+                UserName: $.trim($("[name=UserName]").val()),
+                Password: $.trim($("[name=Password]").val())
+            };
+            data['@Flh.Web.Config.Current.BACK_URL_KEY'] = '@Request.GetBackUrl()';
+            $.ajax({
+                url: '@Url.Action("Login")',
+                type:"post",
+                data: data,
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 0) {
+                        data.data ? location.href = data.data : '@Url.Action("index", "home")';
+                    } else {
+                        alert(data.msg)
+                    }
+                },
+                error: function () {
+                    alert("网络错误，请重试");
+                }
+            })
+            return false;
+        });
+    })();
+</script>

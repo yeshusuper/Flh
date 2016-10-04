@@ -80,8 +80,10 @@
     <Compile Include="BaseController.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="FlhAuthorizeAttribute.cs" />
+    <Compile Include="HtmlHelperExtension.cs" />
     <Compile Include="JsonResultEntry.cs" />
     <Compile Include="NinjectDependencyResolver.cs" />
+    <Compile Include="Pager.cs" />
     <Compile Include="RequestBaseExtension.cs" />
     <Compile Include="SessionServiceExtenstion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
