@@ -26,6 +26,11 @@ namespace Flh.AdminSite.Controllers
         [HttpPost]
         public ActionResult Login(Models.Account.LoginModel model)
         {
+            if (String.IsNullOrWhiteSpace(Session.GetCurrentCertCode()) || Session.GetCurrentCertCode().ToLower() != model.CertCode.ToLower())
+            {
+                Session.SetCurrentCertCode(String.Empty);
+                return JsonResult(ErrorCode.ArgError, "验证码错误");
+            }
             var admin = _AdminManager.Login(model.UserName, model.Password, Request.GetCurrentIP());
 
             var entry = new UserSessionEntry
@@ -41,6 +46,15 @@ namespace Flh.AdminSite.Controllers
         {
             Session.SetCurrentUser(null);
             return RedirectToAction("Index", "Home");
+        }
+        public ActionResult VerifyImage()
+        {
+            var s1 = new CertCode();
+            var random = new Random();
+            string code = random.Next(1000, 9999).ToString();
+            byte[] bytes = s1.CreateImage(out code);
+            Session.SetCurrentCertCode(code);
+            return File(bytes, @"image/jpeg");
         }
     }
 }

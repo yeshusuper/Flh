@@ -18,11 +18,14 @@ namespace Flh.Web
                 JSONP_ACTION_KEY = "callback",
                 BACK_URL_KEY = "backurl",
                 SESSION_USER_KEY = "SessionUserKey",
+                CERT_CODE = "CertCode",
+
             };
         }
 
         public string JSONP_ACTION_KEY { get; set; }
         public string BACK_URL_KEY { get; set; }
         public string SESSION_USER_KEY { get; set; }
+        public string CERT_CODE { get; set; }
     }
 }
