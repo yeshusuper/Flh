@@ -115,6 +115,7 @@
     <Compile Include="App_Start\InjectConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
+    <Compile Include="Controllers\CommonDataController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -123,6 +124,7 @@
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Classes\BatchAddModel.cs" />
     <Compile Include="Models\Classes\ListModel.cs" />
+    <Compile Include="Models\ClassTreeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

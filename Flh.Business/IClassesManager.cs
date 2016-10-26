@@ -19,6 +19,7 @@ namespace Flh.Business
         Data.Classes[] AddRange(long @operator, string parentNo, IClassEditInfo[] adds);
         IQueryable<Data.Classes> GetChildren(string parentNo);
         Data.Classes GetEnabled(string no);
+        IQueryable<Data.Classes> EnabledClasses { get; }
     }
 
     internal class ClassesManager : IClassesManager
@@ -114,6 +115,10 @@ namespace Flh.Business
                             .FirstOrDefault(c => c.no == no);
             ExceptionHelper.ThrowIfNull(entity, "no", "no不存在");
             return entity;
+        }
+        public IQueryable<Data.Classes> EnabledClasses
+        {
+            get { return _ClassesRepository.EnabledClasses; }
         }
     }
 }
