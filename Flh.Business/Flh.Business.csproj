@@ -57,6 +57,14 @@
   <ItemGroup>
     <Compile Include="Admins\IAdmin.cs" />
     <Compile Include="Admins\IAdminManager.cs" />
+    <Compile Include="Data\Area.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\IAreaRePository.cs" />
+    <Compile Include="Data\Trade.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\TradeRePository.cs" />
     <Compile Include="FlhConfig.cs" />
     <Compile Include="Data\Admin.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
@@ -89,9 +97,11 @@
     <Compile Include="Data\User.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="IAreaManager.cs" />
     <Compile Include="IClassesManager.cs" />
     <Compile Include="Inject\DataModules.cs" />
     <Compile Include="Inject\ServiceModules.cs" />
+    <Compile Include="ITradeManager.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

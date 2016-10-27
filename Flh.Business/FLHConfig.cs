@@ -12,5 +12,7 @@ namespace Flh.Business
         /// 产品分类的前缀
         /// </summary>
         public const string CLASSNO_CLASS_PREFIX = "0001";
+        public const string AREA_CLASS_PREFIX = "0001";
+        public const string TRADE_CLASS_PREFIX = "0001";
     }
 }
