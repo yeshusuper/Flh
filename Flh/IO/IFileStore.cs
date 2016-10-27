@@ -9,6 +9,7 @@ namespace Flh.IO
 {
     public interface IFileStore
     {
+        void CreateTemp(FileId id, Stream stream);
         void CreateOrUpdate(FileId id, Stream stream);
         void CreateOrAppend(FileId id, Stream stream);
         void Copy(FileId sourceId, FileId destId);
@@ -16,7 +17,7 @@ namespace Flh.IO
         bool Exists(FileId id);
     }
 
-    internal class SystemFileStroe : IFileStore
+    public class SystemFileStroe : IFileStore
     {
         private string _Root;
 
@@ -28,6 +29,11 @@ namespace Flh.IO
         private string GetFilename(FileId id)
         {
             var filename = id.ToPath(_Root);
+            return GetFilename(filename);
+        }
+
+        private string GetFilename(string filename)
+        {
             var path = Path.GetDirectoryName(filename);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -63,6 +69,14 @@ namespace Flh.IO
         public bool Exists(FileId id)
         {
             return File.Exists(GetFilename(id));
+        }
+
+        public void CreateTemp(FileId id, Stream stream)
+        {
+            using (var fs = File.Open(GetFilename(id.ToTempPath(_Root)), FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                stream.CopyTo(fs);
+            }
         }
     }
 }
