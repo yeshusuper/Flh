@@ -8,6 +8,7 @@ namespace Flh.Business.Admins
 {
     public interface IAdmin : IUser
     {
+        DateTime CreateTime { get; }
     }
 
     internal class Admin : IAdmin
@@ -29,6 +30,17 @@ namespace Flh.Business.Admins
         public string Name
         {
             get { return _User.Name; }
+        }
+
+
+        public string Mobile
+        {
+            get { return _User.Mobile; }
+        }
+
+        public DateTime CreateTime
+        {
+            get { return _Entity.created; }
         }
     }
 }
