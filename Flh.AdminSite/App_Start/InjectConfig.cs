@@ -9,15 +9,6 @@ namespace Flh.AdminSite
 {
     public class InjectConfig
     {
-        private class WebModule : Ninject.Modules.NinjectModule
-        {
-            public override void Load()
-            {
-                Bind<Flh.IO.FileManager>().ToSelf();
-                Bind<Flh.IO.IFileStore>().To<Flh.IO.SystemFileStroe>();
-            }
-        }
-
         public static void Register()
         {
             DependencyResolver.SetResolver(new NinjectDependencyResolver(
