@@ -44,6 +44,9 @@
     <Compile Include="Data\TreeExtension.cs" />
     <Compile Include="ExceptionHelper.cs" />
     <Compile Include="FlhException.cs" />
+    <Compile Include="IO\FileId.cs" />
+    <Compile Include="IO\FileManager.cs" />
+    <Compile Include="IO\IFileStore.cs" />
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="Log\LocalLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -17,7 +17,7 @@ namespace Flh.AdminSite.Controllers
         {
             _TradeManager =tradeManager;
         }
-
+        [HttpGet]
         public ActionResult List(string pno, int? page)
         {
             if (String.IsNullOrWhiteSpace(pno) || !pno.StartsWith(FlhConfig.TRADE_CLASS_PREFIX))
