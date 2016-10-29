@@ -129,6 +129,7 @@
     <Compile Include="Models\Classes\BatchAddModel.cs" />
     <Compile Include="Models\Classes\ListModel.cs" />
     <Compile Include="Models\ClassTreeModel.cs" />
+    <Compile Include="Models\Product\BatchEditListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +277,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Product\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Product\BatchEdit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

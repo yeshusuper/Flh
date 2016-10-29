@@ -9,6 +9,7 @@ namespace Flh.Business
     public interface IProductManager
     {
         void AddOrUpdateProducts(Data.Product[] products);
+        IQueryable<Data.Product> GetProductList(ProductListArgs args);
     }
     public class ProductManager : IProductManager
     {
