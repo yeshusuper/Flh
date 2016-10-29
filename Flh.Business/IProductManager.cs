@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Flh.Business
 {
     public interface IProductManager
     {
         void AddOrUpdateProducts(Data.Product[] products);
+        IEnumerable<Data.Product> Search(ProductSearchArgs args, out int count);
+        IQueryable<Data.Product> GetProductList(ProductListArgs args);
+        IQueryable<Data.Product> EnabledProducts { get; }
+        void Delete(long uid, long[] pids);
     }
     public class ProductManager : IProductManager
     {
@@ -89,8 +92,45 @@ namespace Flh.Business
                 setValue(oldEntity, newValue(newEntity));
             }
         }
-
-
+        public IEnumerable<Data.Product> Search(ProductSearchArgs args,out int count)
+        {
+            int start = 0;
+            int limit = 30;
+            var source = _Repository.EnabledProduct;
+            if (args!=null)
+            {
+                if (!String.IsNullOrWhiteSpace(args.ClassNo))
+                {
+                    source = source.Where(d => d.classNo.StartsWith(args.ClassNo.Trim()));
+                }
+                if (!String.IsNullOrWhiteSpace(args.Keyword))
+                {
+                var keyword=args.Keyword.Trim();
+                    source = source.Where(d =>d.name.Contains(keyword)||d.keywords.Contains(keyword));
+                }
+                start = Math.Max(0, args.Start);
+                if (args.Limit > 0)
+                    limit = args.Limit;
+            }
+            count = source.Count();
+            return source.OrderByDescending(p => p.sortNo)
+                 .ThenByDescending(p => p.updated)
+                 .Skip(start).Take(limit)
+                 .ToArray();
+        }
+        public IQueryable<Data.Product> EnabledProducts
+        {
+            get { return _Repository.EnabledProduct; }
+        }
+        public void Delete(long uid, long[] pids)
+        {
+            ExceptionHelper.ThrowIfNotId(uid, "uid");
+            pids = (pids ?? Enumerable.Empty<long>()).Where(id=>id>0).Distinct().ToArray();
+            if (pids.Length > 0)
+            {
+                _Repository.Update(p => pids.Contains(p.pid) &&p.enabled, c => new Data.Product { enabled = false, updated = DateTime.Now, updater = uid });
+            }
+        }
     }
 
     public class ProductListArgs
@@ -102,5 +142,12 @@ namespace Flh.Business
         }
         public String ClassNo { get; set; }
         public long[] Pids { get; set; }
+    }
+    public class ProductSearchArgs
+    {
+        public String ClassNo { get; set; }
+        public string  Keyword { get; set; }
+        public int Start { get; set; }
+        public int Limit { get; set; }
     }
 }

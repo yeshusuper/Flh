@@ -86,9 +86,10 @@ namespace Flh.AdminSite.Controllers
             return RedirectToAction("list", new { pno = no.Substring(0, no.Length - 4) });
         }
         [HttpPost]
-        public ActionResult Delete(string[] nos)
+        public ActionResult Delete(string nos)
         {
-            _ClassesManager.Delete(this.CurrentUser.Uid, nos);
+            var _Nos = (nos ?? String.Empty).Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Where(n => !String.IsNullOrWhiteSpace(n)).Distinct().ToArray();
+            _ClassesManager.Delete(this.CurrentUser.Uid, _Nos);
             return SuccessJsonResult();
         }
     }

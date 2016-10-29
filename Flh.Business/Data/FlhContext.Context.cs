@@ -9,37 +9,29 @@
 
 namespace Flh.Business.Data
 {
-using System;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-
-public partial class FlhContext : DbContext
-{
-    public FlhContext()
-        : base("name=FlhContext")
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    
+    public partial class FlhContext : DbContext
     {
-    }
-
-    protected override void OnModelCreating(DbModelBuilder modelBuilder)
-    {
-        throw new UnintentionalCodeFirstException();
-    }
-
-    public virtual DbSet<Admin> Admin { get; set; }
+        public FlhContext()
+            : base("name=FlhContext")
+        {
+        }
+    
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
+        }
+    
+        public virtual DbSet<Admin> Admin { get; set; }
         public virtual DbSet<AdminModifyHistory> AdminModifyHistory { get; set; }
         public virtual DbSet<Area> Area { get; set; }
-    public virtual DbSet<Classes> Classes { get; set; }
+        public virtual DbSet<Classes> Classes { get; set; }
         public virtual DbSet<LoginHistory> LoginHistory { get; set; }
         public virtual DbSet<Product> Product { get; set; }
-
-    public virtual DbSet<AdminModifyHistory> AdminModifyHistory { get; set; }
-
-    public virtual DbSet<Trade> Trade { get; set; }
-
-    public virtual DbSet<Area> Area { get; set; }
-
-    public virtual DbSet<Product> Product { get; set; }
-
+        public virtual DbSet<Trade> Trade { get; set; }
         public virtual DbSet<User> User { get; set; }
-}
+    }
 }

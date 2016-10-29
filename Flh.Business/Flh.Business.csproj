@@ -60,26 +60,6 @@
     <Compile Include="Data\Admin.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\AdminModifyHistory.cs">
-    <Compile Include="Data\IAreaRePository.cs" />
-    <Compile Include="Data\IProductRepository.cs" />
-    <Compile Include="Data\Trade.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Area.cs">
-    <Compile Include="Data\TradeRePository.cs" />
-    <Compile Include="Data\AdminModifyHistory.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\IAdminModifyHistoryRepository.cs" />
-    <Compile Include="Data\PartialEntity.cs" />
-    <Compile Include="Data\Product.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FlhConfig.cs" />
-    <Compile Include="Data\Admin.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Data\Classes.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
@@ -98,18 +78,27 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FlhContext.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Data\IAreaRePository.cs" />
+    <Compile Include="Data\IProductRepository.cs" />
+    <Compile Include="Data\Area.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\LoginHistory.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\TradeRePository.cs" />
+    <Compile Include="Data\AdminModifyHistory.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\IAdminModifyHistoryRepository.cs" />
+    <Compile Include="Data\PartialEntity.cs" />
+    <Compile Include="Data\User.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\IAreaRePository.cs" />
     <Compile Include="Data\Product.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Trade.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\TradeRePository.cs" />
-    <Compile Include="Data\User.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
     <Compile Include="FlhConfig.cs" />
