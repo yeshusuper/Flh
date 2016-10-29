@@ -10,6 +10,7 @@ namespace Flh.Business
     {
         void AddOrUpdateProducts(Data.Product[] products);
         IQueryable<Data.Product> GetProductList(ProductListArgs args);
+        void UpdateSearchIndex(long pid);
     }
     public class ProductManager : IProductManager
     {
@@ -65,14 +66,21 @@ namespace Flh.Business
         {
             ExceptionHelper.ThrowIfNull(args, "args");
             var query = _Repository.EnabledProduct;
-            if (!String.IsNullOrWhiteSpace(args.ClassNo))
+            if (args != null)
             {
-                query = query.Where(d => d.classNo.StartsWith(args.ClassNo));
-            }
-            if (args.Pids != null && args.Pids.Any())
-            {
-                query = query.Where(d => args.Pids.Contains(d.pid));
-            }
+                if (!String.IsNullOrWhiteSpace(args.ClassNo))
+                {
+                    query = query.Where(d => d.classNo.StartsWith(args.ClassNo));
+                }
+                if (args.Pids != null && args.Pids.Any())
+                {
+                    query = query.Where(d => args.Pids.Contains(d.pid));
+                }
+                if (args.MinPid > 0)
+                {
+                    query = query.Where(d=>d.pid>args.MinPid);
+                }
+            }            
             return query;
         }
 
@@ -92,6 +100,11 @@ namespace Flh.Business
         }
 
 
+
+
+        public void UpdateSearchIndex(long pid)
+        {            
+        }
     }
 
     public class ProductListArgs
@@ -103,5 +116,6 @@ namespace Flh.Business
         }
         public String ClassNo { get; set; }
         public long[] Pids { get; set; }
+        public long MinPid { get; set; }
     }
 }
