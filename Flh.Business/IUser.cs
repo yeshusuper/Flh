@@ -10,6 +10,7 @@ namespace Flh.Business
     {
         long Uid { get; }
         string Name { get; }
+        string Mobile { get; }
     }
 
     internal class User : IUser
@@ -21,6 +22,12 @@ namespace Flh.Business
         {
             _LazyUser = new Lazy<Data.User>(() => entity);
             Uid = entity.uid;
+        }
+
+
+        public string Mobile
+        {
+            get { return _LazyUser.Value.mobile; }
         }
     }
 }

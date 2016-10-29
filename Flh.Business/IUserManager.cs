@@ -14,6 +14,7 @@ namespace Flh.Business
         bool IsUsableMobile(string mobile);
         bool IsUsableEmail(string email);
         IUser Login(string mobileOrEmail, string password, string ip);
+        IUser[] GetUsersByIds(long[] uids);
     }
 
     internal class UserManager : IUserManager
@@ -119,6 +120,17 @@ namespace Flh.Business
         private IUser GetUser(Data.User entity)
         {
             return new User(entity);
+        }
+
+        public IUser[] GetUsersByIds(long[] uids)
+        {
+            var users = _UserRepository.Entities.Where(u => uids.Contains(u.uid)).ToArray();
+            List<IUser> results = new List<IUser>();
+            foreach (var user in users)
+            {
+                results.Add(new User(user));
+            }
+            return results.ToArray();
         }
     }
 

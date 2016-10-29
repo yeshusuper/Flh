@@ -16,8 +16,11 @@ namespace Flh.Business.Inject
             Bind<Data.IUserRepository>().To<Data.UserRepository>();
             Bind<Data.IAdminRepository>().To<Data.AdminRepository>();
             Bind<Data.IClassesRepository>().To<Data.ClassesRepository>();
+            Bind<Data.IAdminModifyHistoryRepository>().To<Data.AdminModifyHistoryRepository>();
             Bind<Data.IAreaRepository>().To<Data.AreaRepository>();
             Bind<Data.ITradeRepository>().To<Data.TradeRepository>();
+            Bind<Data.IProductRepository>().To<Data.ProductRepository>();
+            
         }
     }
 }

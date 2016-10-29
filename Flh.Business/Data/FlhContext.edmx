@@ -88,6 +88,36 @@
           <Property Name="imagePath" Type="nvarchar" MaxLength="1024" />
           <Property Name="classNo" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="pid" />
+          </Key>
+          <Property Name="pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="enName" Type="nvarchar" MaxLength="200" />
+          <Property Name="description" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="enDescription" Type="nvarchar" MaxLength="1000" />
+          <Property Name="size" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="enSize" Type="nvarchar" MaxLength="100" />
+          <Property Name="color" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="enColor" Type="nvarchar" MaxLength="100" />
+          <Property Name="material" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="enMaterial" Type="nvarchar" MaxLength="200" />
+          <Property Name="technique" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="enTechnique" Type="nvarchar" MaxLength="200" />
+          <Property Name="minQuantity" Type="int" Nullable="false" />
+          <Property Name="deliveryDay" Type="int" Nullable="false" />
+          <Property Name="keywords" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="enKeywords" Type="nvarchar" MaxLength="500" />
+          <Property Name="unitPrice" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="imagePath" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="classNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="sortNo" Type="int" Nullable="false" />
+          <Property Name="createUid" Type="bigint" Nullable="false" />
+          <Property Name="created" Type="datetime" Nullable="false" />
+          <Property Name="updated" Type="datetime" Nullable="false" />
+          <Property Name="enabled" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Trade">
           <Key>
             <PropertyRef Name="no" />
@@ -406,6 +436,64 @@
           <NavigationProperty Name="Admin" Relationship="Self.FK_Admin_User" FromRole="User" ToRole="Admin" />
           <NavigationProperty Name="LoginHistory" Relationship="Self.FK_LoginHistory_User" FromRole="User" ToRole="LoginHistory" />
         </EntityType>
+        <EntityContainer Name="FlhContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="LoginHistory" EntityType="Self.LoginHistory" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="Admin" EntityType="FlhModel.Admin" />
+          <AssociationSet Name="FK_Admin_User" Association="FlhModel.FK_Admin_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Admin" EntitySet="Admin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoginHistory_User" Association="FlhModel.FK_LoginHistory_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="LoginHistory" EntitySet="LoginHistory" />
+          </AssociationSet>
+          <EntitySet Name="Classes" EntityType="FlhModel.Classes" />
+          <AssociationSet Name="FK_Classes_Admin_creater" Association="FlhModel.FK_Classes_Admin_creater">
+            <End Role="Admin" EntitySet="Admin" />
+            <End Role="Classes" EntitySet="Classes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Classes_Admin_updater" Association="FlhModel.FK_Classes_Admin_updater">
+            <End Role="Admin" EntitySet="Admin" />
+            <End Role="Classes" EntitySet="Classes" />
+          </AssociationSet>
+          <EntitySet Name="AdminModifyHistory" EntityType="FlhModel.AdminModifyHistory" />
+          <EntitySet Name="Trade" EntityType="FlhModel.Trade" />
+          <AssociationSet Name="FK_Trade_Admin_creater" Association="FlhModel.FK_Trade_Admin_creater">
+            <End Role="Admin" EntitySet="Admin" />
+            <End Role="Trade" EntitySet="Trade" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trade_Admin_updater" Association="FlhModel.FK_Trade_Admin_updater">
+            <End Role="Admin" EntitySet="Admin" />
+            <End Role="Trade" EntitySet="Trade" />
+          </AssociationSet>
+          <EntitySet Name="Area" EntityType="FlhModel.Area" />
+          <AssociationSet Name="FK_Area_Admin_creater" Association="FlhModel.FK_Area_Admin_creater">
+            <End Role="Admin" EntitySet="Admin" />
+            <End Role="Area" EntitySet="Area" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Area_Admin_updater" Association="FlhModel.FK_Area_Admin_updater">
+            <End Role="Admin" EntitySet="Admin" />
+            <End Role="Area" EntitySet="Area" />
+          </AssociationSet>
+          <EntitySet Name="Product" EntityType="FlhModel.Product" />
+        </EntityContainer>
+        <EnumType Name="EmployeesCountRanges" UnderlyingType="Byte" a:ExternalTypeName="Flh.Business.Users.EmployeesCountRanges" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="uid" />
+          </Key>
+          <Property Name="uid" Type="Int64" Nullable="false" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="enabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="FlhModel.FK_Admin_User" FromRole="Admin" ToRole="User" />
+          <NavigationProperty Name="Classes" Relationship="FlhModel.FK_Classes_Admin_creater" FromRole="Admin" ToRole="Classes" />
+          <NavigationProperty Name="Classes1" Relationship="FlhModel.FK_Classes_Admin_updater" FromRole="Admin" ToRole="Classes" />
+          <NavigationProperty Name="Trade" Relationship="FlhModel.FK_Trade_Admin_creater" FromRole="Admin" ToRole="Trade" />
+          <NavigationProperty Name="Trade1" Relationship="FlhModel.FK_Trade_Admin_updater" FromRole="Admin" ToRole="Trade" />
+          <NavigationProperty Name="Area" Relationship="FlhModel.FK_Area_Admin_creater" FromRole="Admin" ToRole="Area" />
+          <NavigationProperty Name="Area1" Relationship="FlhModel.FK_Area_Admin_updater" FromRole="Admin" ToRole="Area" />
+        </EntityType>
         <Association Name="FK_Admin_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Admin" Type="Self.Admin" Multiplicity="0..1" />
@@ -466,6 +554,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AdminModifyHistory">
+          <Key>
+            <PropertyRef Name="ophID" />
+          </Key>
+          <Property Name="ophID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="adminUid" Type="Int64" Nullable="false" />
+          <Property Name="opContent" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="operatorUid" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Trade">
+          <Key>
+            <PropertyRef Name="no" />
+          </Key>
+          <Property Name="no" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="full_name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="creater" Type="Int64" Nullable="false" />
+          <Property Name="updater" Type="Int64" Nullable="false" />
+          <Property Name="enabled" Type="Boolean" Nullable="false" />
+          <Property Name="order_by" Type="Int32" Nullable="false" />
+          <Property Name="name_en" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="full_name_en" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Admin" Relationship="FlhModel.FK_Trade_Admin_creater" FromRole="Trade" ToRole="Admin" />
+          <NavigationProperty Name="Admin1" Relationship="FlhModel.FK_Trade_Admin_updater" FromRole="Trade" ToRole="Admin" />
+        </EntityType>
         <Association Name="FK_Trade_Admin_creater">
           <End Role="Admin" Type="Self.Admin" Multiplicity="1" />
           <End Role="Trade" Type="Self.Trade" Multiplicity="*" />
@@ -545,6 +661,36 @@
           </AssociationSet>
         </EntityContainer>
         <EnumType Name="EmployeesCountRanges" UnderlyingType="Byte" a:ExternalTypeName="Flh.Business.Users.EmployeesCountRanges" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="pid" />
+          </Key>
+          <Property Name="pid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="enName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="enDescription" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="size" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="enSize" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="color" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="enColor" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="material" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="enMaterial" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="technique" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="enTechnique" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="minQuantity" Type="Int32" Nullable="false" />
+          <Property Name="deliveryDay" Type="Int32" Nullable="false" />
+          <Property Name="keywords" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="enKeywords" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="unitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="imagePath" Type="String" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="classNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sortNo" Type="Int32" Nullable="false" />
+          <Property Name="createUid" Type="Int64" Nullable="false" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="enabled" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -676,6 +822,108 @@
                 <ScalarProperty Name="last_login_date" ColumnName="last_login_date" />
                 <ScalarProperty Name="enabled" ColumnName="enabled" />
                 <ScalarProperty Name="enabled_memo" ColumnName="enabled_memo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Admin">
+            <EntityTypeMapping TypeName="FlhModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="enabled" ColumnName="enabled" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Classes">
+            <EntityTypeMapping TypeName="FlhModel.Classes">
+              <MappingFragment StoreEntitySet="Classes">
+                <ScalarProperty Name="full_name_en" ColumnName="full_name_en" />
+                <ScalarProperty Name="name_en" ColumnName="name_en" />
+                <ScalarProperty Name="order_by" ColumnName="order_by" />
+                <ScalarProperty Name="enabled" ColumnName="enabled" />
+                <ScalarProperty Name="updater" ColumnName="updater" />
+                <ScalarProperty Name="creater" ColumnName="creater" />
+                <ScalarProperty Name="updated" ColumnName="updated" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="no" ColumnName="no" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trade">
+            <EntityTypeMapping TypeName="FlhModel.Trade">
+              <MappingFragment StoreEntitySet="Trade">
+                <ScalarProperty Name="full_name_en" ColumnName="full_name_en" />
+                <ScalarProperty Name="name_en" ColumnName="name_en" />
+                <ScalarProperty Name="order_by" ColumnName="order_by" />
+                <ScalarProperty Name="enabled" ColumnName="enabled" />
+                <ScalarProperty Name="updater" ColumnName="updater" />
+                <ScalarProperty Name="creater" ColumnName="creater" />
+                <ScalarProperty Name="updated" ColumnName="updated" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="no" ColumnName="no" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdminModifyHistory">
+            <EntityTypeMapping TypeName="FlhModel.AdminModifyHistory">
+              <MappingFragment StoreEntitySet="AdminModifyHistory">
+                <ScalarProperty Name="operatorUid" ColumnName="operatorUid" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="opContent" ColumnName="opContent" />
+                <ScalarProperty Name="adminUid" ColumnName="adminUid" />
+                <ScalarProperty Name="ophID" ColumnName="ophID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Area">
+            <EntityTypeMapping TypeName="FlhModel.Area">
+              <MappingFragment StoreEntitySet="Area">
+                <ScalarProperty Name="area_full_name_en" ColumnName="area_full_name_en" />
+                <ScalarProperty Name="area_name_en" ColumnName="area_name_en" />
+                <ScalarProperty Name="updated" ColumnName="updated" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="updater" ColumnName="updater" />
+                <ScalarProperty Name="creater" ColumnName="creater" />
+                <ScalarProperty Name="enabled" ColumnName="enabled" />
+                <ScalarProperty Name="order_by" ColumnName="order_by" />
+                <ScalarProperty Name="area_full_name" ColumnName="area_full_name" />
+                <ScalarProperty Name="area_name" ColumnName="area_name" />
+                <ScalarProperty Name="area_no" ColumnName="area_no" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="FlhModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="enabled" ColumnName="enabled" />
+                <ScalarProperty Name="updated" ColumnName="updated" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="createUid" ColumnName="createUid" />
+                <ScalarProperty Name="sortNo" ColumnName="sortNo" />
+                <ScalarProperty Name="classNo" ColumnName="classNo" />
+                <ScalarProperty Name="imagePath" ColumnName="imagePath" />
+                <ScalarProperty Name="unitPrice" ColumnName="unitPrice" />
+                <ScalarProperty Name="enKeywords" ColumnName="enKeywords" />
+                <ScalarProperty Name="keywords" ColumnName="keywords" />
+                <ScalarProperty Name="deliveryDay" ColumnName="deliveryDay" />
+                <ScalarProperty Name="minQuantity" ColumnName="minQuantity" />
+                <ScalarProperty Name="enTechnique" ColumnName="enTechnique" />
+                <ScalarProperty Name="technique" ColumnName="technique" />
+                <ScalarProperty Name="enMaterial" ColumnName="enMaterial" />
+                <ScalarProperty Name="material" ColumnName="material" />
+                <ScalarProperty Name="enColor" ColumnName="enColor" />
+                <ScalarProperty Name="color" ColumnName="color" />
+                <ScalarProperty Name="enSize" ColumnName="enSize" />
+                <ScalarProperty Name="size" ColumnName="size" />
+                <ScalarProperty Name="enDescription" ColumnName="enDescription" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="enName" ColumnName="enName" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="pid" ColumnName="pid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
