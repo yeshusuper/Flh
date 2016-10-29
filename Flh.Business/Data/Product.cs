@@ -30,31 +30,43 @@ public partial class Product
 
     public string size { get; set; }
 
+    public string enSize { get; set; }
+
     public string color { get; set; }
+
+    public string enColor { get; set; }
 
     public string material { get; set; }
 
+    public string enMaterial { get; set; }
+
     public string technique { get; set; }
 
-    public Nullable<int> minQuantity { get; set; }
+    public string enTechnique { get; set; }
 
-    public Nullable<int> deliveryDay { get; set; }
+    public int minQuantity { get; set; }
+
+    public int deliveryDay { get; set; }
 
     public string keywords { get; set; }
 
-    public Nullable<decimal> unitPrice { get; set; }
+    public string enKeywords { get; set; }
 
-    public Nullable<int> sortNo { get; set; }
-
-    public System.DateTime created { get; set; }
-
-    public Nullable<System.DateTime> updated { get; set; }
-
-    public long createUid { get; set; }
+    public decimal unitPrice { get; set; }
 
     public string imagePath { get; set; }
 
     public string classNo { get; set; }
+
+    public int sortNo { get; set; }
+
+    public long createUid { get; set; }
+
+    public System.DateTime created { get; set; }
+
+    public System.DateTime updated { get; set; }
+
+    public bool enabled { get; set; }
 
 }
 

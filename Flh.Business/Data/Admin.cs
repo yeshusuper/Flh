@@ -12,18 +12,18 @@
 namespace Flh.Business.Data
 {
 
-    using System;
+using System;
     using System.Collections.Generic;
     
-    public partial class Admin
+public partial class Admin
+{
+
+    public Admin()
     {
 
-        public Admin()
-        {
+        this.Classes = new HashSet<Classes>();
 
-            this.Classes = new HashSet<Classes>();
-
-            this.Classes1 = new HashSet<Classes>();
+        this.Classes1 = new HashSet<Classes>();
 
         this.Trade = new HashSet<Trade>();
 
@@ -33,22 +33,22 @@ namespace Flh.Business.Data
 
         this.Area1 = new HashSet<Area>();
 
-        }
-    
-
-        public long uid { get; set; }
-
-        public System.DateTime created { get; set; }
-
-        public bool enabled { get; set; }
-    
+    }
 
 
-        public virtual User User { get; set; }
+    public long uid { get; set; }
 
-        public virtual ICollection<Classes> Classes { get; set; }
+    public System.DateTime created { get; set; }
 
-        public virtual ICollection<Classes> Classes1 { get; set; }
+    public bool enabled { get; set; }
+
+
+
+    public virtual User User { get; set; }
+
+    public virtual ICollection<Classes> Classes { get; set; }
+
+    public virtual ICollection<Classes> Classes1 { get; set; }
 
     public virtual ICollection<Trade> Trade { get; set; }
 
@@ -58,6 +58,6 @@ namespace Flh.Business.Data
 
     public virtual ICollection<Area> Area1 { get; set; }
 
-    }
+}
 
 }

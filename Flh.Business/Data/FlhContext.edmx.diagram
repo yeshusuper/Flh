@@ -20,7 +20,7 @@
         <AssociationConnector Association="FlhModel.FK_Area_Admin_creater" />
         <AssociationConnector Association="FlhModel.FK_Area_Admin_updater" />
         <EntityTypeShape EntityType="FlhModel.AdminModifyHistory" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="FlhModel.Product" Width="1.5" PointX="2.75" PointY="6.75" />
+        <EntityTypeShape EntityType="FlhModel.Product" Width="1.5" PointX="3.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
