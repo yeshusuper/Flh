@@ -25,40 +25,59 @@ namespace Flh.Business
             ExceptionHelper.ThrowIfNull(products, "products");
             if (products.Any())
             {
+                List<long> searchIndexPids = new List<long>();
                 var pids = products.Where(p => p.pid > 0).Select(p => p.pid).ToArray();
                 var existsProducts = _Repository.EnabledProduct.Where(p => pids.Contains(p.pid)).ToArray();
-                foreach (var oldProduct in existsProducts)
+                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
+                using (var scope = new System.Transactions.TransactionScope())
                 {
-                    var newProduct = products.FirstOrDefault(p => p.pid == oldProduct.pid);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.description, (p, v) => p.description = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enDescription, (p, v) => p.enDescription = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.size, (p, v) => p.size = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enSize, (p, v) => p.enSize = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.color, (p, v) => p.color = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enColor, (p, v) => p.enColor = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.material, (p, v) => p.material = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enMaterial, (p, v) => p.enMaterial = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.technique, (p, v) => p.technique = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.imagePath, (p, v) => p.imagePath = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
-                    oldProduct.minQuantity = newProduct.minQuantity;
-                    oldProduct.deliveryDay = newProduct.deliveryDay;
-                    oldProduct.unitPrice = newProduct.unitPrice;
-                    oldProduct.sortNo = newProduct.sortNo;
-                    oldProduct.updated = DateTime.Now;
+                    //更新已存在的产品
+                    foreach (var oldProduct in existsProducts)
+                    {
+                        var newProduct = products.FirstOrDefault(p => p.pid == oldProduct.pid);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.description, (p, v) => p.description = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enDescription, (p, v) => p.enDescription = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.size, (p, v) => p.size = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enSize, (p, v) => p.enSize = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.color, (p, v) => p.color = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enColor, (p, v) => p.enColor = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.material, (p, v) => p.material = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enMaterial, (p, v) => p.enMaterial = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.technique, (p, v) => p.technique = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.imagePath, (p, v) => p.imagePath = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
+                        oldProduct.minQuantity = newProduct.minQuantity;
+                        oldProduct.deliveryDay = newProduct.deliveryDay;
+                        oldProduct.unitPrice = newProduct.unitPrice;
+                        oldProduct.sortNo = newProduct.sortNo;
+                        oldProduct.updated = DateTime.Now;
+                        searchIndexPids.Add(oldProduct.pid);
+                    }
+
+                    //新增的产品
+                    foreach (var item in addingProducts)
+                    {
+                        AddEnabledProduct(item);
+                        searchIndexPids.Add(item.pid);
+                    }
+                    _Repository.SaveChanges();
+                    scope.Complete();
                 }
 
-                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
+                //重新更新索引
+                foreach (var item in existsProducts)
+                {
+                    UpdateSearchIndex(item.pid);
+                }
                 foreach (var item in addingProducts)
                 {
-                    AddEnabledProduct(item);
+                    UpdateSearchIndex(item.pid);
                 }
-                _Repository.SaveChanges();
             }
         }
 
@@ -78,9 +97,9 @@ namespace Flh.Business
                 }
                 if (args.MinPid > 0)
                 {
-                    query = query.Where(d=>d.pid>args.MinPid);
+                    query = query.Where(d => d.pid > args.MinPid);
                 }
-            }            
+            }
             return query;
         }
 
@@ -103,7 +122,7 @@ namespace Flh.Business
 
 
         public void UpdateSearchIndex(long pid)
-        {            
+        {
         }
     }
 
