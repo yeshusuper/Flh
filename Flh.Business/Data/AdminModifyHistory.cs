@@ -12,12 +12,12 @@ namespace Flh.Business.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class LoginHistory
+    public partial class AdminModifyHistory
     {
-        public long uid { get; set; }
-        public System.DateTime login_date { get; set; }
-        public string ip { get; set; }
-    
-        public virtual User User { get; set; }
+        public long ophID { get; set; }
+        public long adminUid { get; set; }
+        public string opContent { get; set; }
+        public System.DateTime created { get; set; }
+        public long operatorUid { get; set; }
     }
 }

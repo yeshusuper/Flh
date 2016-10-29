@@ -67,5 +67,29 @@ namespace Flh.AdminSite.Controllers
             _ClassesManager.AddRange(this.CurrentUser.Uid, pno, items);
             return SuccessJsonResult();
         }
+        [HttpGet]
+        public ActionResult Edit(string no)
+        {
+            var entity = _ClassesManager.GetEnabled(no);
+            ViewBag.No = no;
+            return View(new Models.Classes.BatchAddModel.EditModel
+            {
+                EnName = entity.name_en,
+                Name = entity.name,
+                Order = entity.order_by
+            });
+        }
+        [HttpPost]
+        public ActionResult Edit(string no, string name, string name_en, int order)
+        {
+            _ClassesManager.Edit(this.CurrentUser.Uid, no, new Models.Classes.BatchAddModel.EditModel { EnName = name_en, Name = name, Order = order });
+            return RedirectToAction("list", new { pno = no.Substring(0, no.Length - 4) });
+        }
+        [HttpPost]
+        public ActionResult Delete(string[] nos)
+        {
+            _ClassesManager.Delete(this.CurrentUser.Uid, nos);
+            return SuccessJsonResult();
+        }
     }
 }
