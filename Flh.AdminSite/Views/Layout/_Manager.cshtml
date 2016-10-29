@@ -18,6 +18,8 @@
     <div class="manager-area">
         <ul class="sidebar">
             <li><a href="@Url.Action("list", "classes", new { pno = String.Empty })" @(Url.IsCurrent("list", "classes") ? "class=\"current\"" : String.Empty)>分类管理</a></li>
+            <li><a href="@Url.Action("list", "area", new { pno = String.Empty })" @(Url.IsCurrent("list", "area") ? "class=\"current\"" : String.Empty)>地区管理</a></li>
+            <li><a href="@Url.Action("list", "trade", new { pno = String.Empty })" @(Url.IsCurrent("list", "trade") ? "class=\"current\"" : String.Empty)>行业类型管理</a></li>
         </ul>
         <div class="manager_content">
             @RenderBody()

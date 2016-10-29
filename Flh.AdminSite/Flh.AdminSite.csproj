@@ -114,9 +114,12 @@
   <ItemGroup>
     <Compile Include="App_Start\InjectConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
+    <Compile Include="Controllers\CommonDataController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TradeController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -124,6 +127,7 @@
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Classes\BatchAddModel.cs" />
     <Compile Include="Models\Classes\ListModel.cs" />
+    <Compile Include="Models\ClassTreeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +257,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Layout\_Manager.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Trade\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Trade\BatchAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Area\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Area\BatchAdd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\List.cshtml" />

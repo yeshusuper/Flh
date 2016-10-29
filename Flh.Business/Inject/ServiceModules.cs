@@ -17,6 +17,8 @@ namespace Flh.Business.Inject
             Bind<IClassesManager>().To<ClassesManager>();
             Bind<IAdminModifyHistoryManager>().To<AdminModifyHistoryManager>();
             Bind<IAdminManager>().To<AdminManager>();
+            Bind<ITradeManager>().To<TradeManager>();
+            Bind<IAreaManager>().To<AreaManager>();
         }
     }
 }

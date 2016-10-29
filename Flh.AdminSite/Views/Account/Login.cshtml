@@ -15,6 +15,11 @@
             <td><input name="Password" class="input-control" type="password" /></td>
         </tr>
         <tr>
+            <td>验证码：</td>
+            <td><input name="CertCode" placeholder="验证码"  class="input-control" /></td>
+           <td><img style="cursor: pointer; vertical-align:middle" src="@Url.Action("VerifyImage", "Account")" id="VerifyImage" title="看不清？点击换一个" onclick="javascript:document.getElementById('VerifyImage').src='@Url.Action("VerifyImage", "Account")?r='+Math.random();return false;"></td>
+        </tr>
+        <tr>
             <td>&nbsp;</td>
             <td><input value="登陆" type="submit" class="btn btn-primary j-login-submit" /></td>
         </tr>
@@ -25,7 +30,8 @@
         $(".j-login-submit").click(function () {
             var data = {
                 UserName: $.trim($("[name=UserName]").val()),
-                Password: $.trim($("[name=Password]").val())
+                Password: $.trim($("[name=Password]").val()),
+                CertCode: $.trim($("[name=CertCode]").val())
             };
             data['@Flh.Web.Config.Current.BACK_URL_KEY'] = '@Request.GetBackUrl()';
             $.ajax({
@@ -38,10 +44,12 @@
                         data.data ? location.href = data.data : '@Url.Action("index", "home")';
                     } else {
                         alert(data.msg)
+                        $("#VerifyImage").src = "@Url.Action("VerifyImage", "Account")?r="+Math.random();
                     }
                 },
                 error: function () {
                     alert("网络错误，请重试");
+                    $("#VerifyImage").src = "@Url.Action("VerifyImage", "Account")?r="+Math.random();
                 }
             })
             return false;

@@ -13,6 +13,12 @@
         <EntityTypeShape EntityType="FlhModel.Classes" Width="1.5" PointX="7.25" PointY="1.875" />
         <AssociationConnector Association="FlhModel.FK_Classes_Admin_creater" />
         <AssociationConnector Association="FlhModel.FK_Classes_Admin_updater" />
+        <EntityTypeShape EntityType="FlhModel.Trade" Width="1.5" PointX="7.625" PointY="6.625" />
+        <AssociationConnector Association="FlhModel.FK_Trade_Admin_creater" />
+        <AssociationConnector Association="FlhModel.FK_Trade_Admin_updater" />
+        <EntityTypeShape EntityType="FlhModel.Area" Width="1.5" PointX="7.25" PointY="10.875" />
+        <AssociationConnector Association="FlhModel.FK_Area_Admin_creater" />
+        <AssociationConnector Association="FlhModel.FK_Area_Admin_updater" />
         <EntityTypeShape EntityType="FlhModel.AdminModifyHistory" Width="1.5" PointX="0.75" PointY="6.75" />
         <EntityTypeShape EntityType="FlhModel.Product" Width="1.5" PointX="2.75" PointY="6.75" />
       </Diagram>
