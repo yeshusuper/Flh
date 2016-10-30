@@ -9,18 +9,66 @@ using System.Web.Mvc;
 
 namespace Flh.AdminSite.Controllers
 {
-    [FlhAuthorize]
+     [FlhAuthorize]
     public class ProductController : BaseController
     {
-        private readonly IProductManager _ProductManager;
-        public ProductController(IProductManager productManager)
+       private readonly IProductManager _ProductManager;
+       private readonly IClassesManager _ClassesManager;
+       public ProductController(IProductManager productManager, IClassesManager classesManager)
+       {
+           _ProductManager = productManager;
+           _ClassesManager = classesManager;
+       }
+        public ActionResult List(string no,string keyword,int? page)
         {
-            _ProductManager = productManager;
-        }
-
-        public ActionResult List()
+            if (!page.HasValue || page.Value < 1)
+                page = 1;
+            var size = 30;
+            var Position = "产品列表";
+            var count = 0;
+            if (!String.IsNullOrWhiteSpace(no))
+            {
+                try
+                {
+                    var productClass = _ClassesManager.GetEnabled(no);
+                    Position = Util.DisplayClassFullName(productClass.full_name);
+                }
+                catch
+                {
+                }
+            }
+            var products = _ProductManager.Search(new ProductSearchArgs 
+            { 
+                Keyword = keyword, 
+                Limit = size, 
+                Start = (page.Value - 1) * size, 
+                ClassNo = no 
+            }, out count);
+            return View(new Models.Product.ListModel()
+            {
+                No = (no ?? String.Empty).Trim(),
+                Position = Position,
+                Keyword=(keyword??String.Empty).Trim(),
+                Items = new PageModel<Models.Product.ListModel.Item>(products
+                            .Select(p => new Models.Product.ListModel.Item
+                            {
+                                Pid=p.pid,
+                                Name = p.name,
+                                No = p.classNo,
+                                Order = p.sortNo,
+                                Color = p.color,
+                                Image = p.imagePath,
+                                Material = p.material,
+                                Size = p.size,
+                                Technique = p.technique
+                            }), page.Value, (int)Math.Ceiling((double)count / (double)size))
+            });
+       }
+        public ActionResult Delete(string pids)
         {
-            return View();
+            var _Pids = (pids??String.Empty).Split( new string[]{","},StringSplitOptions.RemoveEmptyEntries).Select(id=>long.Parse(id)).ToArray();
+            _ProductManager.Delete(this.CurrentUser.Uid, _Pids);
+            return SuccessJsonResult();
         }
 
         /// <summary>

@@ -1,0 +1,28 @@
+﻿@model Flh.AdminSite.Models.Classes.BatchAddModel.EditModel
+@{
+    ViewBag.Title = "Edit";
+    string no = ViewBag.No;
+}
+@using (Html.BeginForm("Edit", "Area", FormMethod.Post))
+{
+    <div class="popup" style="width:390px;">
+        <table>
+            <tr>
+                <td>中文名称</td>
+                <td><input type="hidden" value="@no" name="no" /> <input type="text" name="name" value="@Model.Name" /> </td>
+            </tr>
+            <tr>
+                <td>英文名称</td>
+                <td><input type="text" name="name_en" value="@Model.EnName" /> </td>
+            </tr>
+            <tr>
+                <td>排&nbsp;&nbsp;序：</td>
+                <td><input type="text" name="order" value="@Model.Order" /> </td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="确定"></td>
+                <td><input type="button" value=" 取消" /> </td>
+            </tr>
+        </table>
+    </div>
+}

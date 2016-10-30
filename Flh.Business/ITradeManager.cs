@@ -12,6 +12,8 @@ namespace Flh.Business
         IQueryable<Data.Trade> GetChildren(string parentNo);
         Data.Trade GetEnabled(string no);
         IQueryable<Data.Trade> EnabledTrades { get; }
+        void Delete(long uid, string[] nos);
+        void Edit(long uid, string no, IClassEditInfo info);
     }
 
     internal class TradeManager : ITradeManager
@@ -110,6 +112,52 @@ namespace Flh.Business
         public IQueryable<Data.Trade> EnabledTrades
         {
             get { return _TradeRepository.EnabledTrades; }
+        }
+        public void Delete(long uid, string[] nos)
+        {
+            ExceptionHelper.ThrowIfNotId(uid, "uid");
+            nos = (nos ?? Enumerable.Empty<string>()).Where(n => !String.IsNullOrWhiteSpace(n)).Distinct().ToArray();
+            if (nos.Length>0)
+            {
+                _TradeRepository.Update(c => nos.Contains(c.no) && c.enabled, c => new Data.Trade { enabled = false, updated = DateTime.Now, updater = uid });
+            }
+        }
+
+        public void Edit(long uid, string no, IClassEditInfo info)
+        {
+            ExceptionHelper.ThrowIfNotId(uid, "uid");
+            ExceptionHelper.ThrowIfNull(info,"info");
+            var entity = GetEnabled(no);
+            bool update = false;
+            if (!String.IsNullOrWhiteSpace(info.Name)&&entity.name!=info.Name.Trim())
+            {
+                var oldName = entity.name;
+                entity.name = info.Name.Trim();
+                var entitys = _TradeRepository.Entities.Where(c => c.no.StartsWith(no)&&c.full_name!=null).ToArray();
+                foreach(var item in entitys)
+                {
+                    item.full_name = Utility.ReplyFullName(item.full_name, oldName, info.Name);
+                }
+                update = true;
+            }
+            if (!String.IsNullOrWhiteSpace(info.EnName)&&entity.name_en!=info.EnName.Trim())
+            {
+                var oldEnName = entity.name_en;
+                entity.name_en = info.EnName.Trim();
+                var entitys = _TradeRepository.Entities.Where(c => c.no.StartsWith(no) && c.full_name_en != null).ToArray();
+                foreach (var item in entitys)
+                {
+                    item.full_name_en = Utility.ReplyFullName(item.full_name_en, oldEnName, info.EnName);
+                }
+                update = true;
+            }
+            if (entity.order_by != info.Order)
+            {
+                entity.order_by = info.Order;
+                update = true;
+            }
+            if (update)
+                _TradeRepository.SaveChanges();
         }
     }
 }
