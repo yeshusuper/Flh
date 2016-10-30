@@ -26,7 +26,7 @@ namespace Flh.AdminSite.Controllers
         [HttpPost]
         public ActionResult Login(Models.Account.LoginModel model)
         {
-            if (String.IsNullOrWhiteSpace(Session.GetCurrentCertCode()) || Session.GetCurrentCertCode().ToLower() != model.CertCode.ToLower())
+            if (String.IsNullOrWhiteSpace(model.CertCode)|| String.IsNullOrWhiteSpace(Session.GetCurrentCertCode()) || Session.GetCurrentCertCode().ToLower() != model.CertCode.ToLower())
             {
                 Session.SetCurrentCertCode(String.Empty);
                 return JsonResult(ErrorCode.ArgError, "验证码错误");
