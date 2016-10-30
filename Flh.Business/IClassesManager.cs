@@ -43,7 +43,6 @@ namespace Flh.Business
             for (int i = 0; i < adds.Length; i++)
             {
                 ExceptionHelper.ThrowIfNullOrWhiteSpace(adds[i].Name, String.Format("第{0}项的名称为空", i));
-                ExceptionHelper.ThrowIfNullOrWhiteSpace(adds[i].EnName, String.Format("第{0}项的英文名称为空", i));
             }
             parentNo = parentNo.Trim();
             var parent = _ClassesRepository.EnabledClasses.FirstOrDefault(c => c.no == parentNo);
@@ -77,7 +76,7 @@ namespace Flh.Business
                         created = DateTime.Now,
                         creater = @operator,
                         name = item.Name.Trim(),
-                        name_en = item.EnName.Trim(),
+                        name_en = (item.EnName??String.Empty).Trim(),
                         no = parent.no + num.ToString().PadLeft(4, '0'),
                         order_by = item.Order,
                         updated = DateTime.Now,
