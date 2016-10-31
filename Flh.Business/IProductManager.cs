@@ -12,6 +12,7 @@ namespace Flh.Business
         IQueryable<Data.Product> GetProductList(ProductListArgs args);
         IQueryable<Data.Product> EnabledProducts { get; }
         void Delete(long uid, long[] pids);
+        void UpdateSearchIndex(long pid);
     }
     public class ProductManager : IProductManager
     {
@@ -26,8 +27,13 @@ namespace Flh.Business
             ExceptionHelper.ThrowIfNull(products, "products");
             if (products.Any())
             {
+                List<long> searchIndexPids = new List<long>();
                 var pids = products.Where(p => p.pid > 0).Select(p => p.pid).ToArray();
                 var existsProducts = _Repository.EnabledProduct.Where(p => pids.Contains(p.pid)).ToArray();
+                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
+                using (var scope = new System.Transactions.TransactionScope())
+                {
+                    //更新已存在的产品
                 foreach (var oldProduct in existsProducts)
                 {
                     var newProduct = products.FirstOrDefault(p => p.pid == oldProduct.pid);
@@ -52,14 +58,28 @@ namespace Flh.Business
                     oldProduct.unitPrice = newProduct.unitPrice;
                     oldProduct.sortNo = newProduct.sortNo;
                     oldProduct.updated = DateTime.Now;
+                        searchIndexPids.Add(oldProduct.pid);
                 }
 
-                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
+                    //新增的产品
                 foreach (var item in addingProducts)
                 {
                     AddEnabledProduct(item);
+                        searchIndexPids.Add(item.pid);
                 }
                 _Repository.SaveChanges();
+                    scope.Complete();
+                }
+
+                //重新更新索引
+                foreach (var item in existsProducts)
+                {
+                    UpdateSearchIndex(item.pid);
+            }
+                foreach (var item in addingProducts)
+                {
+                    UpdateSearchIndex(item.pid);
+                }
             }
         }
 
@@ -67,6 +87,8 @@ namespace Flh.Business
         {
             ExceptionHelper.ThrowIfNull(args, "args");
             var query = _Repository.EnabledProduct;
+            if (args != null)
+            {
             if (!String.IsNullOrWhiteSpace(args.ClassNo))
             {
                 query = query.Where(d => d.classNo.StartsWith(args.ClassNo));
@@ -74,6 +96,11 @@ namespace Flh.Business
             if (args.Pids != null && args.Pids.Any())
             {
                 query = query.Where(d => args.Pids.Contains(d.pid));
+            }
+                if (args.MinPid > 0)
+                {
+                    query = query.Where(d => d.pid > args.MinPid);
+                }
             }
             return query;
         }
@@ -131,6 +158,13 @@ namespace Flh.Business
                 _Repository.Update(p => pids.Contains(p.pid) &&p.enabled, c => new Data.Product { enabled = false, updated = DateTime.Now, updater = uid });
             }
         }
+
+
+
+
+        public void UpdateSearchIndex(long pid)
+        {
+        }
     }
 
     public class ProductListArgs
@@ -142,6 +176,7 @@ namespace Flh.Business
         }
         public String ClassNo { get; set; }
         public long[] Pids { get; set; }
+        public long MinPid { get; set; }
     }
     public class ProductSearchArgs
     {
