@@ -1,0 +1,89 @@
+﻿@model Flh.AdminSite.Controllers.AdminManageListItemModel[]
+@{
+    Layout = "~/Views/Layout/_Manager.cshtml";
+    ViewBag.Title = "List";
+}
+<div>管理员增删</div>
+<div style="margin-top:15px;">
+    <form method="get" class="common-form">
+        <input class="input-control" name="mobile" value="@ViewBag.Mobile" type="text" placeholder="输入手机号码 进行搜索" />
+        <button class="btn btn-default" type="submit">搜索</button>
+        <a style="font-size:12px;" href="javascript:;" data-event="tryAddAdmin" type="button">添加管理员</a>
+    </form>    
+</div>
+
+<table style="margin-top:15px;" class="common-list">
+    <tr>
+        <th>姓名</th>
+        <th>管理员</th>
+        <th>手机号码</th>
+        <th>设置时间</th>
+        <th>操作</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.UserName</td>
+            <td>@(item.IsAdmin?"是":"否")</td>
+            <td>@item.Mobile</td>
+            <td>@(item.CreateDate.HasValue ? item.CreateDate.Value.ToString("yyyy-MM-dd") : "--")</td>
+            <td>
+                @if (item.IsAdmin)
+                {
+                    <button data-event="remove" data-uid="@item.Uid" data-name="@item.UserName" type="button">删除管理员</button>
+                }
+                else
+                {
+                    <button data-event="add" data-uid="@item.Uid" data-name="@item.UserName" type="button">设为管理员</button>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+<script>
+    $(function () {
+
+        $('[data-event="remove"]').click(function () {
+            if (confirm("确实要删除管理员【" + $(this).attr("data-name") + "】？")) {
+                var uid = $(this).attr("data-uid");
+                $.post("/Admin/Remove", { uid: uid }, function (result) {
+                    AjaxResultHandler(result, function () {
+                        alert("操作成功");
+                        window.location.reload();
+                    });                   
+                }, "json").fail(function () {
+                    alert("发生错误了，请重试");
+                });
+            }           
+        });       
+
+        $('[data-event="add"]').click(function () {
+            if (confirm("确实要将【" + $(this).attr("data-name") + "】添加为管理员？")) {
+                var uid = $(this).attr("data-uid");
+                $.post("/Admin/Add", { uid: uid }, function (result) {
+                    AjaxResultHandler(result, function () {
+                        alert("操作成功");
+                        window.location.reload();
+                    });
+                },"json").fail(function () {
+                    alert("发生错误了，请重试");
+                });
+            }
+        });
+
+        $('[data-event="tryAddAdmin"]').click(function () {
+            alert("请在输入框中输入【手机号码】后点击【搜索】按钮，根据搜索出来的用户选择设置或删除管理员");
+            $(this).hide();
+            $('[name=mobile]').focus();
+        });
+        function AjaxResultHandler(result, success) {
+            if (result.code == 0) {
+                success(result);
+            }
+            else {
+                alert(result.msg);
+            }
+        }
+    });
+</script>

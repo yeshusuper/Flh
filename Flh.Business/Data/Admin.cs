@@ -16,8 +16,12 @@ namespace Flh.Business.Data
     {
         public Admin()
         {
+            this.Area = new HashSet<Area>();
+            this.Area1 = new HashSet<Area>();
             this.Classes = new HashSet<Classes>();
             this.Classes1 = new HashSet<Classes>();
+            this.Trade = new HashSet<Trade>();
+            this.Trade1 = new HashSet<Trade>();
         }
     
         public long uid { get; set; }
@@ -25,7 +29,11 @@ namespace Flh.Business.Data
         public bool enabled { get; set; }
     
         public virtual User User { get; set; }
+        public virtual ICollection<Area> Area { get; set; }
+        public virtual ICollection<Area> Area1 { get; set; }
         public virtual ICollection<Classes> Classes { get; set; }
         public virtual ICollection<Classes> Classes1 { get; set; }
+        public virtual ICollection<Trade> Trade { get; set; }
+        public virtual ICollection<Trade> Trade1 { get; set; }
     }
 }

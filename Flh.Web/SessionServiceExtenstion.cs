@@ -19,9 +19,14 @@ namespace Flh.Web
         {
             session[Config.Current.SESSION_USER_KEY] = entry;
         }
-
-
-
+        public static  string GetCurrentCertCode(this HttpSessionStateBase session)
+        {
+             return HttpContext.Current.Session[Config.Current.CERT_CODE] as string;
+        }
+        public static void SetCurrentCertCode(this HttpSessionStateBase session, string code)
+        {
+            HttpContext.Current.Session[Config.Current.CERT_CODE] = code;
+        }
         public static UserSessionEntry Login(this HttpSessionStateBase session, Flh.Business.IUserManager manager, string username, string password, string ip)
         {
             var user = manager.Login(username, password, ip);

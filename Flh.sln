@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flh.AdminSite", "Flh.AdminS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flh.Business", "Flh.Business\Flh.Business.csproj", "{38576E81-2772-4B42-867B-CEAA65BDC7E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flh.UnitTest", "Flh.UnitTest\Flh.UnitTest.csproj", "{7CB7212A-29F6-46F4-9D41-E6E528F657C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flh.UpdateSearchConsoleApplication", "Flh.UpdateSearchConsoleApplication\Flh.UpdateSearchConsoleApplication.csproj", "{6FA4B0A2-D6DF-4F9F-93AD-CD51F42FC20F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{38576E81-2772-4B42-867B-CEAA65BDC7E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38576E81-2772-4B42-867B-CEAA65BDC7E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38576E81-2772-4B42-867B-CEAA65BDC7E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CB7212A-29F6-46F4-9D41-E6E528F657C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CB7212A-29F6-46F4-9D41-E6E528F657C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CB7212A-29F6-46F4-9D41-E6E528F657C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CB7212A-29F6-46F4-9D41-E6E528F657C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FA4B0A2-D6DF-4F9F-93AD-CD51F42FC20F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FA4B0A2-D6DF-4F9F-93AD-CD51F42FC20F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FA4B0A2-D6DF-4F9F-93AD-CD51F42FC20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FA4B0A2-D6DF-4F9F-93AD-CD51F42FC20F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

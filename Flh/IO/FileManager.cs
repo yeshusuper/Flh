@@ -9,13 +9,25 @@ namespace Flh.IO
 {
     public class FileManager
     {
-        private IFileStore _FileStore;
+        private readonly IFileStore _FileStore;
+
+        public FileManager(IFileStore store)
+        {
+            _FileStore = store;
+        }
 
         public void Copy(FileId sourceId, FileId destId)
         {
             ExceptionHelper.ThrowIfNull(sourceId, "sourceId");
             ExceptionHelper.ThrowIfNull(destId, "destId");
             _FileStore.Copy(sourceId, destId);
+        }
+
+        public void CreateTemp(FileId id, Stream stream)
+        {
+            ExceptionHelper.ThrowIfNull(id, "id");
+            ExceptionHelper.ThrowIfNull(stream, "stream");
+            _FileStore.CreateTemp(id, stream);
         }
 
         public void CreateOrUpdate(FileId id, Stream stream)

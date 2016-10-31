@@ -4,15 +4,23 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9be2f2792cfd4f40a065ca63d06d5b33" Name="Diagram1">
-        <EntityTypeShape EntityType="FlhModel.LoginHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="FlhModel.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="FlhModel.Admin" Width="1.5" PointX="5" PointY="2.125" />
-        <AssociationConnector Association="FlhModel.FK_Admin_User" />
-        <AssociationConnector Association="FlhModel.FK_LoginHistory_User" />
-        <EntityTypeShape EntityType="FlhModel.Classes" Width="1.5" PointX="7.25" PointY="1.875" />
-        <AssociationConnector Association="FlhModel.FK_Classes_Admin_creater" />
-        <AssociationConnector Association="FlhModel.FK_Classes_Admin_updater" />
+      <Diagram DiagramId="8278dfac0f1c460ebcdd6a0e938fb64b" Name="Diagram1">
+        <EntityTypeShape EntityType="TestModel.Admin" Width="1.5" PointX="3" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.AdminModifyHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Area" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Classes" Width="1.5" PointX="5.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.LoginHistory" Width="1.5" PointX="3" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Product" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Trade" Width="1.5" PointX="5.25" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.User" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
+        <AssociationConnector Association="TestModel.FK_Admin_User" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_Area_Admin_creater" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_Area_Admin_updater" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_Classes_Admin_creater" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_Classes_Admin_updater" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_Trade_Admin_creater" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_Trade_Admin_updater" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_LoginHistory_User" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

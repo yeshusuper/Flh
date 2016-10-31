@@ -32,6 +32,11 @@ namespace Flh.IO
             return new FileId(fileId);
         }
 
+        internal string ToTempId()
+        {
+            return Path.Combine("temp", Id);
+        }
+
         internal string ToPath(string root)
         {
             var arr = new string[4];
@@ -40,6 +45,11 @@ namespace Flh.IO
             arr[2] = Id.Substring(2, 1);
             arr[3] = Id;
             return Path.Combine(root, String.Join("/", arr));
+        }
+
+        internal string ToTempPath(string root)
+        {
+            return ToPath(Path.Combine(root, "temp"));
         }
 
         public override string ToString()
