@@ -1,31 +1,70 @@
 ﻿@{
     Layout = "../Layout/_Header.cshtml";
-    ViewBag.Title = "登陆";
+    ViewBag.Title = "登录";
 }
-<form action="@Url.Action("Login")" method="post" enctype="application/x-www-form-urlencoded" class="common-form">
-    <input name="@Flh.Web.Config.Current.BACK_URL_KEY " type="hidden" value="@Request.GetBackUrl()" />
-    <table class="common_table">
-        <tr>
-        <tr>
-            <td>账号：</td>
-            <td><input name="UserName" placeholder="手机号/邮箱" class="input-control" /></td>
-        </tr>
-        <tr>
-            <td>密码：</td>
-            <td><input name="Password" class="input-control" type="password" /></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td><input value="登陆" type="submit" class="btn btn-primary j-login-submit" /></td>
-        </tr>
-    </table>
-</form>
+<div id="low-main" class="login-low-main login-main">
+    <div class="login-main-bg">
+        <table class="common-table">
+            <tr>
+                <td colspan="3" class="login-main-title">辅料汇后台管理系统</td>
+            </tr>
+            <tr class="common-table-tr">
+                <td width="93" align="right">账&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+                <td colspan="2"><input name="UserName" placeholder="手机号/邮箱" class="input-control" /></td>
+            </tr>
+            <tr class="common-table-tr">
+                <td width="93" align="right">密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+                <td colspan="2"><input name="Password" placeholder="密码" class="input-control" type="password" /></td>
+            </tr>
+            <tr class="common-table-tr">
+                <td width="93" align="right">验证码：</td>
+                <td width="163"><input name="CertCode" placeholder="验证码" class="input-control" style="width:163px;" /></td>
+                <td><img style="cursor: pointer; vertical-align:middle" src="@Url.Action("VerifyImage", "Account")" class="VerifyImage" title="看不清？点击换一个" /></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <a class="btn-primary j-login-submit" href="javascript:;">登 录</a>
+              </td>
+            </tr>
+        </table>
+    </div>
+    
+</div>
+    
+<div id="advanced-main" class="login-advanced-main login-main">
+    <div class="container">
+        <h1>辅料汇后台</h1>
+        <div class="container-table">
+            <input  type="text"  name="UserName" placeholder="手机号/邮箱" />
+            <input type="password" name="Password" placeholder="密  码" />
+            <div class="login-advanced-yzm">
+                <input class="text" type="text" name="CertCode" placeholder="验证码" />
+                <img style="cursor: pointer; vertical-align:middle" src="@Url.Action("VerifyImage", "Account")" class="VerifyImage"  title="看不清？点击换一个" />
+            </div>
+            <a class="btn-primary j-login-submit" href="javascript:;">登 录</a>
+        </div>
+    </div>
+    <ul class="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
 <script>
     (function () {
         $(".j-login-submit").click(function () {
+            var omain=$(this).parents('.login-main');
             var data = {
-                UserName: $.trim($("[name=UserName]").val()),
-                Password: $.trim($("[name=Password]").val())
+                UserName: $.trim($("[name=UserName]",omain).val()),
+                Password: $.trim($("[name=Password]",omain).val()),
+                CertCode: $.trim($("[name=CertCode]",omain).val())
             };
             data['@Flh.Web.Config.Current.BACK_URL_KEY'] = '@Request.GetBackUrl()';
             $.ajax({
@@ -38,13 +77,45 @@
                         data.data ? location.href = data.data : '@Url.Action("index", "home")';
                     } else {
                         alert(data.msg)
+                        var url="@Url.Action("VerifyImage", "Account")?r="+Math.random();
+                             $(".VerifyImage").attr('src',url)
                     }
                 },
                 error: function () {
                     alert("网络错误，请重试");
+                    var url="@Url.Action("VerifyImage", "Account")?r="+Math.random();
+                    $(".VerifyImage").attr('src',url)
                 }
             })
             return false;
         });
     })();
+    $(function () {
+        var w_h = $(window).height();
+        $('.login-main').css({ 'height': w_h });
+        if (window.applicationCache) {
+            $('#advanced-main').show();
+        } else {
+            $('#low-main').show();
+        }
+
+        $('.login-advanced-main').bind('keyup', function (event) {
+            if (event.keyCode == "13") {
+                //回车执行查询
+                $('.j-login-submit', '.login-advanced-main').click();
+            }
+        });
+        $('.login-low-main').bind('keyup', function (event) {
+            if (event.keyCode == "13") {
+                //回车执行查询
+                $('.j-login-submit', '.login-low-main').click();
+            }
+        });
+
+
+        $('.VerifyImage').on('click', function () {
+            var url="@Url.Action("VerifyImage", "Account")?r="+Math.random();
+            $(".VerifyImage").attr('src',url)
+        })
+    })
 </script>
