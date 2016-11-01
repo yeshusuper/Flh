@@ -68,6 +68,8 @@ public partial class Product
 
     public bool enabled { get; set; }
 
+    public Nullable<long> updater { get; set; }
+
 }
 
 }

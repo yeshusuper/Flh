@@ -128,7 +128,7 @@ namespace Flh.Business
         {
             var entity = _Repository.EnabledProduct.FirstOrDefault(d=>d.pid==pid);
             if(entity!=null){
-                AliyunHelper.UpdateIndexDoc("", new AliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
+                AliyunHelper.UpdateIndexDoc("","", new AliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
                 {"",entity.pid},
                 {"",entity.name},
                 {"",entity.enName},
@@ -182,47 +182,16 @@ namespace Flh.Business
 
         static AliyunHelper()
         {
-            _Http = HttpLease.HttpLease.Get<IAliyunHttp>(new Config
+            _Http = HttpLease.HttpLease.Get<IAliyunHttp>(config=>
             {
-                Encoding = Encoding.UTF8,
-                Host = HOST,
+                config.Encoding = Encoding.UTF8;
+                config.Host = HOST;
             });
         }
 
-        class Config : HttpLease.IConfig
-        {
+       
 
-            public System.Net.CookieContainer CookieContainer
-            {
-                get;
-                set;
-            }
-
-            public Encoding Encoding
-            {
-                get;
-                set;
-            }
-
-            public IDictionary<string, string> FiexdHeaders
-            {
-                get { return new Dictionary<string, string>(); }
-            }
-
-            public HttpLease.Formatters.IFormatter Formatter
-            {
-                get;
-                set;
-            }
-
-            public string Host
-            {
-                get;
-                set;
-            }
-        }
-
-        public static AliyunResponse UpdateIndexDoc(String accessKeyId,IAliyunIndexer indexer, Dictionary<string, object>[] items)
+        public static AliyunResponse UpdateIndexDoc(String accessKeyId,String accessKeySecret,IAliyunIndexer indexer, Dictionary<string, object>[] items)
         {
             var baseQuerys = new AliyunBaseQuerys();
             var action = "push";
@@ -239,7 +208,7 @@ namespace Flh.Business
                     { "table_name", indexer.AliyunTableName },
                     { "items", itemsJson }
                 };
-            var signature = baseQuerys.GetSignature(accessKeyId,"post", otherQuerys);
+            var signature = baseQuerys.GetSignature(accessKeyId,accessKeySecret,"post", otherQuerys);
             return _Http.IndexDoc(baseQuerys.Version,
                         accessKeyId,
                         signature,
@@ -253,7 +222,7 @@ namespace Flh.Business
                         itemsJson);
         }
 
-        public static AliyunResponse DeleteIndexDoc(String accessKeyId, IAliyunIndexer indexer, string idKey, string[] ids)
+        public static AliyunResponse DeleteIndexDoc(String accessKeyId,String accessKeySecret, IAliyunIndexer indexer, string idKey, string[] ids)
         {
             var baseQuerys = new AliyunBaseQuerys();
             var action = "push";
@@ -268,7 +237,7 @@ namespace Flh.Business
                 { "table_name", indexer.AliyunTableName },
                 { "items", itemsJson }
             };
-            var signature = baseQuerys.GetSignature(accessKeyId,"post", otherQuerys);
+            var signature = baseQuerys.GetSignature(accessKeyId,accessKeySecret,"post", otherQuerys);
 
             return _Http.IndexDoc(baseQuerys.Version,
                         accessKeyId,
@@ -283,7 +252,7 @@ namespace Flh.Business
                         itemsJson);
         }
 
-        public static SearchResponse.SearchResult Search(String accessKeyId,IAliyunIndexer indexer, QueryBuilder query, string qp, ISummary summary = null, string formula_name = null, string[] fields = null)
+        public static SearchResponse.SearchResult Search(String accessKeyId,String accessKeySecret,IAliyunIndexer indexer, QueryBuilder query, string qp, ISummary summary = null, string formula_name = null, string[] fields = null)
         {
             var baseQuerys = new AliyunBaseQuerys();
             var queryString = query.ToString();
@@ -301,7 +270,7 @@ namespace Flh.Business
                 { "formula_name", formula_name ?? String.Empty },
                 { "summary", summaryString },
             };
-            var sign = baseQuerys.GetSignature(accessKeyId, "get", otherQuerys);
+            var sign = baseQuerys.GetSignature(accessKeyId,accessKeySecret, "get", otherQuerys);
 
             var response = _Http.Search(baseQuerys.Version, accessKeyId, sign, baseQuerys.Signature.Method, baseQuerys.Signature.Version,
                 baseQuerys.SignatureNonce, baseQuerys.Timestamp, queryString, indexer.AliyunAppName,
@@ -387,13 +356,13 @@ namespace Flh.Business
         string Timestamp { get; }
         string SignatureNonce { get; }
         IAliyunSignature Signature { get; }
-        string GetSignature(string httpMethod, IDictionary<string, string> otherQuerys);
+        string GetSignature(string accessKeyId,string accessKeySecret, string httpMethod, IDictionary<string, string> otherQuerys);
     }
     public interface IAliyunSignature
     {
         string Version { get; }
         string Method { get; }
-        string GetResult(string httpMethod, IDictionary<string, string> allQuerys);
+        string GetResult(String accessKeySecret, string httpMethod, IDictionary<string, string> allQuerys);
     }
     public class AliyunBaseQuerys : IAliyunBaseQuerys
     {
@@ -435,7 +404,7 @@ namespace Flh.Business
             Signature = new HMACSHA1Signature();
         }
 
-        public string GetSignature(string accessKeyId,string httpMethod, IDictionary<string, string> otherQuerys)
+        public string GetSignature(string accessKeyId,String accessKeySecret,string httpMethod, IDictionary<string, string> otherQuerys)
         {
             var allQuery = otherQuerys == null ? new Dictionary<string, string>() : new Dictionary<string, string>(otherQuerys);
 
@@ -446,7 +415,7 @@ namespace Flh.Business
             allQuery.Add("SignatureVersion", Signature.Version);
             allQuery.Add("SignatureNonce", SignatureNonce);
 
-            return Signature.GetResult(httpMethod, allQuery);
+            return Signature.GetResult(accessKeySecret,httpMethod, allQuery);
         }
     }
     class HMACSHA1Signature : IAliyunSignature

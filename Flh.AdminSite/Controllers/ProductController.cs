@@ -37,17 +37,40 @@ namespace Flh.AdminSite.Controllers
             {
                 page = 1;
             }
+            ViewBag.Page = page;
+            ViewBag.Pids = pids;
+            ViewBag.ClassNo = classNo;
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult BatchEdit(int? page, long[] pids, String classNo)
+        {
+            if (!page.HasValue || page.Value < 1)
+            {
+                page = 1;
+            }
             int size = 30;
             var products = _ProductManager.GetProductList(new ProductListArgs { Pids = pids, ClassNo = classNo });
-            return View(new Models.Product.BatchEditListModel
-            {
-                Items = new PageModel<Flh.Business.Data.Product>(products
-                            .OrderByDescending(n => n.sortNo)
-                            .ThenByDescending(n => n.created)
-                            .Skip((page.Value - 1) * size)
-                            .Take(size)
-                            .Select(p => p).ToArray(),
-                            page.Value, (int)Math.Ceiling((double)products.Count() / (double)size))
+            //return View(new Models.Product.BatchEditListModel
+            //{
+            //    Items = new PageModel<Flh.Business.Data.Product>(products
+            //                .OrderByDescending(n => n.sortNo)
+            //                .ThenByDescending(n => n.created)
+            //                .Skip((page.Value - 1) * size)
+            //                .Take(size)
+            //                .Select(p => p).ToArray(),
+            //                page.Value, (int)Math.Ceiling((double)products.Count() / (double)size))
+            //});
+
+            var items = products.OrderByDescending(n => n.sortNo)
+                    .ThenByDescending(n => n.created)
+                    .Skip((page.Value - 1) * size)
+                    .Take(size)
+                    .Select(p => p).ToArray();
+            return Json(new { 
+                Items=items,
+
             });
         }
 

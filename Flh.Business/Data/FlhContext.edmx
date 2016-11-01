@@ -93,6 +93,7 @@
           <Property Name="created" Type="datetime" Nullable="false" />
           <Property Name="updated" Type="datetime" Nullable="false" />
           <Property Name="enabled" Type="bit" Nullable="false" />
+          <Property Name="updater" Type="bigint" />
         </EntityType>
         <EntityType Name="Trade">
           <Key>
@@ -555,6 +556,7 @@
           <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="updated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="enabled" Type="Boolean" Nullable="false" />
+          <Property Name="updater" Type="Int64" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -668,6 +670,7 @@
           <EntitySetMapping Name="Product">
             <EntityTypeMapping TypeName="FlhModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="updater" ColumnName="updater" />
                 <ScalarProperty Name="enabled" ColumnName="enabled" />
                 <ScalarProperty Name="updated" ColumnName="updated" />
                 <ScalarProperty Name="created" ColumnName="created" />
