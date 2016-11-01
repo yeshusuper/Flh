@@ -27,12 +27,13 @@ namespace Flh.AdminSite.Controllers
                 page = 1;
             var size = 30;
             var parent = _TradeManager.GetEnabled(pno);
-
+            pno=pno.Trim();
             var classes = _TradeManager.GetChildren(pno);
-
+            var parentClasses = _TradeManager.EnabledTrades.Where(c =>pno.StartsWith(c.no)).OrderBy(c => c.no.Length).ToDictionary(c => c.no, c => c.name);
             return View(new Models.Classes.ListModel(){
-                ParentNo = pno.Trim(),
+                ParentNo = pno,
                 ParentFullName = Util.DisplayClassFullName(parent.full_name),
+                ParentClasses=parentClasses,
                 Items = new PageModel<Models.Classes.ListModel.Item>(classes
                             .OrderByDescending(n => n.order_by)
                             .ThenByDescending(n => n.created)

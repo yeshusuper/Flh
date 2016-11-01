@@ -54,6 +54,9 @@
           <Property Name="order_by" Type="int" Nullable="false" />
           <Property Name="name_en" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="full_name_en" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="indexImage" Type="nvarchar" MaxLength="200" />
+          <Property Name="listImage" Type="nvarchar" MaxLength="200" />
+          <Property Name="introduce" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="LoginHistory">
           <Key>
@@ -335,6 +338,9 @@
           <Property Name="full_name_en" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Admin" Relationship="Self.FK_Classes_Admin_creater" FromRole="Classes" ToRole="Admin" />
           <NavigationProperty Name="Admin1" Relationship="Self.FK_Classes_Admin_updater" FromRole="Classes" ToRole="Admin" />
+          <Property Name="indexImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="listImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="introduce" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="LoginHistory">
           <Key>
@@ -604,6 +610,9 @@
           <EntitySetMapping Name="Classes">
             <EntityTypeMapping TypeName="TestModel.Classes">
               <MappingFragment StoreEntitySet="Classes">
+                <ScalarProperty Name="introduce" ColumnName="introduce" />
+                <ScalarProperty Name="listImage" ColumnName="listImage" />
+                <ScalarProperty Name="indexImage" ColumnName="indexImage" />
                 <ScalarProperty Name="no" ColumnName="no" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="full_name" ColumnName="full_name" />

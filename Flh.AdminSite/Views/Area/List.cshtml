@@ -3,7 +3,22 @@
     ViewBag.Title = "地区列表";
     Layout = "../Layout/_Manager.cshtml";
 }
-当前分类：@Model.ParentFullName <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a>
+当前分类：
+@if (Model.ParentClasses != null)
+{
+    int index = 0;
+    int count = Model.ParentClasses.Count;
+    foreach (var c in Model.ParentClasses)
+    {
+        <a href="@Url.Action("List", new { pno = c.Key })">@c.Value</a>
+        index++;
+        if (index < count)
+        {
+            <span>></span>
+        }
+    }
+}
+ <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a>
 <table class="common-list">
     <thead>
         <tr>

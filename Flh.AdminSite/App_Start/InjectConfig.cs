@@ -22,7 +22,8 @@ namespace Flh.AdminSite
         {
             DependencyResolver.SetResolver(new NinjectDependencyResolver(
                 new Flh.Business.Inject.DataModule(),
-                new Flh.Business.Inject.ServiceModule()));
+                new Flh.Business.Inject.ServiceModule(),
+                new WebModule()));
         }
     }
 }
