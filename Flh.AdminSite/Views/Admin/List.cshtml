@@ -1,18 +1,20 @@
 ﻿@model Flh.AdminSite.Controllers.AdminManageListItemModel[]
 @{
     Layout = "~/Views/Layout/_Manager.cshtml";
-    ViewBag.Title = "List";
+    ViewBag.Title = "管理员列表";
 }
-<div>管理员增删</div>
-<div style="margin-top:15px;">
-    <form method="get" class="common-form">
-        <input class="input-control" name="mobile" value="@ViewBag.Mobile" type="text" placeholder="输入手机号码 进行搜索" />
-        <button class="btn btn-default" type="submit">搜索</button>
-        <a style="font-size:12px;" href="javascript:;" data-event="tryAddAdmin" type="button">添加管理员</a>
-    </form>    
+<div class="crumbs">您的位置：辅料汇后台 &gt;  管理员管理 &gt; 管理员列表</div>
+<div class="layout-search">
+    <input class="input-mobile" name="mobile" value="@ViewBag.Mobile" type="text" placeholder="输入手机号码 进行搜索" />
+    <button class="btn btn-default" type="submit">搜索</button>
 </div>
 
 <table style="margin-top:15px;" class="common-list">
+    <tr>
+        <td colspan="5">
+        <a style="font-size:12px;" href="javascript:;" data-event="tryAddAdmin" type="button">添加管理员</a>
+        </td>
+    </tr>
     <tr>
         <th>姓名</th>
         <th>管理员</th>
