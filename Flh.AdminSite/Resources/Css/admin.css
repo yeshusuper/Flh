@@ -68,9 +68,15 @@ color: #fff;
 :-ms-input-placeholder { /* Internet Explorer 10+ */
 color: #fff;
 }
+/*所有列表的搜索样式*/
+.layout-search{margin: 10px 10px 0 10px;padding: 18px;background-color: #F0F5FB;border: 1px solid #D8E6F5;}
+.layout-search .input-mobile{ width: 200px; padding: 0px 0px 0px 10px; border:1px solid #999; color: #333; height: 28px;}
+.layout-search .btn{line-height: 14px;height: 30px; padding: 0px 20px; background: #2776ab; border: 0px; font-size: 14px;}
+.layout-search .btn:hover{background: #acd1ff;}
 
 /*产品*/
-.layout-header{ height: 70px; height: 70px;min-width: 1220px;position: relative;z-index: 30;background: url("http://img.tgimg.cn/ywqadmin/shared/logo.gif") no-repeat 20px 0 #31465f;color: #fff;}
+.layout-header{ height: 70px; height: 70px;min-width: 1220px;position: relative;z-index: 30;background:#31465f;color: #fff;}
+.layout-header .logo{ display: block; width:200px; height: 70px; font-size: 40px; line-height: 70px; position: absolute; top: 0px; left: 0px; color: #fff; text-align: center;}
 .layout-header nav{margin-left: 200px;}
 .layout-header nav a{padding: 0 40px;display: inline-block;*display: inline;*zoom: 1;line-height: 66px;font-weight: bold;background-color: #375171;border-bottom: 4px solid #619DE0;color: #fff;margin-right: 5px;}
 .header-user{float: right;margin-right: 40px;line-height: 70px;}
@@ -109,3 +115,4 @@ color: #fff;
 .product-main .td-enKeywords{width: 94%;padding: 0px; height: 25px; color: #666; margin:17px 0px 0px 0px;}
 .product-main .td-unitPrice{ width: 80%; height: 25px; margin-right: 5px; }
 .product-main .td-sortNo{width:90%; margin: 47px auto 0px auto; height: 25px;}
+/*管理员列表*/
