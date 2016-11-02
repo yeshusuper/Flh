@@ -130,6 +130,7 @@
     <Compile Include="Models\Classes\ListModel.cs" />
     <Compile Include="Models\ClassTreeModel.cs" />
     <Compile Include="Models\Product\BatchEditListModel.cs" />
+    <Compile Include="Models\Product\ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +272,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Area\BatchAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Trade\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Area\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Classes\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\List.cshtml" />

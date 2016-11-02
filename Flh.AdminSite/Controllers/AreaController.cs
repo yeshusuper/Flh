@@ -1,4 +1,4 @@
-﻿using Flh.Business;
+using Flh.Business;
 using Flh.Web;
 using Newtonsoft.Json;
 using System;
@@ -64,6 +64,30 @@ namespace Flh.AdminSite.Controllers
         {
             var items = JsonConvert.DeserializeObject<Models.Classes.BatchAddModel.EditModel[]>(model);
             _AreaManager.AddRange(this.CurrentUser.Uid, pno, items);
+            return SuccessJsonResult();
+        }
+        public ActionResult Edit(string no)
+        {
+            var entity = _AreaManager.GetEnabled(no);
+            ViewBag.No = no;
+            return View(new Models.Classes.BatchAddModel.EditModel
+            {
+                EnName = entity.area_name_en,
+                Name = entity.area_name,
+                Order = entity.order_by
+            });
+        }
+        [HttpPost]
+        public ActionResult Edit(string no, string name, string name_en, int order)
+        {
+            _AreaManager.Edit(this.CurrentUser.Uid, no, new Models.Classes.BatchAddModel.EditModel { EnName = name_en, Name = name, Order = order });
+            return RedirectToAction("list", new { pno = no.Substring(0, no.Length - 4) });
+        }
+        [HttpPost]
+        public ActionResult Delete(string nos)
+        {
+            var _Nos = (nos ?? String.Empty).Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Where(n => !String.IsNullOrWhiteSpace(n)).Distinct().ToArray();
+            _AreaManager.Delete(this.CurrentUser.Uid, _Nos);
             return SuccessJsonResult();
         }
     }

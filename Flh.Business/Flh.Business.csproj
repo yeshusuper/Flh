@@ -70,12 +70,8 @@
     <Compile Include="Data\Trade.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\TradeRePository.cs" />
-    <Compile Include="Data\AdminModifyHistory.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\IAdminModifyHistoryRepository.cs" />
-    <Compile Include="Data\PartialEntity.cs" />
+    <Compile Include="Data\TradeRePository.cs" />    
+    <Compile Include="Data\IAdminModifyHistoryRepository.cs" />    
     <Compile Include="Data\Product.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
@@ -86,8 +82,6 @@
     <Compile Include="Data\Classes.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\IClassesRepository.cs" />
-    <Compile Include="Data\DbSetRepository.cs" />
     <Compile Include="Data\FlhContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -102,15 +96,21 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FlhContext.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Data\IAdminRepository.cs" />
-    <Compile Include="Data\IUserRepository.cs" />
+    </Compile>   
     <Compile Include="Data\LoginHistory.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
+    </Compile>   
+    <Compile Include="Data\PartialEntity.cs" />
     <Compile Include="Data\User.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>  
+    <Compile Include="Data\AdminModifyHistory.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\IClassesRepository.cs" />
+    <Compile Include="Data\DbSetRepository.cs" />
+    <Compile Include="Data\IAdminRepository.cs" />
+    <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="IAdminManager.cs" />
     <Compile Include="IAdminModifyHistoryManager.cs" />
     <Compile Include="IAreaManager.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users\EmployeesCountRanges.cs" />
     <Compile Include="Users\IRegisterInfo.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Flh.Aliyun\Flh.Aliyun.csproj">
@@ -135,13 +136,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <EntityDeploy Include="Data\FlhContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>FlhContext.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
     <None Include="Data\FlhContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>FlhContext.edmx</DependentUpon>

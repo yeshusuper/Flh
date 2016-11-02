@@ -12,6 +12,8 @@ namespace Flh.Business
         IQueryable<Data.Area> GetChildren(string parentNo);
         Data.Area GetEnabled(string no);
         IQueryable<Data.Area> EnabledAreas { get; }
+        void Delete(long uid, string[] nos);
+        void Edit(long uid, string no, IClassEditInfo info);
     }
 
     internal class AreaManager : IAreaManager
@@ -113,6 +115,52 @@ namespace Flh.Business
             {
                 return _AreaRepositor.EnabledAreas;
             }
+        }
+        public void Delete(long uid, string[] nos)
+        {
+            ExceptionHelper.ThrowIfNotId(uid, "uid");
+            nos = (nos ?? Enumerable.Empty<string>()).Where(n => !String.IsNullOrWhiteSpace(n)).Distinct().ToArray();
+            if (nos.Length > 0)
+            {
+                _AreaRepositor.Update(c => nos.Contains(c.area_no) && c.enabled, c => new Data.Area { enabled = false, updated = DateTime.Now, updater = uid });
+            }
+        }
+
+        public void Edit(long uid, string no, IClassEditInfo info)
+        {
+            ExceptionHelper.ThrowIfNotId(uid, "uid");
+            ExceptionHelper.ThrowIfNull(info, "info");
+            var entity = GetEnabled(no);
+            bool update = false;
+            if (!String.IsNullOrWhiteSpace(info.Name) && entity.area_name != info.Name.Trim())
+            {
+                var oldName = entity.area_name;
+                entity.area_name = info.Name.Trim();
+                var entitys = _AreaRepositor.Entities.Where(c => c.area_no.StartsWith(no) && c.area_full_name != null).ToArray();
+                foreach (var item in entitys)
+                {
+                    item.area_full_name = Utility.ReplyFullName(item.area_full_name, oldName, info.Name);
+                }
+                update = true;
+            }
+            if (!String.IsNullOrWhiteSpace(info.EnName) && entity.area_name_en != info.EnName.Trim())
+            {
+                var oldEnName = entity.area_name_en;
+                entity.area_name_en = info.EnName.Trim();
+                var entitys = _AreaRepositor.Entities.Where(c => c.area_no.StartsWith(no) && c.area_full_name_en != null).ToArray();
+                foreach (var item in entitys)
+                {
+                    item.area_full_name_en = Utility.ReplyFullName(item.area_full_name_en, oldEnName, info.EnName);
+                }
+                update = true;
+            }
+            if (entity.order_by != info.Order)
+            {
+                entity.order_by = info.Order;
+                update = true;
+            }
+            if (update)
+                _AreaRepositor.SaveChanges();
         }
     }
 }

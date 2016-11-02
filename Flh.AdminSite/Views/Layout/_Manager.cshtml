@@ -2,8 +2,9 @@
     Layout = "~/Views/Layout/_header.cshtml";
 }
 <div class="main_layout">
-    <div class="header _temp_border">
-        <div class="user_info">
+    <div class="layout-header">
+        <a class="logo">辅料汇</a>
+        <div class="header-user">
             @if (this.Session.GetCurrentUser() != null)
             {
                 <span>欢迎你：</span>@(this.Session.GetCurrentUser().Name)
@@ -14,16 +15,38 @@
                 <a href="@Url.Action("login", "account")">登陆</a>
             }
         </div>
+        <nav>
+            <a href="@Url.Action("list", "admin")">管理员管理</a>
+            <a href="@Url.Action("list", "classes", new { pno = String.Empty })" >分类管理</a>
+            <a href="@Url.Action("list", "area", new { pno = String.Empty })">地区管理</a>
+            <a href="@Url.Action("list", "trade", new { pno = String.Empty })" >行业类型管理</a>
+            <a href="@Url.Action("list", "product")" >产品管理</a>
+        </nav>
     </div>
-    <div class="manager-area">
-        <ul class="sidebar">
-            <li><a href="@Url.Action("list", "admin")" @(Url.IsCurrent("list", "admin") ? "class=\"current\"" : String.Empty)>管理员管理</a></li>
-            <li><a href="@Url.Action("list", "classes", new { pno = String.Empty })" @(Url.IsCurrent("list", "classes") ? "class=\"current\"" : String.Empty)>分类管理</a></li>
-            <li><a href="@Url.Action("list", "area", new { pno = String.Empty })" @(Url.IsCurrent("list", "area") ? "class=\"current\"" : String.Empty)>地区管理</a></li>
-            <li><a href="@Url.Action("list", "trade", new { pno = String.Empty })" @(Url.IsCurrent("list", "trade") ? "class=\"current\"" : String.Empty)>行业类型管理</a></li>
-            <li><a href="@Url.Action("list", "product")" @(Url.IsCurrent("list", "product") ? "class=\"current\"" : String.Empty)>产品管理</a></li>
-        </ul>
-        <div class="manager_content">
+    <div class="layout-center">
+        <div class="layout-left">
+            <div class="layout-left-list">
+                <div class="layout-left-tub">会员管理</div>
+                <div class="layout-left-subclass"><a href="@Url.Action("list", "admin")" @(Url.IsCurrent("list", "admin") ? "class=\"current\"" : String.Empty)>管理员列表</a></div>
+            </div>
+            <div class="layout-left-list">
+                <div class="layout-left-tub">分类管理</div>
+                <div class="layout-left-subclass"><a href="@Url.Action("list", "classes", new { pno = String.Empty })" @(Url.IsCurrent("list", "classes") ? "class=\"current\"" : String.Empty)>分类列表</a></div>
+            </div>
+            <div class="layout-left-list">
+                <div class="layout-left-tub">地区管理</div>
+                <div class="layout-left-subclass"><a href="@Url.Action("list", "area", new { pno = String.Empty })" @(Url.IsCurrent("list", "area") ? "class=\"current\"" : String.Empty)>地区列表</a></div>
+            </div>
+            <div class="layout-left-list">
+                <div class="layout-left-tub">行业类型管理</div>
+                <div class="layout-left-subclass"><a href="@Url.Action("list", "trade", new { pno = String.Empty })" @(Url.IsCurrent("list", "trade") ? "class=\"current\"" : String.Empty)>行业类型列表</a></div>
+            </div>
+            <div class="layout-left-list">
+                <div class="layout-left-tub">产品管理</div>
+                <div class="layout-left-subclass"><a href="@Url.Action("list", "product")" @(Url.IsCurrent("list", "product") ? "class=\"current\"" : String.Empty)>产品列表</a></div>
+            </div>
+        </div>
+        <div class="layout-right">
             @RenderBody()
         </div>
     </div>

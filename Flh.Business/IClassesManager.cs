@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +20,8 @@ namespace Flh.Business
         IQueryable<Data.Classes> GetChildren(string parentNo);
         Data.Classes GetEnabled(string no);
         IQueryable<Data.Classes> EnabledClasses { get; }
+        void Delete(long uid, string[] nos);
+        void Edit(long uid, string no, IClassEditInfo info);
     }
 
     internal class ClassesManager : IClassesManager
@@ -41,7 +43,6 @@ namespace Flh.Business
             for (int i = 0; i < adds.Length; i++)
             {
                 ExceptionHelper.ThrowIfNullOrWhiteSpace(adds[i].Name, String.Format("第{0}项的名称为空", i));
-                ExceptionHelper.ThrowIfNullOrWhiteSpace(adds[i].EnName, String.Format("第{0}项的英文名称为空", i));
             }
             parentNo = parentNo.Trim();
             var parent = _ClassesRepository.EnabledClasses.FirstOrDefault(c => c.no == parentNo);
@@ -75,7 +76,7 @@ namespace Flh.Business
                         created = DateTime.Now,
                         creater = @operator,
                         name = item.Name.Trim(),
-                        name_en = item.EnName.Trim(),
+                        name_en = (item.EnName??String.Empty).Trim(),
                         no = parent.no + num.ToString().PadLeft(4, '0'),
                         order_by = item.Order,
                         updated = DateTime.Now,
@@ -119,6 +120,52 @@ namespace Flh.Business
         public IQueryable<Data.Classes> EnabledClasses
         {
             get { return _ClassesRepository.EnabledClasses; }
+        }
+        public void Delete(long uid, string[] nos)
+        {
+            ExceptionHelper.ThrowIfNotId(uid, "uid");
+            nos = (nos ?? Enumerable.Empty<string>()).Where(n => !String.IsNullOrWhiteSpace(n)).Distinct().ToArray();
+            if (nos.Length > 0)
+            {
+                _ClassesRepository.Update(c => nos.Contains(c.no) && c.enabled, c => new Data.Classes { enabled = false, updated = DateTime.Now, updater = uid });
+            }
+        }
+
+        public void Edit(long uid, string no, IClassEditInfo info)
+        {
+            ExceptionHelper.ThrowIfNotId(uid, "uid");
+            ExceptionHelper.ThrowIfNull(info, "info");
+            var entity = GetEnabled(no);
+            bool update = false;
+            if (!String.IsNullOrWhiteSpace(info.Name) && entity.name != info.Name.Trim())
+            {
+                var oldName = entity.name;
+                entity.name = info.Name.Trim();
+                var entitys = _ClassesRepository.Entities.Where(c => c.no.StartsWith(no) && c.full_name != null).ToArray();
+                foreach (var item in entitys)
+                {
+                    item.full_name = Utility.ReplyFullName(item.full_name, oldName, info.Name);
+                }
+                update = true;
+            }
+            if (!String.IsNullOrWhiteSpace(info.EnName) && entity.name_en != info.EnName.Trim())
+            {
+                var oldEnName = entity.name_en;
+                entity.name_en = info.EnName.Trim();
+                var entitys = _ClassesRepository.Entities.Where(c => c.no.StartsWith(no) && c.full_name_en != null).ToArray();
+                foreach (var item in entitys)
+                {
+                    item.full_name_en = Utility.ReplyFullName(item.full_name_en, oldEnName, info.EnName);
+                }
+                update = true;
+            }
+            if (entity.order_by != info.Order)
+            {
+                entity.order_by = info.Order;
+                update = true;
+            }
+            if (update)
+                _ClassesRepository.SaveChanges();
         }
     }
 }

@@ -1,5 +1,75 @@
-﻿@{
-    Layout = "~/Views/Layout/_Manager.cshtml";
-    ViewBag.Title = "List";
+﻿@model Flh.AdminSite.Models.Product.ListModel
+@{
+    ViewBag.Title = "产品列表";
+    Layout = "../Layout/_Manager.cshtml";
 }
-<h2>List</h2>
+当前位置：@Model.Position 
+<div style="margin-top:15px;">
+    <form method="get" class="common-form">
+        <input class="input-control" name="keyword" value="@Model.Keyword" type="text" placeholder="产品名称/关键词 进行搜索" />
+        <button class="btn btn-default" type="submit">搜索</button>
+    </form>
+</div>
+<div style="margin:5px auto 5px auto;">
+    <label><input value="" name="" type="checkbox" class="check-all">全选</label>
+    <button class="btn btn-default product-delete">批量删除</button>
+    <button class="btn btn-default">项目添加</button>
+</div>
+<table class="common-list">
+    <thead>
+        <tr>
+            <th></th>
+            <th>图片</th>
+            <th>名称</th>
+            <th>尺寸</th>
+            <th>颜色</th>
+            <th>材质</th>
+            <th>工艺</th>
+            <th>排序</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                <input value="@item.Pid" name="pid" type="checkbox" class="check-monomer">
+                </td>
+                <td>
+                    <img src="@item.Image" alt="产品图片" style="width:35px;height:35px;" />
+                </td>
+                <td>@item.Name</td>
+                <td>@item.Size</td>
+                <td>@item.Color</td>
+                <td>@item.Material</td>
+                <td>@item.Technique</td>
+                <td>@item.Order</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="page">
+    @Html.Pager(Model.Items);
+</div>
+<script type="text/javascript">
+    $(".check-all").click(function () {
+        if (this.checked) {
+            $("input[name='pid']").attr("checked", true);
+        } else {
+            $("input[name='pid']").attr("checked", false);
+        }
+    });
+
+    $(".product-delete").click(function () {
+        var pids = new Array(); 
+        $("input[name='pid']").each(function (i) {
+            if (this.checked == true) {
+                pids[i] = $(this).val();
+            }
+        });
+        $.post('@Url.Action("Delete")', { "pids":pids.join(',') }, function (data) {
+            alert(data);
+            window.location.reload();
+        })
+    });
+</script>

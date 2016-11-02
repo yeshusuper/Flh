@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -64,7 +64,7 @@ namespace Flh.AdminSite.Controllers
             deep = Math.Max(1, deep);
             var maxLength = (parent ?? String.Empty).Length + 4 * deep;
 
-            var areaInfos = _ClassesManager.EnabledClasses.Where(c => c.no.Length <= maxLength);
+            var areaInfos = _TradeManager.EnabledTrades.Where(c => c.no.Length <= maxLength);
             if (!String.IsNullOrWhiteSpace(parent))
                 areaInfos = areaInfos.Where(c => c.no.StartsWith(parent) && c.no.Length > parent.Length);
 
