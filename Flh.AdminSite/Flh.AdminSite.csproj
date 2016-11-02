@@ -119,7 +119,6 @@
     <Compile Include="Controllers\CommonDataController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TradeController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
