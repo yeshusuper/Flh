@@ -78,6 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionResultExtension.cs" />
+    <Compile Include="Aliyun\AliyunAccessKey.cs" />
+    <Compile Include="Aliyun\AliyunHelper.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="CertCode.cs" />
     <Compile Include="Config.cs" />

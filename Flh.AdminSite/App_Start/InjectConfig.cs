@@ -1,4 +1,5 @@
 ﻿using Flh.Web;
+using Flh.Web.Aliyun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,8 @@ namespace Flh.AdminSite
             public override void Load()
             {
                 Bind<Flh.IO.FileManager>().ToSelf();
-                Bind<Flh.IO.IFileStore>().To<Flh.IO.SystemFileStroe>();
+                //if(AliyunHelper.AliyunAccessKey == null)
+                    Bind<Flh.IO.IFileStore>().To<Flh.IO.SystemFileStroe>();
             }
         }
 
