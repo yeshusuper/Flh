@@ -7,7 +7,7 @@
 <div class="common-form" id="product-categories">
     <div style="width:800px;">
         <table class="common-list-table">
-            <tr><td colspan="4">@Model.ParentFullName</td></tr>
+            <tr><td colspan="4">当前分类：@Model.ParentFullName</td></tr>
             <tr>
                 <th width="270">中文名称</th>
                 <th width="270">英文名称</th>
@@ -17,9 +17,9 @@
             @foreach (var item in Model.EditModels)
             {
                 <tr class="j-batch-item">
-                    <td><input type="text" class="input-sortName" name="Name" /></td>
-                    <td><input type="text" class="input-sortEnName" name="EnName" /></td>
-                    <td><input type="text" class="input-sortOrder" name="Order" value="0" /></td>
+                    <td><input type="text" class="input-allName" name="Name" /></td>
+                    <td><input type="text" class="input-allEnName" name="EnName" /></td>
+                    <td><input type="text" class="input-allOrder" name="Order" value="0" /></td>
                     <td><button class="j-batch-del">删除</button></td>
                 </tr>
             }

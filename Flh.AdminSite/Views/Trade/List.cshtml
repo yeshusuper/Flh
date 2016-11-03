@@ -3,32 +3,32 @@
     ViewBag.Title = "行业类型列表";
     Layout = "../Layout/_Manager.cshtml";
 }
-当前分类：@Model.ParentFullName <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a>
-<table class="common-list">
-    <thead>
+<div class="crumbs">您的位置：辅料汇后台 &gt;  行业类型管理 &gt; 行业类型列表</div>
+<div class="common-list" id="careerType_list">
+    <table class="common-list-table">
+        <tr><td colspan="4">@Model.ParentFullName <a class="btn-batch-add btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a></td></tr>
         <tr>
-            <th>分类编号</th>
-            <th>分类名称</th>
-            <th>分类排序</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Items)
-        {
-            <tr>
-                <td>@item.No</td>
-                <td>@item.Name</td>
-                <td>@item.Order</td>
-                <td>
-                    <a class="btn btn-default" href="@Url.Action("edit", new { no = item.No })" target="_blank">修改</a>
-                    <a class="btn btn-default" href="@Url.Action("list", new { pno = item.No })" target="_blank">子类型列表</a>
-                    <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
-                </td>
+<tr>
+                <th>分类编号</th>
+                <th>分类名称</th>
+                <th>分类排序</th>
+                <th>操作</th>
             </tr>
-        }
-    </tbody>
-</table>
-<div class="page">
-    @Html.Pager(Model.Items);
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.No</td>
+                    <td>@item.Name</td>
+                    <td>@item.Order</td>
+                    <td>
+                        <a class="btn btn-default" href="@Url.Action("edit", new { no = item.No })" target="_blank">修改</a>
+                        <a class="btn btn-default" href="@Url.Action("list", new { pno = item.No })" target="_blank">子类型列表</a>
+                        <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
+                    </td>
+                </tr>
+            }
+    </table>
+    <div class="page">
+        @Html.Pager(Model.Items);
+    </div>
 </div>
