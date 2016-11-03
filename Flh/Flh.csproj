@@ -39,8 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConvertExtension.cs" />
     <Compile Include="Data\IClassModel.cs" />
     <Compile Include="Data\IRepository.cs" />
+    <Compile Include="Data\Range.cs" />
     <Compile Include="Data\TreeExtension.cs" />
     <Compile Include="ExceptionHelper.cs" />
     <Compile Include="FlhException.cs" />
