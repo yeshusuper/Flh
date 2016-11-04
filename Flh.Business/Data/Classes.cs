@@ -25,6 +25,9 @@ namespace Flh.Business.Data
         public int order_by { get; set; }
         public string name_en { get; set; }
         public string full_name_en { get; set; }
+        public string indexImage { get; set; }
+        public string listImage { get; set; }
+        public string introduce { get; set; }
     
         public virtual Admin Admin { get; set; }
         public virtual Admin Admin1 { get; set; }

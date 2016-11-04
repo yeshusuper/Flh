@@ -1,8 +1,8 @@
 @charset "GBK";
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, dialog, details, em, fieldset, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, main, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
   font-size: 100%;
   font: inherit;
   vertical-align: baseline; }
@@ -52,11 +52,11 @@ blockquote, q {
   quotes: none; }
 
 blockquote:before, blockquote:after, q:before, q:after {
-  content: '';
+    content: '';
   content: none; }
 
 table {
-  border-collapse: collapse;
+    border-collapse: collapse;
   border-spacing: 0; }
 
 th, td {
@@ -123,7 +123,7 @@ button, input {
   *overflow: visible; }
 
 button::-moz-focus-inner, input::-moz-focus-inner {
-  border: 0;
+    border: 0;
   padding: 0; }
 
 button, input[type="button"], input[type="reset"], input[type="submit"] {
@@ -140,7 +140,7 @@ input[type="search"]::-webkit-search-decoration {
   -webkit-appearance: none; }
 
 textarea {
-  margin: 0;
+    margin: 0;
   overflow: auto;
   /*移除IE6-9纵向滚动条*/
   vertical-align: top;
@@ -351,7 +351,7 @@ h6 {
 
 body {
   color: #333;
-  font-size: 12px;
+    font-size: 12px;
   line-height: 24px;
   font-family: '宋体';
   background: #fff; }
@@ -379,13 +379,13 @@ img {
   border: none; }
 
 .btn-menu a, .btn-group a, .button, button {
-  display: inline-block;
+    display: inline-block;
   *display: inline;
   *zoom: 1;
   vertical-align: middle;
-  cursor: pointer;
+    cursor: pointer;
   text-decoration: none;
-  white-space: nowrap;
+    white-space: nowrap;
   outline: none;
   overflow-y: hidden;
   box-shadow: none;
@@ -787,10 +787,10 @@ textarea {
 
 /*分页样式*/
 .page {
-  margin: 20px 0;
-  line-height: 20px;
+margin: 20px 0;
+line-height: 20px;
   text-align: center; }
-  .page a, .page b {
+.page a, .page b {
     display: inline-block;
     *display: inline;
     *zoom: 1;
@@ -804,21 +804,21 @@ textarea {
     margin-right: 5px;
     font-weight: 400;
     border-radius: 2px; }
-  .page b, .page a.current, .page a:hover {
+.page b, .page a.current, .page a:hover {
     border: 1px #4C6A8C solid;
     background-color: #8BBBE9;
     color: #fff; }
-  .page input {
-    box-sizing: content-box;
-    line-height: 22px;
-    height: 22px;
-    border: 1px solid #8CA9CC;
-    border-radius: 2px;
-    height: 16px;
-    width: 40px;
-    line-height: 16px;
-    border-right: 0;
-    vertical-align: top;
+.page input {
+box-sizing: content-box;
+line-height: 22px;
+height: 22px;
+border: 1px solid #8CA9CC;
+border-radius: 2px;
+height: 16px;
+width: 40px;
+line-height: 16px;
+border-right: 0;
+vertical-align: top;
     border-radius: 2px 0 0 2px; }
     .page input:focus {
       box-shadow: 0 0 5px #A4C6FD;
@@ -946,7 +946,7 @@ textarea {
     border-radius: 2px;
     padding: 1px 0.5em; }
     .search-area input:focus {
-      box-shadow: 0 0 5px #A4C6FD;
+    box-shadow: 0 0 5px #A4C6FD;
       outline: -webkit-focus-ring-color auto 5px; }
   .search-area .checkbox-list input {
     padding: 0;
@@ -992,10 +992,10 @@ textarea {
     border-bottom: 4px solid #619DE0;
     color:#fff;
     margin-right: 5px;
-  }
+    }
 #header nav a.current{
   cursor: default;
-}
+    } 
   #header .user {
     float: right;
     margin-right: 40px;
@@ -1040,7 +1040,7 @@ textarea {
 
 /*左边导航*/
 #nav-bar {
-  float: left;
+        float: left;
   /*position: fixed;
   padding-top: 70px;*/
   z-index: 20;
@@ -1139,14 +1139,14 @@ form label.valid {
 }
 .tag-green{
     background-color:#76b65b;
-}
+    }
 .tag-blue{
     background-color:#44a6e1;
-}
+        }
 .tag-red{
     background-color:#d20c0c;
-}
+        }
 .tag-yellow{
     background-color:#ffa10e;
-}
+            }
     

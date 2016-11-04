@@ -13,11 +13,15 @@ namespace Flh.AdminSite.Models.Classes
             public string No { get; set; }
             public string Name { get; set; }
             public int Order { get; set; }
+            public string Introduce { get; set; }
+            public string IndexImage { get; set; }
+            public string ListImage { get; set; }
         }
 
         public string ParentNo { get; set; }
         public string ParentFullName { get; set; }
         public PageModel<Item> Items { get; set; }
+        public Dictionary<string, string> ParentClasses { get; set; }
         
     }
 }
