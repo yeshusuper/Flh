@@ -32,7 +32,7 @@ namespace Flh.IO
             return new FileId(fileId);
         }
 
-        internal string ToTempId()
+        public string ToTempId()
         {
             return Path.Combine("temp", Id);
         }

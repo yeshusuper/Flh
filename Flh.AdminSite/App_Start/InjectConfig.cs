@@ -15,8 +15,10 @@ namespace Flh.AdminSite
             public override void Load()
             {
                 Bind<Flh.IO.FileManager>().ToSelf();
-                //if(AliyunHelper.AliyunAccessKey == null)
+                if (AliyunHelper.AliyunAccessKey == null)
                     Bind<Flh.IO.IFileStore>().To<Flh.IO.SystemFileStroe>();
+                else
+                    Bind<Flh.IO.IFileStore>().ToConstant(new OSSService("flh-images"));
             }
         }
 

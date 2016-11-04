@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aliyun.OSS">
+      <HintPath>..\packages\Aliyun.OSS.SDK.2.3.0\lib\Aliyun.OSS.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -80,6 +83,7 @@
     <Compile Include="ActionResultExtension.cs" />
     <Compile Include="Aliyun\AliyunAccessKey.cs" />
     <Compile Include="Aliyun\AliyunHelper.cs" />
+    <Compile Include="Aliyun\OSSService.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="CertCode.cs" />
     <Compile Include="Config.cs" />
