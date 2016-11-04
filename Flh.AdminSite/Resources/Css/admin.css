@@ -73,7 +73,18 @@ color: #fff;
 .layout-search .input-mobile{ width: 200px; padding: 0px 0px 0px 10px; border:1px solid #999; color: #333; height: 28px;}
 .layout-search .btn{line-height: 14px;height: 30px; padding: 0px 20px; background: #2776ab; border: 0px; font-size: 14px;}
 .layout-search .btn:hover{background: #acd1ff;}
-
+/*普通的列表页样式*/
+.common-list{ margin: 15px 10px 0px 10px; color: #333;}
+.common-list-table{width: 100%;}
+.common-list-table td,.common-list-table th{ border:1px solid #ddd; padding: 6px 0px 6px 10px;}
+.common-list-table th{background: #C1D9F3;}
+.common-list .operating a{ color: #336699; margin-right: 10px;}
+.common-list .operating a:hover{ color: #f60;}
+.btn-batch-add{ float: right; margin-right: 10px; color: #369;}
+.btn-batch-add:hover{ color: #f60;}
+.input-allName,.input-allEnName{ height: 28px; border:1px solid #999; border-radius: 4px; color: #666;  width: 256px;}
+.input-allOrder{height: 28px; border:1px solid #999; border-radius: 4px; color: #666;  width: 124px; text-align: center;}
+.input-allName:hover,.input-allEnName:hover,.input-allOrder:hover{ border: 1px solid #369;}
 /*产品*/
 .layout-header{ height: 70px; height: 70px;min-width: 1220px;position: relative;z-index: 30;background:#31465f;color: #fff;}
 .layout-header .logo{ display: block; width:200px; height: 70px; font-size: 40px; line-height: 70px; position: absolute; top: 0px; left: 0px; color: #fff; text-align: center;}
@@ -115,4 +126,15 @@ color: #fff;
 .product-main .td-enKeywords{width: 94%;padding: 0px; height: 25px; color: #666; margin:17px 0px 0px 0px;}
 .product-main .td-unitPrice{ width: 80%; height: 25px; margin-right: 5px; }
 .product-main .td-sortNo{width:90%; margin: 47px auto 0px auto; height: 25px;}
-/*管理员列表*/
+/*产品分类*/
+.common-form{margin: 15px 10px 0px 10px; color: #333;}
+#product-categories .btn-add-all{ float: right; margin-right: 10px; color: #369;}
+#product-categories .btn-add-all:hover{ color: #f60;}
+.input-sortName,.input-sortEnName{ height: 28px; border:1px solid #999; border-radius: 4px; color: #666;  width: 256px;}
+.input-sortOrder{height: 28px; border:1px solid #999; border-radius: 4px; color: #666;  width: 124px; text-align: center;}
+.input-sortName:hover,.input-sortEnName:hover,.input-sortOrder:hover{ border: 1px solid #369;}
+.options-add{ display: block; width: 50%; height: 20px; line-height: 20px; font-size: 14px; color: #336699; text-align: center; margin: 0px auto;}
+.options-add:hover{ color: #f60;}
+.options{ margin-top: 15px;}
+.options-save{ padding: 6px 20px; background: #336699; color: #fff; font-size: 14px;}
+.options-save:hover{ background: #acd1ff; color: #fff;};

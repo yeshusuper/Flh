@@ -3,33 +3,34 @@
     ViewBag.Title = "行业类型列表";
     Layout = "../Layout/_Manager.cshtml";
 }
-当前分类：
-@if (Model.ParentClasses != null)
-{
-    int index = 0;
-    int count = Model.ParentClasses.Count;
-    foreach (var c in Model.ParentClasses)
+<div class="crumbs">
+    当前分类：
+    @if (Model.ParentClasses != null)
     {
-        <a href="@Url.Action("List", new { pno = c.Key })">@c.Value</a>
-        index++;
-        if (index < count)
+        int index = 0;
+        int count = Model.ParentClasses.Count;
+        foreach (var c in Model.ParentClasses)
         {
-            <span>></span>
+            <a href="@Url.Action(" list", new { pno=c.Key })">@c.Value</a>
+            index++;
+            if (index < count)
+            {
+                <span>></span>
+            }
         }
     }
-}
-<a class="btn btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a>
-
-<table class="common-list">
-    <thead>
+</div>
+<a class="btn btn-default" href="@Url.Action(" batchadd", new { pno=Model.ParentNo })" target="_blank">批量添加</a>
+<div class="common-list" id="careerType_list">
+    <table class="common-list-table">
+        <tr><td colspan="4">@Model.ParentFullName <a class="btn-batch-add btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a></td></tr>
+        <tr>
         <tr>
             <th>分类编号</th>
             <th>分类名称</th>
             <th>分类排序</th>
             <th>操作</th>
         </tr>
-    </thead>
-    <tbody>
         @foreach (var item in Model.Items)
         {
             <tr>
@@ -43,8 +44,8 @@
                 </td>
             </tr>
         }
-    </tbody>
 </table>
 <div class="page">
     @Html.Pager(Model.Items);
+</div>
 </div>
