@@ -3,45 +3,41 @@
     Layout = "~/Views/Layout/_Manager.cshtml";
     ViewBag.Title = "管理员列表";
 }
-<div class="crumbs">您的位置：辅料汇后台 &gt;  管理员管理 &gt; 管理员列表</div>
+<div class="crumbs">您的位置：辅料汇后台 &gt;  会员管理 &gt; 会员列表</div>
 <div class="layout-search">
     <input class="input-mobile" name="mobile" value="@ViewBag.Mobile" type="text" placeholder="输入手机号码 进行搜索" />
     <button class="btn btn-default" type="submit">搜索</button>
 </div>
-
-<table style="margin-top:15px;" class="common-list">
-    <tr>
-        <td colspan="5">
-        <a style="font-size:12px;" href="javascript:;" data-event="tryAddAdmin" type="button">添加管理员</a>
-        </td>
-    </tr>
-    <tr>
-        <th>姓名</th>
-        <th>管理员</th>
-        <th>手机号码</th>
-        <th>设置时间</th>
-        <th>操作</th>
-    </tr>
-    @foreach (var item in Model)
-    {
+<div class="common-list">
+    <table class="common-list-table">
         <tr>
-            <td>@item.UserName</td>
-            <td>@(item.IsAdmin?"是":"否")</td>
-            <td>@item.Mobile</td>
-            <td>@(item.CreateDate.HasValue ? item.CreateDate.Value.ToString("yyyy-MM-dd") : "--")</td>
-            <td>
-                @if (item.IsAdmin)
-                {
-                    <button data-event="remove" data-uid="@item.Uid" data-name="@item.UserName" type="button">删除管理员</button>
-                }
-                else
-                {
-                    <button data-event="add" data-uid="@item.Uid" data-name="@item.UserName" type="button">设为管理员</button>
-                }
-            </td>
+            <th width="20%">姓名</th>
+            <th width="20%">手机号码</th>
+            <th width="20%">管理员</th>
+            <th width="20%">设置时间</th>
+            <th>操作</th>
         </tr>
-    }
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.UserName</td>
+                <td>@item.Mobile</td>
+                <td>@(item.IsAdmin ? "是" : "否")</td>
+                <td>@(item.CreateDate.HasValue ? item.CreateDate.Value.ToString("yyyy-MM-dd") : "--")</td>
+                <td>
+                    @if (item.IsAdmin)
+                    {
+                        <button data-event="remove" data-uid="@item.Uid" data-name="@item.UserName" type="button">删除管理员</button>
+                    }
+                    else
+                    {
+                        <button data-event="add" data-uid="@item.Uid" data-name="@item.UserName" type="button">设为管理员</button>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>
 
 <script>
     $(function () {

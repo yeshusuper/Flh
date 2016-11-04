@@ -24,16 +24,19 @@ namespace Flh.AdminSite.Controllers
             {
                 pno = FlhConfig.AREA_CLASS_PREFIX;
             }
+            pno = pno.Trim();
             if (!page.HasValue || page.Value < 1)
                 page = 1;
             var size = 30;
             var parent = _AreaManager.GetEnabled(pno);
 
             var classes = _AreaManager.GetChildren(pno);
+            var parentClasses = _AreaManager.EnabledAreas.Where(c => pno.StartsWith(c.area_no)).OrderBy(c => c.area_no.Length).ToDictionary(c => c.area_no, c => c.area_name);
 
             return View(new Models.Classes.ListModel(){
                 ParentNo = pno.Trim(),
                 ParentFullName = Util.DisplayClassFullName(parent.area_full_name),
+                ParentClasses=parentClasses,
                 Items = new PageModel<Models.Classes.ListModel.Item>(classes
                             .OrderByDescending(n => n.order_by)
                             .ThenByDescending(n => n.created)

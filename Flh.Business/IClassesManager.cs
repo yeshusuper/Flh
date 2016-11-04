@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Flh;
+using Flh.IO;
 
 namespace Flh.Business
 {
@@ -12,6 +13,9 @@ namespace Flh.Business
         string Name { get; }
         string EnName { get; }
         int Order { get; }
+        string Introduce { get; }
+        string IndexImage { get; }
+        string ListImage { get; }
     }
 
     public interface IClassesManager
@@ -27,10 +31,12 @@ namespace Flh.Business
     internal class ClassesManager : IClassesManager
     {
         private readonly Data.IClassesRepository _ClassesRepository;
+        private readonly FileManager _FileManager;
 
-        public ClassesManager(Data.IClassesRepository classesRepository)
+        public ClassesManager(Data.IClassesRepository classesRepository, FileManager fileManager)
         {
             _ClassesRepository = classesRepository;
+            _FileManager = fileManager;
         }
 
         public Data.Classes[] AddRange(long @operator, string parentNo, IClassEditInfo[] adds)
@@ -162,6 +168,27 @@ namespace Flh.Business
             if (entity.order_by != info.Order)
             {
                 entity.order_by = info.Order;
+                update = true;
+            }
+            if (!String.IsNullOrWhiteSpace(info.Introduce)&&info.Introduce.Trim()!=entity.introduce)
+            {
+                entity.introduce = info.Introduce.Trim();
+                update = true;
+            }
+            if (!String.IsNullOrWhiteSpace(info.IndexImage) && info.IndexImage.Trim() != entity.indexImage)
+            {
+                var target = FileId.FromFileName(info.IndexImage);
+                var sourceId=FileId.FromFileId(info.IndexImage);
+                _FileManager.Copy(sourceId, target);
+                entity.indexImage = target.Id;
+                update = true;
+            }
+            if (!String.IsNullOrWhiteSpace(info.ListImage) && info.ListImage.Trim() != entity.listImage)
+            {
+                var target = FileId.FromFileName(info.ListImage);
+                var sourceId = FileId.FromFileId(info.ListImage);
+                _FileManager.Copy(sourceId, target);
+                entity.listImage = target.Id;
                 update = true;
             }
             if (update)

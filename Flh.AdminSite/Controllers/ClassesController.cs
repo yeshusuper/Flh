@@ -25,16 +25,19 @@ namespace Flh.AdminSite.Controllers
             {
                 pno = FlhConfig.CLASSNO_CLASS_PREFIX;
             }
+            pno = pno.Trim();
             if (!page.HasValue || page.Value < 1)
                 page = 1;
             var size = 30;
             var parent = _ClassesManager.GetEnabled(pno);
 
             var classes = _ClassesManager.GetChildren(pno);
+            var parentClasses = _ClassesManager.EnabledClasses.Where(c => pno.StartsWith(c.no)).OrderBy(c => c.no.Length).ToDictionary(c => c.no, c => c.name);
 
             return View(new Models.Classes.ListModel(){
                 ParentNo = pno.Trim(),
                 ParentFullName = Util.DisplayClassFullName(parent.full_name),
+                ParentClasses=parentClasses,
                 Items = new PageModel<Models.Classes.ListModel.Item>(classes
                             .OrderByDescending(n => n.order_by)
                             .ThenByDescending(n => n.created)
@@ -43,7 +46,10 @@ namespace Flh.AdminSite.Controllers
                             .Select(n => new Models.Classes.ListModel.Item{
                                 Name = n.name,
                                 No = n.no,
-                                Order = n.order_by
+                                Order = n.order_by,
+                                IndexImage=n.indexImage,
+                                 Introduce=n.introduce,
+                                  ListImage=n.introduce,
                             }), page.Value, (int)Math.Ceiling((double)classes.Count()/(double)size))
             });
         }
@@ -76,13 +82,16 @@ namespace Flh.AdminSite.Controllers
             {
                 EnName = entity.name_en,
                 Name = entity.name,
-                Order = entity.order_by
+                Order = entity.order_by,
+                Introduce = entity.introduce,
+                ListImage = entity.listImage,
+                IndexImage = entity.indexImage,
             });
         }
         [HttpPost]
-        public ActionResult Edit(string no, string name, string name_en, int order)
+        public ActionResult Edit(string no, string name, string name_en, int order, string listImage, string indexImage, string introduce)
         {
-            _ClassesManager.Edit(this.CurrentUser.Uid, no, new Models.Classes.BatchAddModel.EditModel { EnName = name_en, Name = name, Order = order });
+            _ClassesManager.Edit(this.CurrentUser.Uid, no, new Models.Classes.BatchAddModel.EditModel { EnName = name_en, Name = name, Order = order, IndexImage=indexImage,ListImage=listImage,Introduce=introduce });
             return RedirectToAction("list", new { pno = no.Substring(0, no.Length - 4) });
         }
         [HttpPost]

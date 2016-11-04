@@ -1,47 +1,50 @@
 ﻿@model Flh.AdminSite.Models.Classes.BatchAddModel
 @{
     Layout = "../Layout/_Manager.cshtml";
-    ViewBag.Title = "BatchAdd";
+    ViewBag.Title = "添加产品分类";
 }
-<div class="common-form">
-    <h3>当前分类：@Model.ParentFullName</h3>
-    <table class="common-list" style="width:800px">
-        <thead>
+<div class="crumbs">您的位置：辅料汇后台 &gt;  分类管理 &gt; 添加产品分类</div>
+<div class="common-form" id="product-categories">
+    <div style="width:800px;">
+        <table class="common-list-table">
+            <tr><td colspan="4">当前分类：@Model.ParentFullName</td></tr>
             <tr>
-                <th>中文名称</th>
-                <th>英文名称</th>
-                <th style="width:100px">排序</th>
-                <th style="width:100px">删除</th>
+                <th width="270">中文名称</th>
+                <th width="270">英文名称</th>
+                <th>排序</th>
+                <th width="80">删除</th>
             </tr>
-        </thead>
-        <tbody class="j-batch-items">
             @foreach (var item in Model.EditModels)
             {
                 <tr class="j-batch-item">
-                    <td><input class="input-control" name="Name" /></td>
-                    <td><input class="input-control" name="EnName" /></td>
-                    <td><input class="input-control" name="Order" style="width:100px;" value="0" /></td>
+                    <td><input type="text" class="input-allName" name="Name" /></td>
+                    <td><input type="text" class="input-allEnName" name="EnName" /></td>
+                    <td><input type="text" class="input-allOrder" name="Order" value="0" /></td>
                     <td><button class="j-batch-del">删除</button></td>
                 </tr>
             }
-        </tbody>
-    </table>
-    <div class="options">
-        <a class="btn btn-primary j-batch-add">增加一个</a>
-        <a class="btn btn-primary j-batch-submit">保存</a>
+            <tr class="j-batch-fun">
+                <td colspan="4"><a class="options-add btn-primary j-batch-add">增加一个</a></td>
+            </tr>
+        </table>
+        <div class="options">
+            <a class="options-save btn-primary j-batch-submit">保存</a>
+        </div>
     </div>
 </div>
+
 <script>
-    (function () {
+    $(function(){
         var $itemTemplate = $(".j-batch-item").eq(0).clone(),
-            $parent = $(".j-batch-items"),
+            $parent = $(".j-batch-fun"),
             submiting = false;
         $(".j-batch-add").click(function () {
-            $parent.append($itemTemplate.clone());
+            $parent.before($itemTemplate.clone());
         });
-        $(".j-batch-items").delegate(".j-batch-del", "click", function () {
-            $(this).parents().filter(".j-batch-item").remove();
+        $(".j-batch-del").live("click", function () {
+            $(this).parents(".j-batch-item").remove();
         });
+
         $(".j-batch-submit").click(function () {
             if (!submiting) {
                 submiting = true;
@@ -83,6 +86,6 @@
             }
             return false;
         })
-    })();
+    })
 </script>
 

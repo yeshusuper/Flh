@@ -12,6 +12,9 @@ namespace Flh.AdminSite.Models.Classes
             public string Name { get; set; }
             public string EnName { get; set; }
             public int Order { get; set; }
+            public string Introduce{get;set;}
+            public string IndexImage{get;set;}
+            public string ListImage{get;set;}
         }
 
         public string ParentNo { get; set; }

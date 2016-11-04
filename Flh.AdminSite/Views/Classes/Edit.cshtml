@@ -20,6 +20,14 @@
                 <td><input type="text" name="order" value="@Model.Order" /> </td>
             </tr>
             <tr>
+                <td>简&nbsp;&nbsp;介：</td>
+                <td><textarea name="introduce">@Model.Introduce</textarea> </td>
+            </tr>
+            <tr>
+                <td>图&nbsp;&nbsp;片：</td>
+                <td><img src="@Model.IndexImage" /><input type="hidden" value="@Model.IndexImage" name="indexImage" /> &nbsp;<img src="@Model.ListImage" /><input type="hidden" name="listImage" value="@Model.ListImage" /> </td>
+            </tr>
+            <tr>
                 <td><input type="submit" value="确定"></td>
                 <td><input type="button" value=" 取消" /> </td>
             </tr>

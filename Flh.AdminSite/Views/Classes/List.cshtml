@@ -3,32 +3,49 @@
     ViewBag.Title = "分类列表";
     Layout = "../Layout/_Manager.cshtml";
 }
-当前分类：@Model.ParentFullName <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a>
-<table class="common-list">
-    <thead>
+<div class="crumbs">
+    当前分类：
+    @if (Model.ParentClasses != null)
+    {
+        int index = 0;
+        int count = Model.ParentClasses.Count;
+        foreach (var c in Model.ParentClasses)
+        {
+            <a href="@Url.Action(" list", new { pno=c.Key })">@c.Value</a>
+            index++;
+            if (index < count)
+            {
+                <span>></span>
+            }
+        }
+    }
+</div>
+<div class="common-list" id="product-categories">
+    <table class="common-list-table">
+        <tr><td colspan="4">@Model.ParentFullName <a class="btn-add-all btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a></td></tr>
         <tr>
-            <th>分类编号</th>
-            <th>分类名称</th>
-            <th>分类排序</th>
-            <th>操作</th>
+            <th width="20%">分类编号</th>
+            <th width="35%">分类名称</th>
+            <th width="10%">分类排序</th>
+            <th style="text-align:center">操作</th>
         </tr>
-    </thead>
-    <tbody>
+
         @foreach (var item in Model.Items)
         {            
         <tr>
             <td>@item.No</td>
             <td>@item.Name</td>
             <td>@item.Order</td>
-            <td>
+                <td class="operating">
                 <a class="btn btn-default" href="@Url.Action("edit", new { no = item.No })" target="_blank">修改</a>
                 <a class="btn btn-default" href="@Url.Action("list", new { pno = item.No })" target="_blank">子分类列表</a>
                 <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
             </td>
         </tr>            
         }
-    </tbody>
+
 </table>
 <div class="page">
     @Html.Pager(Model.Items);
+</div>
 </div>
