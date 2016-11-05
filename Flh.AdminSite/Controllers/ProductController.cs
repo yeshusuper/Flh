@@ -3,6 +3,7 @@ using Flh.Web;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -79,7 +80,7 @@ namespace Flh.AdminSite.Controllers
         /// <param name="classNo"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult BatchEdit(int? page, String pids)
+        public ActionResult BatchEdit(int? page, String pids,String classNo)
         {
             if (!page.HasValue || page.Value < 1)
             {
@@ -87,6 +88,7 @@ namespace Flh.AdminSite.Controllers
             }
             ViewBag.Page = page;
             ViewBag.Pids = pids;
+            ViewBag.ClassNo = classNo;
             return View();
         }
 
@@ -113,6 +115,42 @@ namespace Flh.AdminSite.Controllers
             var items = JsonConvert.DeserializeObject<Flh.Business.Data.Product[]>(models);
             _ProductManager.AddOrUpdateProducts(items);
             return SuccessJsonResult();
+        }
+
+        [HttpPost]
+        public ActionResult UploadImages()
+        {
+            List<String> fileNames = new List<string>();
+            foreach (string item in Request.Files)
+            {
+                HttpPostedFileBase file = Request.Files[item] as HttpPostedFileBase;
+                if (file == null && file.ContentLength == 0)
+                    continue;
+                //判断Upload文件夹是否存在，不存在就创建
+                string path = Server.MapPath("..//Upload");
+                if (!System.IO.Directory.Exists(path))
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+
+                path = AppDomain.CurrentDomain.BaseDirectory + "Upload/";
+                //获取上传的文件名
+                string fileName = Path.GetFileName(file.FileName);
+                //限制上传文件的类型
+                if (Path.GetExtension(fileName) != ".png" 
+                    && Path.GetExtension(fileName) != ".jpg"
+                    && Path.GetExtension(fileName) != ".jpeg"
+                    && Path.GetExtension(fileName) != ".gif")
+                {
+                    return JsonResult(ErrorCode.ServerError, "只能上传png/jpg/jpeg/gif格式的图片");
+                }
+                //上传
+                file.SaveAs(Path.Combine(path, fileName));
+
+                var imgUrl = "/Upload/" + fileName;
+                fileNames.Add(imgUrl);
+            }
+            return SuccessJsonResult<List<String>>(fileNames);
         }
     }
 }
