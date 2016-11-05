@@ -1,6 +1,20 @@
 ﻿@{
     ViewBag.Title = "BatchEdit";
-    Layout = "~/Views/Layout/_Manager.cshtml";
+    //Layout = "~/Views/Layout/_Manager.cshtml";
 }
 
 <h2>BatchEdit</h2>
+
+<!--图片批量上传-->
+<form method="post" action="/Product/UploadImages" enctype="multipart/form-data">
+    <input type="file" name="file0" />
+    <input type="file" name="file1" />
+    <input type="file" name="file2" />
+    <button type="submit">上传</button>
+</form>
+<script>
+    var pageIndex ='@ViewBag.Page';// 页码
+    var pids = '@ViewBag.Pids'; //产品id数组，英文逗号隔开
+    var classNo='@ViewBag.ClassNo';//产品分类
+</script>
+

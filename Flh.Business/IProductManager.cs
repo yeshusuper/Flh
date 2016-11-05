@@ -38,6 +38,8 @@ namespace Flh.Business
                     //更新已存在的产品
                     foreach (var oldProduct in existsProducts)
                     {
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(oldProduct.enName, "", "产品名称不能为空");
+                        //todo:更多空值验证
                         var newProduct = products.FirstOrDefault(p => p.pid == oldProduct.pid);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
@@ -223,7 +225,10 @@ namespace Flh.Business
             var querys = new List<IQuery>();
             if (!String.IsNullOrWhiteSpace(args.Keyword))
             {
-                querys.Add(new QueryItem("keyword", args.Keyword));
+                querys.Add(Query.Or(
+                     new QueryItem("keyword", args.Keyword)
+                     ,new QueryItem("enkeyword", args.Keyword)
+                    ));
             }
             if (!String.IsNullOrWhiteSpace(args.ClassNo))
             {
