@@ -28,7 +28,7 @@ namespace Flh.AdminSite.Controllers
         {
             var target = FileId.FromFileName(file.FileName);
             _FileManager.CreateTemp(target, file.InputStream);
-            return SuccessJsonResult<string>(target.Id);
+            return SuccessJsonResult<string>(target.ToTempId());
         }
         [HttpGet]
         public ActionResult Test()
