@@ -225,7 +225,10 @@ namespace Flh.Business
             var querys = new List<IQuery>();
             if (!String.IsNullOrWhiteSpace(args.Keyword))
             {
-                querys.Add(new QueryItem("keyword", args.Keyword));
+                querys.Add(Query.Or(
+                     new QueryItem("keyword", args.Keyword)
+                     ,new QueryItem("enkeyword", args.Keyword)
+                    ));
             }
             if (!String.IsNullOrWhiteSpace(args.ClassNo))
             {
