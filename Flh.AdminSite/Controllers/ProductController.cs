@@ -42,8 +42,8 @@ namespace Flh.AdminSite.Controllers
             { 
                 Keyword = keyword, 
                 Limit = size, 
-                Start = (page.Value - 1) * size, 
-                ClassNo = no 
+                Start = (page.Value - 1) * size,
+                ClassNo = String.IsNullOrWhiteSpace(no) ? "0001" : no
             }, out count);
             return View(new Models.Product.ListModel()
             {
