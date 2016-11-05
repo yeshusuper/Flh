@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace Flh.AdminSite.Controllers
 {
-     [FlhAuthorize]
+     //[FlhAuthorize]
     public class ProductController : BaseController
     {
        private readonly IProductManager _ProductManager;
@@ -79,7 +79,7 @@ namespace Flh.AdminSite.Controllers
         /// <param name="classNo"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult BatchEdit(int? page, long[] pids, String classNo)
+        public ActionResult BatchEdit(int? page, String pids)
         {
             if (!page.HasValue || page.Value < 1)
             {
@@ -87,15 +87,15 @@ namespace Flh.AdminSite.Controllers
             }
             ViewBag.Page = page;
             ViewBag.Pids = pids;
-            ViewBag.ClassNo = classNo;
             return View();
         }
 
-        [HttpPost]
-        public ActionResult BatchEdit(long[] pids)
+        //[HttpPost]//todo:改成post请求
+        public ActionResult BatchEditList(string pids)
         {
-           
-            var products = _ProductManager.GetProductList(new ProductListArgs { Pids = pids});
+            pids = pids ?? String.Empty;
+            var pidsArr = pids.Split(new char[]{','},StringSplitOptions.RemoveEmptyEntries).Select(d=>d.To<long>()).ToArray();
+            var products = _ProductManager.GetProductList(new ProductListArgs { Pids = pidsArr });
             var items = products.OrderByDescending(n => n.sortNo)
                     .ThenByDescending(n => n.created)
                     .Select(p => p).ToArray();
@@ -108,7 +108,7 @@ namespace Flh.AdminSite.Controllers
         /// <param name="models"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult BatchEdit(string models)
+        public ActionResult SaveBatchEdit(string models)
         {
             var items = JsonConvert.DeserializeObject<Flh.Business.Data.Product[]>(models);
             _ProductManager.AddOrUpdateProducts(items);
