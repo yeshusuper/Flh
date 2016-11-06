@@ -77,7 +77,7 @@ namespace Flh.Business
                     OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
                     if (oldProduct.imagePath != newProduct.imagePath)
                     {
-                        var newFileID = FileId.FromFileName(newProduct.imagePath);
+                        var newFileID = FileId.FromFileId(newProduct.imagePath);
                         _FileStore.Copy(FileId.FromFileId(newProduct.imagePath), FileId.FromFileName(newProduct.imagePath));//将临时文件复制到永久文件处
                         oldProduct.imagePath = newFileID.Id;
                     }
@@ -98,21 +98,19 @@ namespace Flh.Business
 
                 //新增的产品  
                 var addingProducts = products.Where(p => p.pid <= 0).ToArray();
-                foreach (var item in addingProducts)
+                foreach (var entity in addingProducts)
                 {
-                    item.created = DateTime.Now;
-                    item.updated = DateTime.Now;
-                    item.enabled = true;
-                    //try
-                    //{
-                    _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
-                    //}
-                    //catch
-                    //{
-                    //}
-                    _Repository.Add(item);
+                    entity.created = DateTime.Now;
+                    entity.updated = DateTime.Now;
+                    entity.enabled = true;
+
+                    var newFileID = FileId.FromFileId(entity.imagePath);
+                    _FileStore.Copy(FileId.FromFileId(entity.imagePath), newFileID);//将临时文件复制到永久文件处
+                    entity.imagePath = newFileID.Id;
+
+                    _Repository.Add(entity);
                     _Repository.SaveChanges();
-                    UpdateSearchIndex(item.pid);  //更新索引
+                    UpdateSearchIndex(entity.pid);  //更新索引
                 }
             }
         }
