@@ -151,30 +151,37 @@ namespace Flh.Business
         }
         public IEnumerable<Data.Product> Search(ProductSearchArgs args, out int count)
         {
-            int start = 0;
-            int limit = 30;
-            var source = _Repository.EnabledProduct;
-            if (args != null)
+            if (args != null && (!String.IsNullOrWhiteSpace(args.ClassNo) || !String.IsNullOrWhiteSpace(args.Keyword)))
             {
-                if (!String.IsNullOrWhiteSpace(args.ClassNo))
-                {
-                    source = source.Where(d => d.classNo.StartsWith(args.ClassNo.Trim()));
-                }
-                if (!String.IsNullOrWhiteSpace(args.Keyword))
-                {
-                    var keyword = args.Keyword.Trim();
-                    source = source.Where(d => d.name.Contains(keyword) || d.keywords.Contains(keyword));
-                }
-                start = Math.Max(0, args.Start);
-                if (args.Limit > 0)
-                    limit = args.Limit;
+                return ProductSearchHelper.Search(args, out count); 
             }
-            count = source.Count();
-            return source.OrderByDescending(p => p.sortNo)
-                 .ThenByDescending(p => p.updated)
-                 .Skip(start).Take(limit)
-                 .ToArray();
-            //return ProductSearchHelper.Search(args, out count);         
+            else
+            {
+                int start = 0;
+                int limit = 30;
+                var source = _Repository.EnabledProduct;
+                if (args != null)
+                {
+                    if (!String.IsNullOrWhiteSpace(args.ClassNo))
+                    {
+                        source = source.Where(d => d.classNo.StartsWith(args.ClassNo.Trim()));
+                    }
+                    if (!String.IsNullOrWhiteSpace(args.Keyword))
+                    {
+                        var keyword = args.Keyword.Trim();
+                        source = source.Where(d => d.name.Contains(keyword) || d.keywords.Contains(keyword));
+                    }
+                    start = Math.Max(0, args.Start);
+                    if (args.Limit > 0)
+                        limit = args.Limit;
+                }
+                count = source.Count();
+                return source.OrderByDescending(p => p.sortNo)
+                     .ThenByDescending(p => p.updated)
+                     .Skip(start).Take(limit)
+                     .ToArray();
+            }            
+                    
         }
         public IQueryable<Data.Product> EnabledProducts
         {
