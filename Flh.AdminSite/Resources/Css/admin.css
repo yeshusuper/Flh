@@ -1,6 +1,7 @@
 body{font: 12px/1.75 arial, "宋体", sans-serif;}
 .p-20{ padding: 20px;}
 .login-main{ display: none;}
+.clear{ clear: both; width: 0px; height: 0px;}
 /*登录界面样式*/
 /*比较LOW的*/
 .login-low-main{   background: #282828; width: 100%; position: relative;}
@@ -56,23 +57,25 @@ font-family: "Microsoft YaHei",sans-serif; color: #282828; border-bottom: 1px so
     -webkit-transform: translateY(-700px) rotate(600deg); transform: translateY(-700px) rotate(600deg);
   }
 }
-::-webkit-input-placeholder { /* WebKit browsers */
+.login-main ::-webkit-input-placeholder { /* WebKit browsers */
 color: #fff;
 }
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+.login-main :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
 color: #fff;
 }
-::-moz-placeholder { /* Mozilla Firefox 19+ */
+.login-main ::-moz-placeholder { /* Mozilla Firefox 19+ */
 color: #fff;
 }
-:-ms-input-placeholder { /* Internet Explorer 10+ */
+.login-main :-ms-input-placeholder { /* Internet Explorer 10+ */
 color: #fff;
 }
 /*所有列表的搜索样式*/
 .layout-search{margin: 10px 10px 0 10px;padding: 18px;background-color: #F0F5FB;border: 1px solid #D8E6F5;}
 .layout-search .input-mobile{ width: 200px; padding: 0px 0px 0px 10px; border:1px solid #999; color: #333; height: 28px;}
+.layout-search .input-keyword{width: 200px; padding: 0px 0px 0px 10px; border:1px solid #999; color: #333; height: 28px;}
 .layout-search .btn{line-height: 14px;height: 30px; padding: 0px 20px; background: #2776ab; border: 0px; font-size: 14px;}
 .layout-search .btn:hover{background: #acd1ff;}
+
 /*普通的列表页样式*/
 .common-list{ margin: 15px 10px 0px 10px; color: #333;}
 .common-list-table{width: 100%;}
@@ -137,4 +140,48 @@ color: #fff;
 .options-add:hover{ color: #f60;}
 .options{ margin-top: 15px;}
 .options-save{ padding: 6px 20px; background: #336699; color: #fff; font-size: 14px;}
-.options-save:hover{ background: #acd1ff; color: #fff;};
+.options-save:hover{ background: #acd1ff; color: #fff;}
+/*产品列表*/
+#product-list  label{ position: relative; padding-left: 15px; display: block; line-height: 29px;}
+#product-list  label input{ width: 13px; height: 13px; position: absolute; top: 50%; margin-top: -7px; left: 0px;}
+#product-list .btn-default{ float: left; padding: 3px 6px; border: 1px solid #ddd; display: block; margin-right: 10px;}
+.product-edit-top{ margin-bottom: 10px;}
+.product-edit-top a{ padding: 6px 20px; background: #336699; color: #fff; font-size: 14px; margin-right: 20px;}
+.product-edit-top a:hover{ background: #acd1ff; color: #fff;}
+.product-edit-tr img{ display: block; width: 50px; height: 50px; margin: 9px auto 29px auto;}
+.product-edit-tr p{ text-align: center;}
+.product-edit-tr th{ padding: 6px 0px; text-align: center;}
+.product-edit-tr th label{ position: relative; padding-right: 15px;}
+.product-edit-tr th label input{ position: absolute; top: 50%;right: 0px; margin-top: -7px; width: 13px; height: 13px; }
+.product-edit-tr td{ padding: 0px; vertical-align: top;}
+.product-edit-tr input{ width:90%; margin:0px auto; padding: 0px; height: 24px;border:1px solid #999;display:block;text-indent:2px}
+.product-edit-tr textarea{ width: 90%; margin: 10px auto; display: block; padding: 0px; height: 50px; }
+.product-edit-double{ padding: 20px 0px;}
+.product-edit-unit{  padding:0px 20px 0px 5px; margin: 0px auto; position: relative;}
+.product-edit-unit input{ width: 100%;}
+.product-edit-unit span{ font-size: 12px; color: #999; position: absolute; top: 0px; right: 3px;}
+/*产品分类弹出框*/
+.popBox-bg{ position: fixed; top: 0px; left: 0px;background: #000;opacity: 0.5; z-index: 100; display: none; width: 100%; height: 100%;}
+.popBox{width: 450px;position: fixed; top: 50%; left: 50%; margin-left: -245px;z-index: 101; background: #fff;padding: 0px 20px 30px 20px;border-radius: 6px; margin-top: -260px;display: none;}
+.popBox .title{padding: 16px 0px;font-size: 16px;font-family: "Microsoft YaHei", Helvetica, sans-serif;color: #4D4D4D;border-bottom: 1px solid #c5c5c5;position: relative;}
+.popBox .title .span_close {display: block;width: 44px;height: 44px;background: url("http://img.tgimg.cn/Common/pop-close.png") no-repeat;position: absolute;top: 0px;right: -20px;cursor: pointer;}
+.popBox .title .span_close:hover {background: url("http://img.tgimg.cn/Common/pop-close-hover.png") no-repeat;}
+.popBox .main{ width: 100%;}
+.popBox .main-list{ padding-left: 80px; position: relative; margin-bottom: 10px;}
+.popBox .main-list span{ position: absolute; display: block; top: 0px; left: 0px; height: 30px; line-height: 30px; color: #333;}
+.popBox .main-list input,.popBox .main-list textarea{border:1px solid #AAA; border-radius: 4px;}
+.popBox .main-list input:hover,.popBox .main-list textarea:hover{ border:1px solid #336699; }
+.popBox .main-list-name{ width: 350px; padding:0px 0px 0px 10px; height: 28px;}
+.popBox .main-list-name_en{width: 350px; padding:0px 0px 0px 10px; height: 28px;}
+.popBox .main-list-order{ width: 100px;padding:0px 0px 0px 10px;height: 28px;}
+.popBox .main-list-introduce{ width: 340px; padding: 0px 10px;height: 70px;}
+.popBox .main-upload{ width: 350px; margin-bottom: 20px;}
+.popBox .main-upload li{ width: 122px; float: left; margin-right: 20px;}
+.popBox .main-upload li img{ width: 120px; height:120px; margin-bottom: 10px ; border: 1px solid #ddd; display: block; text-align: center; line-height: 120px;}
+.popBox .main-upload li a{ display: block; width: 80px; height: 25px; margin: 0px auto; text-align:center; line-height: 25px;}
+.popBox .bottom{ height: 35px; width: 220px; margin-left: 80px;}
+.popBox .bottom a{ display: block; width: 98px; height:33px; border-radius: 4px; line-height: 33px; text-align:center;  float: left; font-size: 14px;}
+.popBox .save-btn{ border: 1px solid #f60; background: #f60; color: #fff;margin-right: 20px;}
+.popBox .cancel-btn{border: 1px solid #aaa; color: #aaa;}
+.popBox .save-btn:hover,.popBox .cancel-btn:hover{opacity:0.8;filter:alpha(opacity=80)}
+/*地区与行业类型弹出框*/
