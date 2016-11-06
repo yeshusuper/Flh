@@ -98,7 +98,7 @@ namespace Flh.AdminSite.Controllers
 
         //[HttpPost]//todo:改成post请求
         public ActionResult BatchEditList(string pids)
-        {
+            {
             pids = pids ?? String.Empty;
             var pidsArr = pids.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(d => d.To<long>()).ToArray();
             Product[] items;
@@ -106,7 +106,7 @@ namespace Flh.AdminSite.Controllers
             {
             var products = _ProductManager.GetProductList(new ProductListArgs { Pids = pidsArr });
                 items = products.OrderByDescending(n => n.sortNo)
-                    .ThenByDescending(n => n.created)
+                            .ThenByDescending(n => n.created)
                     .Select(p => p).ToArray();
                 return Json(items, JsonRequestBehavior.AllowGet);
         }

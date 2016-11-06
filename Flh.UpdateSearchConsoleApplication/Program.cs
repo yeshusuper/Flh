@@ -23,8 +23,8 @@ namespace Flh.UpdateSearchConsoleApplication
                 new Flh.Business.Inject.DataModule()
                 , new Flh.Business.Inject.ServiceModule()
                 ,new FileModule());
-            var productManager = kernel.Get<Flh.Business.IProductManager>();
-           
+            var productManager = kernel.Get<Flh.Business.IProductManager>();           
+            
             long maxPid = 0;
             var maxEntity = productManager.AllProducts.OrderByDescending(p => p.pid).FirstOrDefault();
             if (maxEntity != null)
@@ -34,14 +34,14 @@ namespace Flh.UpdateSearchConsoleApplication
 
             while (true)
             {                
-                //获取上次的索引更新的进度
+            //获取上次的索引更新的进度
                 long minPid=0;
-                if (File.Exists(fileName))
-                {
+            if (File.Exists(fileName))
+            {
                     minPid = long.Parse(File.ReadAllText(fileName));
-                }
-                else
-                {
+            }
+            else
+            {
                     minPid = 0;
                 }
                 if (minPid > 0)
@@ -51,16 +51,16 @@ namespace Flh.UpdateSearchConsoleApplication
                 else
                 {
                     Console.WriteLine("\n从零开始更新索引");
-                }
-                
-                //查出还没更新索引的产品
+            }
+
+            //查出还没更新索引的产品
                 var products = productManager.AllProducts.Where(d => d.pid > minPid)
                     .OrderBy(d => d.pid)
                     .Take(30).ToArray();                
-                if (products.Any())
+            if (products.Any())
+            {
+                foreach (var product in products)
                 {
-                    foreach (var product in products)
-                    {
                         if (product.enabled)
                         {
                             ProductSearchHelper.UpdateSearchIndex(product);//更新索引
@@ -69,26 +69,26 @@ namespace Flh.UpdateSearchConsoleApplication
                         {
                             ProductSearchHelper.DeleteIndex(product.pid);//删除索引
                         }
-                        File.WriteAllText(fileName, product.pid.ToString());//保存索引进度
+                    File.WriteAllText(fileName, product.pid.ToString());//保存索引进度
                         Console.WriteLine("正在更新索引：" + product.pid + "/" + maxPid + " " + product.name);
-                    }
                 }
-                else
-                {
-                    File.WriteAllText(fileName, "0"); //清空索引进度
+            }
+            else
+            {               
+                File.WriteAllText(fileName, "0"); //清空索引进度
                     Console.WriteLine("\n搜索引擎更新完毕！按回车键退出");
                     break;
                 }
             }
             Console.Read();
-        }
-
+            }
+           
         private class FileModule : Ninject.Modules.NinjectModule
         {
             public override void Load()
             {
                 Bind<Flh.IO.FileManager>().ToSelf();
-                Bind<Flh.IO.IFileStore>().To<Flh.IO.SystemFileStroe>();
+                Bind<Flh.IO.IFileStore>().To<Flh.IO.SystemFileStroe>();//为了不报错，先随便用一个
             }
         }
     }
