@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace Flh.AdminSite.Controllers
 {
-     //[FlhAuthorize]
+    [FlhAuthorize]
     public class ProductController : BaseController
     {
        private readonly IProductManager _ProductManager;
@@ -84,7 +84,7 @@ namespace Flh.AdminSite.Controllers
         /// <param name="classNo"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult BatchEdit(int? page, long[] pids, String classNo)
+        public ActionResult BatchEdit(int? page, String pids, String classNo)
         {
             if (!page.HasValue || page.Value < 1)
             {

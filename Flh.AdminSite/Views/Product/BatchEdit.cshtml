@@ -1,30 +1,106 @@
 ﻿@{
     ViewBag.Title = "BatchEdit";
-    //Layout = "~/Views/Layout/_Manager.cshtml";
+    Layout = "~/Views/Layout/_Manager.cshtml";
 }
+<script type="text/javascript" src="Resources/Js/imgUpload/webuploader.html5only.min.js"></script>
+<script type="text/javascript" src="Resources/Js/imgUpload/diyUpload.js"></script>
+<div class="crumbs">您的位置：辅料汇后台 &gt;  产品管理 &gt; 产品添加</div>
 
-<h2>BatchEdit</h2>
+<div class="common-list" id="product-edit">
+    <div class="product-edit-top">
+        <a href="javascript:;"> 批量上传图片</a>
+        <a href="javascript:;">把选中的第一个值应用到所有项中</a>
+    </div>
+    <table class="common-list-table">
+        <tr class="product-edit-tr">
+            <th width="60">图片</th>
+            <th width="120"><label>名称<input value="" name="" type="checkbox" /></label></th>
+            <th width="150"><label>详细说明<input value="" name="" type="checkbox" /></label></th>
+            <th width="80"><label>尺寸<input value="" name="" type="checkbox" /></label></th>
+            <th width="80"><label>颜色<input value="" name="" type="checkbox" /></label></th>
+            <th width="80"><label>材质<input value="" name="" type="checkbox" /></label></th>
+            <th width="80"><label>工艺<input value="" name="" type="checkbox" /></label></th>
+            <th width="80"><label>起订量<input value="" name="" type="checkbox" /></label></th>
+            <th width="80"><label>发货日<input value="" name="" type="checkbox" /></label></th>
+            <th width="120"><label>关键字<input value="" name="" type="checkbox" /></label></th>
+            <th width="80"><label>单价<input value="" name="" type="checkbox" /></label></th>
+            <th width="40">排序</th>
+            <th>操作</th>
+        </tr>
+        <tr class="product-edit-tr">
+            <td>
+                <img src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" width="50" height="50" />
+                <p>英文版：</p>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="name" /></div>
+                <div class="product-edit-double"><input type="text" name="enName" /></div>
+            </td>
+            <td>
+                <div>
+                    <textarea name="description"></textarea>
+                </div>
+                <div>
+                    <textarea name="enDescription"></textarea>
+                </div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="size" /></div>
+                <div class="product-edit-double"><input type="text" name="enSize" /></div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="color" /></div>
+                <div class="product-edit-double"><input type="text" name="enColor" /></div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="material" /></div>
+                <div class="product-edit-double"><input type="text" name="enMaterial" /></div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="technique" /></div>
+                <div class="product-edit-double"><input type="text" name="enTechnique" /></div>
+            </td>
+            <td style="vertical-align: middle;">
+                <input type="text" name="minQuantity" />
+            </td>
+            <td style="vertical-align: middle;">
+                <div class="product-edit-unit"><input type="text" name="deliveryDay" /><span>天</span></div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="keywords" placeholder="多个用“，”分隔" /></div>
+                <div class="product-edit-double"><input type="text" name="enKeywords" placeholder="多个用“，”分隔" /></div>
+            </td>
+            <td style="vertical-align: middle;">
+                <div class="product-edit-unit"><input type="text" name="unitPrice" /><span>元</span></div>
+            </td>
+            <td style="vertical-align: middle;">
+                <input type="text" name="sortNo" />
+                
+            </td>
+            <td align="center" style="vertical-align:middle;"> 
+                <a href="javascript:;">删除</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
 
 <!--图片批量上传-->
-<form method="post" action="/Product/UploadImages" enctype="multipart/form-data">
-    <input type="file" name="file0" />
-    <button type="submit">上传</button>
-</form>
+<div id="imgUpload"></div>
 <script>
-    var pageIndex ='@ViewBag.Page';// 页码
-    var pids = '@ViewBag.Pids'; //产品id数组，英文逗号隔开
-    var classNo = '@ViewBag.ClassNo';//产品分类
-    if(pids.length>0){
-        $.get("/Product/BatchEditList?pids=" + pids, function (result) {
-            alert(JSON.stringify(result));
-        },"json");
-    }
-    else if (classNo.length > 0) {
-        //产品添加模式
-    }
-    else {
-        alert("参数错误");
-    }
-    
+        var pageIndex = '@ViewBag.Page';// 页码
+        var pids = '@ViewBag.Pids'; //产品id数组，英文逗号隔开
+        var classNo = '@ViewBag.ClassNo';//产品分类
+        $(function () {
+            $('#imgUpload').diyUpload({
+                url: 'server/fileupload.php',
+                success: function (data) {
+                    console.info(data);
+                },
+                error: function (err) {
+                    console.info(err);
+                }
+            });
+        })
 </script>
 
