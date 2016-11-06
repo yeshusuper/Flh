@@ -54,81 +54,65 @@ namespace Flh.Business
                 {
                     VeriryEntity(item);
                 }
-                List<long> searchIndexPids = new List<long>();
-
-                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
-
                 var pids = products.Where(p => p.pid > 0).Select(p => p.pid).ToArray();
                 var existsProducts = _Repository.EnabledProduct.Where(p => pids.Contains(p.pid)).ToArray();
 
-                using (var scope = new System.Transactions.TransactionScope())
+                //更新已存在的产品
+                foreach (var newProduct in existsProducts)
                 {
-                    //更新已存在的产品
-                    foreach (var newProduct in existsProducts)
+                    var oldProduct = products.FirstOrDefault(p => p.pid == newProduct.pid);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.description, (p, v) => p.description = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enDescription, (p, v) => p.enDescription = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.size, (p, v) => p.size = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enSize, (p, v) => p.enSize = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.color, (p, v) => p.color = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enColor, (p, v) => p.enColor = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.material, (p, v) => p.material = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enMaterial, (p, v) => p.enMaterial = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.technique, (p, v) => p.technique = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
+                    if (oldProduct.imagePath != newProduct.imagePath)
                     {
-                        var oldProduct = products.FirstOrDefault(p => p.pid == newProduct.pid);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.description, (p, v) => p.description = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enDescription, (p, v) => p.enDescription = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.size, (p, v) => p.size = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enSize, (p, v) => p.enSize = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.color, (p, v) => p.color = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enColor, (p, v) => p.enColor = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.material, (p, v) => p.material = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enMaterial, (p, v) => p.enMaterial = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.technique, (p, v) => p.technique = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
-                        if (oldProduct.imagePath != newProduct.imagePath)
-                        {
-                            var newFileID = FileId.FromFileName(newProduct.imagePath);
-                            _FileStore.Copy(FileId.FromFileId(newProduct.imagePath), FileId.FromFileName(newProduct.imagePath));//将临时文件复制到永久文件处
-                            oldProduct.imagePath = newFileID.Id;
-                        }
-
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
-                        oldProduct.minQuantity = newProduct.minQuantity;
-                        oldProduct.deliveryDay = newProduct.deliveryDay;
-                        oldProduct.unitPrice = newProduct.unitPrice;
-                        oldProduct.sortNo = newProduct.sortNo;
-                        oldProduct.updated = DateTime.Now;
-                        if (newProduct.updater > 0)
-                        {
-                            oldProduct.updater = newProduct.updater;
-                        }
-                        searchIndexPids.Add(oldProduct.pid);
+                        var newFileID = FileId.FromFileName(newProduct.imagePath);
+                        _FileStore.Copy(FileId.FromFileId(newProduct.imagePath), FileId.FromFileName(newProduct.imagePath));//将临时文件复制到永久文件处
+                        oldProduct.imagePath = newFileID.Id;
                     }
 
-                    //新增的产品                    
-                    foreach (var item in addingProducts)
+                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
+                    oldProduct.minQuantity = newProduct.minQuantity;
+                    oldProduct.deliveryDay = newProduct.deliveryDay;
+                    oldProduct.unitPrice = newProduct.unitPrice;
+                    oldProduct.sortNo = newProduct.sortNo;
+                    oldProduct.updated = DateTime.Now;
+                    if (newProduct.updater > 0)
                     {
-                        item.created = DateTime.Now;
-                        item.updated = DateTime.Now;
-                        item.enabled = true;
-                        //try
-                        //{
-                        _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
-                        //}
-                        //catch
-                        //{
-                        //}
-                        _Repository.Add(item);
-                        searchIndexPids.Add(item.pid);
+                        oldProduct.updater = newProduct.updater;
                     }
                     _Repository.SaveChanges();
-                    scope.Complete();
+                    UpdateSearchIndex(oldProduct.pid);//更新索引
                 }
 
-                //重新更新索引
-                foreach (var item in existsProducts)
-                {
-                    UpdateSearchIndex(item.pid);
-                }
+                //新增的产品  
+                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
                 foreach (var item in addingProducts)
                 {
-                    UpdateSearchIndex(item.pid);
+                    item.created = DateTime.Now;
+                    item.updated = DateTime.Now;
+                    item.enabled = true;
+                    //try
+                    //{
+                    _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
+                    //}
+                    //catch
+                    //{
+                    //}
+                    _Repository.Add(item);
+                    _Repository.SaveChanges();
+                    UpdateSearchIndex(item.pid);  //更新索引
                 }
             }
         }
@@ -155,7 +139,13 @@ namespace Flh.Business
             return query;
         }
 
-
+        /// <summary>
+        /// 如果新值不为空就覆盖旧的值
+        /// </summary>
+        /// <param name="oldEntity"></param>
+        /// <param name="newEntity"></param>
+        /// <param name="newValue"></param>
+        /// <param name="setValue"></param>
         private void OverrideIfNotNullNotWhiteSpace(Data.Product oldEntity, Data.Product newEntity, Func<Data.Product, String> newValue, Action<Data.Product, String> setValue)
         {
             if (!String.IsNullOrWhiteSpace(newValue(newEntity)))
@@ -236,31 +226,31 @@ namespace Flh.Business
             {
                 AliyunHelper.UpdateIndexDoc(new ProductAliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
                 {TableKey,entity.pid},
-                {"name",entity.name},
-                {"enname",entity.enName},
-                {"description",entity.description},
-                {"endescription",entity.enDescription},
-                {"size",entity.size},
-                {"ensize",entity.enSize},
-                {"color",entity.color},
-                {"encolor",entity.enColor},
-                {"material",entity.material},
-                {"enmaterial",entity.enMaterial},
-                {"technique",entity.technique},
-                {"entechnique",entity.enTechnique},
-                {"minquantity",entity.minQuantity},
-                {"deliveryday",entity.deliveryDay},
-                {"keywords",entity.keywords},
-                {"enkeywords",entity.enKeywords},
-                {"unitprice",entity.unitPrice},
-                {"imagepath",entity.imagePath},
-                {"classno",entity.classNo},
-                {"sortno",entity.sortNo},
-                {"createuid",entity.createUid},
-                {"created",entity.created},
-                {"updated",entity.updated},
-                {"enabled",entity.enabled},
-                {"updater",entity.updater??0},
+                {name,entity.name},
+                {enname,entity.enName},
+                {description,entity.description},
+                {endescription,entity.enDescription},
+                {size,entity.size},
+                {ensize,entity.enSize},
+                {color,entity.color},
+                {encolor,entity.enColor},
+                {material,entity.material},
+                {enmaterial,entity.enMaterial},
+                {technique,entity.technique},
+                {entechnique,entity.enTechnique},
+                {minquantity,entity.minQuantity},
+                {deliveryday,entity.deliveryDay},
+                {keywords,entity.keywords},
+                {enkeywords,entity.enKeywords},
+                {unitprice,entity.unitPrice},
+                {imagepath,entity.imagePath},
+                {classno,entity.classNo},
+                {sortno,entity.sortNo},
+                {createuid,entity.createUid},
+                {created,entity.created},
+                {updated,entity.updated},
+                {enabled,entity.enabled},
+                {updater,entity.updater??0},
                 }
                 });
 
@@ -302,35 +292,63 @@ namespace Flh.Business
             count = result.Total;
             return products.ToArray();
         }
+
+        //阿里云索引表结构字段
+        static String name = "name";
+        static String enname = "enname";
+        static String description = "description";
+        static String endescription = "endescription";
+        static String size = "size";
+        static String ensize = "ensize";
+        static String color = "color";
+        static String encolor = "encolor";
+        static String material = "material";
+        static String enmaterial = "enmaterial";
+        static String technique = "technique";
+        static String entechnique = "entechnique";
+        static String minquantity = "minquantity";
+        static String deliveryday = "deliveryday";
+        static String keywords = "keywords";
+        static String enkeywords = "enkeywords";
+        static String unitprice = "unitprice";
+        static String imagepath = "imagepath";
+        static String classno = "classno";
+        static String sortno = "sortno";
+        static String createuid = "createuid";
+        static String created = "created";
+        static String updated = "updated";
+        static String enabled = "enabled";
+        static String updater = "updater";
+
         public static Data.Product GetProduct(Dictionary<string, string> dic)
         {
             Data.Product entity = new Data.Product();
             entity.pid = TryGetDictValue(dic, TableKey).To<long>();
-            entity.name = TryGetDictValue(dic, "name");
-            entity.enName = TryGetDictValue(dic, "enname");
-            entity.description = TryGetDictValue(dic, "description");
-            entity.enDescription = TryGetDictValue(dic, "endescription");
-            entity.size = TryGetDictValue(dic, "size");
-            entity.enSize = TryGetDictValue(dic, "ensize");
-            entity.color = TryGetDictValue(dic, "color");
-            entity.enColor = TryGetDictValue(dic, "encolor");
-            entity.material = TryGetDictValue(dic, "material");
-            entity.enMaterial = TryGetDictValue(dic, "enmaterial");
-            entity.technique = TryGetDictValue(dic, "technique");
-            entity.enTechnique = TryGetDictValue(dic, "entechnique");
-            entity.minQuantity = TryGetDictValue(dic, "minquantity").To<int>();
-            entity.deliveryDay = TryGetDictValue(dic, "deliveryday").To<int>();
-            entity.keywords = TryGetDictValue(dic, "keywords");
-            entity.enKeywords = TryGetDictValue(dic, "enkeywords");
-            entity.unitPrice = TryGetDictValue(dic, "unitprice").To<decimal>();
-            entity.imagePath = TryGetDictValue(dic, "imagepath");
-            entity.classNo = TryGetDictValue(dic, "classno");
-            entity.sortNo = TryGetDictValue(dic, "sortno").To<int>();
-            entity.createUid = TryGetDictValue(dic, "createuid").To<long>();
-            entity.created = FieldHelper.ToDateTime(TryGetDictValue(dic, "created").To<int>());
-            entity.updated = FieldHelper.ToDateTime(TryGetDictValue(dic, "updated").To<int>());
-            entity.enabled = TryGetDictValue(dic, "enabled").To<bool>();
-            entity.updater = TryGetDictValue(dic, "updater").To<long>();
+            entity.name = TryGetDictValue(dic, name);
+            entity.enName = TryGetDictValue(dic, enname);
+            entity.description = TryGetDictValue(dic, description);
+            entity.enDescription = TryGetDictValue(dic, endescription);
+            entity.size = TryGetDictValue(dic, size);
+            entity.enSize = TryGetDictValue(dic, ensize);
+            entity.color = TryGetDictValue(dic, color);
+            entity.enColor = TryGetDictValue(dic, encolor);
+            entity.material = TryGetDictValue(dic, material);
+            entity.enMaterial = TryGetDictValue(dic, enmaterial);
+            entity.technique = TryGetDictValue(dic, technique);
+            entity.enTechnique = TryGetDictValue(dic, entechnique);
+            entity.minQuantity = TryGetDictValue(dic, minquantity).To<int>();
+            entity.deliveryDay = TryGetDictValue(dic, deliveryday).To<int>();
+            entity.keywords = TryGetDictValue(dic, keywords);
+            entity.enKeywords = TryGetDictValue(dic, enkeywords);
+            entity.unitPrice = TryGetDictValue(dic, unitprice).To<decimal>();
+            entity.imagePath = TryGetDictValue(dic, imagepath);
+            entity.classNo = TryGetDictValue(dic, classno);
+            entity.sortNo = TryGetDictValue(dic, sortno).To<int>();
+            entity.createUid = TryGetDictValue(dic, createuid).To<long>();
+            entity.created = FieldHelper.ToDateTime(TryGetDictValue(dic, created).To<int>());
+            entity.updated = FieldHelper.ToDateTime(TryGetDictValue(dic, updated).To<int>());
+            entity.enabled = TryGetDictValue(dic, enabled).To<bool>();
+            entity.updater = TryGetDictValue(dic, updater).To<long>();
             return entity;
         }
 
