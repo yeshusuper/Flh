@@ -54,63 +54,90 @@ namespace Flh.Business
                 {
                     VeriryEntity(item);
                 }
-                var pids = products.Where(p => p.pid > 0).Select(p => p.pid).ToArray();
-                var existsProducts = _Repository.EnabledProduct.Where(p => pids.Contains(p.pid)).ToArray();
 
                 //更新已存在的产品
-                foreach (var newProduct in existsProducts)
+                var updatingProducts = products.Where(p => p.pid > 0).ToArray();
+                foreach (var newProduct in updatingProducts)
                 {
-                    var oldProduct = products.FirstOrDefault(p => p.pid == newProduct.pid);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.description, (p, v) => p.description = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enDescription, (p, v) => p.enDescription = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.size, (p, v) => p.size = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enSize, (p, v) => p.enSize = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.color, (p, v) => p.color = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enColor, (p, v) => p.enColor = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.material, (p, v) => p.material = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enMaterial, (p, v) => p.enMaterial = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.technique, (p, v) => p.technique = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
-                    if (oldProduct.imagePath != newProduct.imagePath)
+                    var oldProduct = AllProducts.FirstOrDefault(p => p.pid == newProduct.pid);
+                    if (oldProduct != null)
                     {
-                        var newFileID = FileId.FromFileId(newProduct.imagePath);
-                        _FileStore.Copy(FileId.FromFileId(newProduct.imagePath), FileId.FromFileName(newProduct.imagePath));//将临时文件复制到永久文件处
-                        oldProduct.imagePath = newFileID.Id;
-                    }
+                        using (var scope = new System.Transactions.TransactionScope())
+                        {
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.description, (p, v) => p.description = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enDescription, (p, v) => p.enDescription = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.size, (p, v) => p.size = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enSize, (p, v) => p.enSize = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.color, (p, v) => p.color = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enColor, (p, v) => p.enColor = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.material, (p, v) => p.material = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enMaterial, (p, v) => p.enMaterial = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.technique, (p, v) => p.technique = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
 
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
-                    oldProduct.minQuantity = newProduct.minQuantity;
-                    oldProduct.deliveryDay = newProduct.deliveryDay;
-                    oldProduct.unitPrice = newProduct.unitPrice;
-                    oldProduct.sortNo = newProduct.sortNo;
-                    oldProduct.updated = DateTime.Now;
-                    if (newProduct.updater > 0)
-                    {
-                        oldProduct.updater = newProduct.updater;
+                            String oldImage = oldProduct.imagePath;
+                            var newProductFileId = FileId.FromFileId(newProduct.imagePath);
+                            var newFileID = FileId.FromFileName(newProduct.imagePath);
+                            var imgChange = oldProduct.imagePath != newProduct.imagePath;
+                            if (imgChange)
+                            {
+                                if (newProductFileId.IsTempId)
+                                {   
+                                    oldProduct.imagePath = newFileID.Id;
+                                }
+                                else
+                                {
+                                    oldProduct.imagePath = newProduct.imagePath;
+                                }
+                            }
+                            oldProduct.minQuantity = newProduct.minQuantity;
+                            oldProduct.deliveryDay = newProduct.deliveryDay;
+                            oldProduct.unitPrice = newProduct.unitPrice;
+                            oldProduct.sortNo = newProduct.sortNo;
+                            oldProduct.updated = DateTime.Now;
+                            if (newProduct.updater > 0)
+                            {
+                                oldProduct.updater = newProduct.updater;
+                            }
+                            _Repository.SaveChanges();
+                            UpdateSearchIndex(oldProduct.pid);//更新索引
+                            _FileStore.Copy(newProductFileId, newFileID);//将临时文件复制到永久文件处                           
+                            if (imgChange)
+                            {
+                                _FileStore.Delete(FileId.FromFileId(oldImage));//删掉旧图片
+                            }                            
+                            scope.Complete();
+                        }
                     }
-                    _Repository.SaveChanges();
-                    UpdateSearchIndex(oldProduct.pid);//更新索引
                 }
 
                 //新增的产品  
                 var addingProducts = products.Where(p => p.pid <= 0).ToArray();
                 foreach (var entity in addingProducts)
                 {
-                    entity.created = DateTime.Now;
-                    entity.updated = DateTime.Now;
-                    entity.enabled = true;
+                    using (var scope = new System.Transactions.TransactionScope())
+                    {
+                        entity.created = DateTime.Now;
+                        entity.updated = DateTime.Now;
+                        entity.enabled = true;
 
-                    var newFileID = FileId.FromFileId(entity.imagePath);
-                    _FileStore.Copy(FileId.FromFileId(entity.imagePath), newFileID);//将临时文件复制到永久文件处
-                    entity.imagePath = newFileID.Id;
-
-                    _Repository.Add(entity);
-                    _Repository.SaveChanges();
-                    UpdateSearchIndex(entity.pid);  //更新索引
+                        var temFileId = FileId.FromFileName(entity.imagePath);
+                        var newFileID = FileId.FromFileId(entity.imagePath);
+                        if (temFileId.IsTempId)
+                        {  
+                            entity.imagePath = newFileID.Id;
+                        }
+                        _Repository.Add(entity);
+                        _Repository.SaveChanges();
+                        _FileStore.Copy(temFileId, newFileID);//将临时文件复制到永久文件处
+                        UpdateSearchIndex(entity.pid);  //更新索引
+                        scope.Complete();
+                    }
                 }
             }
         }
