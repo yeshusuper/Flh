@@ -34,18 +34,32 @@ namespace Flh.Business
             if (products.Any())
             {
                 List<long> searchIndexPids = new List<long>();
+
+                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
+
                 var pids = products.Where(p => p.pid > 0).Select(p => p.pid).ToArray();
                 var existsProducts = _Repository.EnabledProduct.Where(p => pids.Contains(p.pid)).ToArray();
-                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
+                
                 using (var scope = new System.Transactions.TransactionScope())
                 {
                     //更新已存在的产品
-                    foreach (var oldProduct in existsProducts)
+                    foreach (var newProduct in existsProducts)
                     {
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(oldProduct.name, "", "产品名称不能为空");
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(oldProduct.imagePath, "", "产品图片不能为空");
-                        //todo:更多空值验证
-                        var newProduct = products.FirstOrDefault(p => p.pid == oldProduct.pid);
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.name, "", "产品名称不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.description, "", "产品详细说明不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.size, "", "产品尺寸不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.color, "", "产品颜色不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.material, "", "产品材质不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.technique, "", "产品工艺不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.keywords, "", "产品关键词不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.imagePath, "", "产品图片不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.classNo, "", "产品分类编号不能为空");
+                        ExceptionHelper.ThrowIfTrue(newProduct.minQuantity<=0, "", "产品起订量必须大于0");
+                        ExceptionHelper.ThrowIfTrue(newProduct.deliveryDay<0, "", "产品发货日必须大于或等于0");
+                        ExceptionHelper.ThrowIfTrue(newProduct.unitPrice<=0, "", "产品单价必须大于0");
+                        ExceptionHelper.ThrowIfTrue(newProduct.updater<=0, "", "没有传入更新人的userID");
+
+                        var oldProduct = products.FirstOrDefault(p => p.pid == newProduct.pid);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.description, (p, v) => p.description = v);
@@ -73,10 +87,14 @@ namespace Flh.Business
                         oldProduct.unitPrice = newProduct.unitPrice;
                         oldProduct.sortNo = newProduct.sortNo;
                         oldProduct.updated = DateTime.Now;
+                        if (newProduct.updater > 0)
+                        {
+                            oldProduct.updater = newProduct.updater;
+                        }                        
                         searchIndexPids.Add(oldProduct.pid);
                     }
 
-                    //新增的产品
+                    //新增的产品                    
                     foreach (var item in addingProducts)
                     {
                         item.created = DateTime.Now;
@@ -221,7 +239,7 @@ namespace Flh.Business
                 {"created",entity.created},
                 {"updated",entity.updated},
                 {"enabled",entity.enabled},
-                {"updater",entity.updater},
+                {"updater",entity.updater??0},
                 }
                 });
 
