@@ -43,6 +43,12 @@ namespace Flh.IO
                 return (Id ?? string.Empty).StartsWith("temp");
             }
         }
+        public FileId ToStorageId()
+        {
+            if (IsTempId)
+                return FileId.FromFileId(Path.GetFileName(Id));
+            return this;
+        }
         internal string ToPath(string root)
         {
             var arr = new string[4];

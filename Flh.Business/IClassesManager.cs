@@ -180,7 +180,7 @@ namespace Flh.Business
                 var sourceId=FileId.FromFileId(info.IndexImage);
                 if (sourceId.IsTempId)
                 {
-                    var target = FileId.FromFileName(info.IndexImage);
+                    var target = sourceId.ToStorageId();
                     _FileManager.Copy(sourceId, target);
                     sourceId = target;
                 }
@@ -192,7 +192,7 @@ namespace Flh.Business
                 var sourceId = FileId.FromFileId(info.ListImage);
                 if (sourceId.IsTempId)
                 {
-                    var target = FileId.FromFileName(info.ListImage);
+                    var target = sourceId.ToStorageId();
                     _FileManager.Copy(sourceId, target);
                     sourceId = target;
                 }
