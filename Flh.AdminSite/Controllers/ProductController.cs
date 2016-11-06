@@ -125,20 +125,27 @@ namespace Flh.AdminSite.Controllers
         [HttpPost]
         public ActionResult SaveBatchEdit(string models)
         {
-            var items = JsonConvert.DeserializeObject<Flh.Business.Data.Product[]>(models);
-            foreach (var item in items)
+            try
             {
-                if (item.pid > 0)
+                var items = JsonConvert.DeserializeObject<Flh.Business.Data.Product[]>(models);
+                foreach (var item in items)
                 {
-                    item.updater = CurrentUser.Uid;
+                    if (item.pid > 0)
+                    {
+                        item.updater = CurrentUser.Uid;
+                    }
+                    else
+                    {
+                        item.createUid = CurrentUser.Uid;
+                    }
                 }
-                else
-                {
-                    item.createUid = CurrentUser.Uid;
-                }
+                _ProductManager.AddOrUpdateProducts(items);
+                return SuccessJsonResult();
             }
-            _ProductManager.AddOrUpdateProducts(items);
-            return SuccessJsonResult();
+            catch (ArgumentException ex)
+            {
+                return JsonResult( ErrorCode.ArgError,ex.Message);
+            }          
         }
 
         [HttpPost]
@@ -161,7 +168,14 @@ namespace Flh.AdminSite.Controllers
                     return JsonResult(ErrorCode.ServerError, "只能上传png/jpg/jpeg/gif格式的图片");
                 }
                 var fid = FileId.FromFileName(file.FileName);
-                _FileStore.CreateTemp(fid, file.InputStream);
+                //try
+                //{
+                    _FileStore.CreateTemp(fid, file.InputStream);
+                //}
+                //catch
+                //{
+
+                //}
                 fileNames.Add(fid.Id);
 
                 ////判断Upload文件夹是否存在，不存在就创建
@@ -186,7 +200,7 @@ namespace Flh.AdminSite.Controllers
                 //file.SaveAs(Path.Combine(path, fileName));
 
                 //var imgUrl = "/Upload/" + fileName;
-                fileNames.Add(fid.Id);
+                //fileNames.Add(fid.Id);
             }
             return SuccessJsonResult<List<String>>(fileNames);
         }

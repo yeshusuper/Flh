@@ -28,11 +28,32 @@ namespace Flh.Business
             _FileStore = fileStore;
         }
 
+        void VeriryEntity(Data.Product newProduct)
+        {
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.name, "", "产品名称不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.description, "", "产品详细说明不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.size, "", "产品尺寸不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.color, "", "产品颜色不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.material, "", "产品材质不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.technique, "", "产品工艺不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.keywords, "", "产品关键词不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.imagePath, "", "产品图片不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.classNo, "", "产品分类编号不能为空");
+            ExceptionHelper.ThrowIfTrue(newProduct.minQuantity <= 0, "", "产品起订量必须大于0");
+            ExceptionHelper.ThrowIfTrue(newProduct.deliveryDay < 0, "", "产品发货日必须大于或等于0");
+            ExceptionHelper.ThrowIfTrue(newProduct.unitPrice <= 0, "", "产品单价必须大于0");
+            ExceptionHelper.ThrowIfTrue(newProduct.updater <= 0, "", "没有传入更新者的userID");
+        }
+        
         public void AddOrUpdateProducts(Data.Product[] products)
         {
             ExceptionHelper.ThrowIfNull(products, "products");
             if (products.Any())
             {
+                foreach (var item in products)
+                {
+                    VeriryEntity(item);
+                }
                 List<long> searchIndexPids = new List<long>();
 
                 var addingProducts = products.Where(p => p.pid <= 0).ToArray();
@@ -44,21 +65,7 @@ namespace Flh.Business
                 {
                     //更新已存在的产品
                     foreach (var newProduct in existsProducts)
-                    {
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.name, "", "产品名称不能为空");
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.description, "", "产品详细说明不能为空");
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.size, "", "产品尺寸不能为空");
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.color, "", "产品颜色不能为空");
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.material, "", "产品材质不能为空");
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.technique, "", "产品工艺不能为空");
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.keywords, "", "产品关键词不能为空");
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.imagePath, "", "产品图片不能为空");
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.classNo, "", "产品分类编号不能为空");
-                        ExceptionHelper.ThrowIfTrue(newProduct.minQuantity<=0, "", "产品起订量必须大于0");
-                        ExceptionHelper.ThrowIfTrue(newProduct.deliveryDay<0, "", "产品发货日必须大于或等于0");
-                        ExceptionHelper.ThrowIfTrue(newProduct.unitPrice<=0, "", "产品单价必须大于0");
-                        ExceptionHelper.ThrowIfTrue(newProduct.updater<=0, "", "没有传入更新人的userID");
-
+                    {                        
                         var oldProduct = products.FirstOrDefault(p => p.pid == newProduct.pid);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
@@ -98,8 +105,15 @@ namespace Flh.Business
                     foreach (var item in addingProducts)
                     {
                         item.created = DateTime.Now;
+                        item.updated = DateTime.Now;
                         item.enabled = true;
-                        _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
+                        //try
+                        //{
+                            _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
+                        //}
+                        //catch
+                        //{
+                        //}
                         _Repository.Add(item);
                         searchIndexPids.Add(item.pid);
                     }
