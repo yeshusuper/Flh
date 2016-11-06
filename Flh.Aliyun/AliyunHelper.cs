@@ -178,7 +178,7 @@ namespace Flh.Aliyun
 
         public string AliyunTableName
         {
-            get { return "products"; }
+            get { return "product"; }
         }
 
         public string AliyunAppName

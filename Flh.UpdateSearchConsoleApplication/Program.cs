@@ -88,7 +88,7 @@ namespace Flh.UpdateSearchConsoleApplication
             public override void Load()
             {
                 Bind<Flh.IO.FileManager>().ToSelf();
-                Bind<Flh.IO.IFileStore>().To<Flh.IO.SystemFileStroe>();
+                Bind<Flh.IO.IFileStore>().To<Flh.IO.SystemFileStroe>();//为了不报错，先随便用一个
             }
         }
     }
