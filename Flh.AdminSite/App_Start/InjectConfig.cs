@@ -1,5 +1,4 @@
-﻿using Flh.Aliyun;
-using Flh.Web;
+﻿using Flh.Web;
 using Flh.Web.Aliyun;
 using System;
 using System.Collections.Generic;

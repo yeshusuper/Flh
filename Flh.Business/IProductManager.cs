@@ -64,70 +64,70 @@ namespace Flh.Business
                 using (var scope = new System.Transactions.TransactionScope())
                 {
                     //更新已存在的产品
-                    foreach (var newProduct in existsProducts)
-                {
+                    foreach (var oldProduct in existsProducts)
+                    {
                         ExceptionHelper.ThrowIfNullOrWhiteSpace(oldProduct.enName, "", "产品名称不能为空");
                         //todo:更多空值验证
                         var newProduct = products.FirstOrDefault(p => p.pid == oldProduct.pid);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.description, (p, v) => p.description = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enDescription, (p, v) => p.enDescription = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.size, (p, v) => p.size = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enSize, (p, v) => p.enSize = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.color, (p, v) => p.color = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enColor, (p, v) => p.enColor = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.material, (p, v) => p.material = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enMaterial, (p, v) => p.enMaterial = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.technique, (p, v) => p.technique = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
-                        if (oldProduct.imagePath != newProduct.imagePath)
-                        {
-                            var newFileID = FileId.FromFileName(newProduct.imagePath);
-                            _FileStore.Copy(FileId.FromFileId(newProduct.imagePath), FileId.FromFileName(newProduct.imagePath));//将临时文件复制到永久文件处
-                            oldProduct.imagePath = newFileID.Id;
-                        }
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.description, (p, v) => p.description = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enDescription, (p, v) => p.enDescription = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.size, (p, v) => p.size = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enSize, (p, v) => p.enSize = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.color, (p, v) => p.color = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enColor, (p, v) => p.enColor = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.material, (p, v) => p.material = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enMaterial, (p, v) => p.enMaterial = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.technique, (p, v) => p.technique = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
+                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
+                            if (oldProduct.imagePath != newProduct.imagePath)
+                            {
+                                var newFileID = FileId.FromFileName(newProduct.imagePath);
+                                _FileStore.Copy(FileId.FromFileId(newProduct.imagePath), FileId.FromFileName(newProduct.imagePath));//将临时文件复制到永久文件处
+                                oldProduct.imagePath = newFileID.Id;
+                            }
                         
-                    OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
-                    oldProduct.minQuantity = newProduct.minQuantity;
-                    oldProduct.deliveryDay = newProduct.deliveryDay;
-                    oldProduct.unitPrice = newProduct.unitPrice;
-                    oldProduct.sortNo = newProduct.sortNo;
-                    oldProduct.updated = DateTime.Now;
-                        if (newProduct.updater > 0)
-                        {
-                            oldProduct.updater = newProduct.updater;
-                        }                        
-                        searchIndexPids.Add(oldProduct.pid);
-                }
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
+                            oldProduct.minQuantity = newProduct.minQuantity;
+                            oldProduct.deliveryDay = newProduct.deliveryDay;
+                            oldProduct.unitPrice = newProduct.unitPrice;
+                            oldProduct.sortNo = newProduct.sortNo;
+                            oldProduct.updated = DateTime.Now;
+                            if (newProduct.updater > 0)
+                            {
+                                oldProduct.updater = newProduct.updater;
+                            }                        
+                            searchIndexPids.Add(oldProduct.pid);
+                    }
 
                     //新增的产品
-                foreach (var item in addingProducts)
-                {
-                        item.created = DateTime.Now;
-                        item.updated = DateTime.Now;
-                        item.enabled = true;
-                        //try
-                        //{
-                            _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
-                        //}
-                        //catch
-                        //{
-                        //}
-                        _Repository.Add(item);
-                        searchIndexPids.Add(item.pid);
-                }
-                _Repository.SaveChanges();
-                    scope.Complete();
-                }
+                    foreach (var item in addingProducts)
+                    {
+                            item.created = DateTime.Now;
+                            item.updated = DateTime.Now;
+                            item.enabled = true;
+                            //try
+                            //{
+                                _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
+                            //}
+                            //catch
+                            //{
+                            //}
+                            _Repository.Add(item);
+                            searchIndexPids.Add(item.pid);
+                    }
+                    _Repository.SaveChanges();
+                        scope.Complete();
+                    }
 
-                //重新更新索引
-                foreach (var item in existsProducts)
-                {
-                    UpdateSearchIndex(item.pid);
-            }
+                    //重新更新索引
+                    foreach (var item in existsProducts)
+                    {
+                        UpdateSearchIndex(item.pid);
+                }
                 foreach (var item in addingProducts)
                 {
                     UpdateSearchIndex(item.pid);
@@ -213,9 +213,6 @@ namespace Flh.Business
             if (entity != null)
             {
                 ProductSearchHelper.UpdateSearchIndex(entity);
-            }
-        }
-
             }
         }
 
