@@ -14,19 +14,37 @@ namespace Flh.Aliyun
     public static class AliyunHelper
     {
         private static readonly IAliyunHttp _Http;
+        static String Host = "http://opensearch-cn-hangzhou.aliyuncs.com";
 
         static AliyunHelper()
         {
+            var value = new System.Configuration.AppSettingsReader().GetValue("aliyunAccessKey", typeof(String)) as string;
+            if (value != null)
+            {
+                var arr = value.Split(new[] { ",", ";" }, StringSplitOptions.RemoveEmptyEntries);
+                if (arr.Length > 1)
+                {
+                    string id = arr[0], secret = arr[1];
+                    if (!String.IsNullOrWhiteSpace(id) && !String.IsNullOrWhiteSpace(secret))
+                    {
+                        AliyunAccessKey = new AliyunAccessKey(id.Trim(), secret.Trim());
+                    }
+                }
+            }
+
             _Http = HttpLease.HttpLease.Get<IAliyunHttp>(config =>
             {
                 config.Encoding = Encoding.UTF8;
-                config.Host = AliyunConfig.Host;
-            });
+                config.Host = Host;
+            });           
         }
 
+        public readonly static AliyunAccessKey AliyunAccessKey;
+
+      
 
 
-        public static AliyunResponse UpdateIndexDoc(String accessKeyId, String accessKeySecret, IAliyunIndexer indexer, Dictionary<string, object>[] items)
+        public static void UpdateIndexDoc(IAliyunIndexer indexer, Dictionary<string, object>[] items)
         {
             var baseQuerys = new AliyunBaseQuerys();
             var action = "push";
@@ -43,9 +61,9 @@ namespace Flh.Aliyun
                     { "table_name", indexer.AliyunTableName },
                     { "items", itemsJson }
                 };
-            var signature = baseQuerys.GetSignature(accessKeyId, accessKeySecret, "post", otherQuerys);
-            return _Http.IndexDoc(baseQuerys.Version,
-                        accessKeyId,
+            var signature = baseQuerys.GetSignature(AliyunAccessKey.AccessKeyId, AliyunAccessKey.AccessKeySecret, "post", otherQuerys);
+            var response = _Http.IndexDoc(baseQuerys.Version,
+                        AliyunAccessKey.AccessKeyId,
                         signature,
                         baseQuerys.Signature.Method,
                         baseQuerys.Signature.Version,
@@ -55,9 +73,15 @@ namespace Flh.Aliyun
                         action,
                         indexer.AliyunTableName,
                         itemsJson);
+            if (!response.IsOk())
+            {
+                throw new Exception(String.Format("系统错误,response:{0};Query:{1}",
+                    Newtonsoft.Json.JsonConvert.SerializeObject(response),
+                    Newtonsoft.Json.JsonConvert.SerializeObject(otherQuerys)));
+            }
         }
 
-        public static AliyunResponse DeleteIndexDoc(String accessKeyId, String accessKeySecret, IAliyunIndexer indexer, string idKey, string[] ids)
+        public static void DeleteIndexDoc( IAliyunIndexer indexer, string idKey, string[] ids)
         {
             var baseQuerys = new AliyunBaseQuerys();
             var action = "push";
@@ -72,10 +96,10 @@ namespace Flh.Aliyun
                 { "table_name", indexer.AliyunTableName },
                 { "items", itemsJson }
             };
-            var signature = baseQuerys.GetSignature(accessKeyId, accessKeySecret, "post", otherQuerys);
+            var signature = baseQuerys.GetSignature(AliyunAccessKey.AccessKeyId,AliyunAccessKey.AccessKeySecret, "post", otherQuerys);
 
-            return _Http.IndexDoc(baseQuerys.Version,
-                        accessKeyId,
+            var response = _Http.IndexDoc(baseQuerys.Version,
+                        AliyunAccessKey.AccessKeyId,
                         signature,
                         baseQuerys.Signature.Method,
                         baseQuerys.Signature.Version,
@@ -85,9 +109,15 @@ namespace Flh.Aliyun
                         action,
                         indexer.AliyunTableName,
                         itemsJson);
+            if (!response.IsOk())
+            {
+                throw new Exception(String.Format("系统错误,response:{0};Query:{1}",
+                    Newtonsoft.Json.JsonConvert.SerializeObject(response),
+                    Newtonsoft.Json.JsonConvert.SerializeObject(otherQuerys)));
+            }
         }
 
-        public static SearchResponse.SearchResult Search(String accessKeyId, String accessKeySecret, IAliyunIndexer indexer, QueryBuilder query, string qp, ISummary summary = null, string formula_name = null, string[] fields = null)
+        public static SearchResponse.SearchResult Search( IAliyunIndexer indexer, QueryBuilder query, string qp, ISummary summary = null, string formula_name = null, string[] fields = null)
         {
             var baseQuerys = new AliyunBaseQuerys();
             var queryString = query.ToString();
@@ -105,9 +135,9 @@ namespace Flh.Aliyun
                 { "formula_name", formula_name ?? String.Empty },
                 { "summary", summaryString },
             };
-            var sign = baseQuerys.GetSignature(accessKeyId, accessKeySecret, "get", otherQuerys);
+            var sign = baseQuerys.GetSignature(AliyunAccessKey.AccessKeyId,AliyunAccessKey.AccessKeySecret, "get", otherQuerys);
 
-            var response = _Http.Search(baseQuerys.Version, accessKeyId, sign, baseQuerys.Signature.Method, baseQuerys.Signature.Version,
+            var response = _Http.Search(baseQuerys.Version, AliyunAccessKey.AccessKeyId, sign, baseQuerys.Signature.Method, baseQuerys.Signature.Version,
                 baseQuerys.SignatureNonce, baseQuerys.Timestamp, queryString, indexer.AliyunAppName,
                 fetch_fields, qp, String.Empty, String.Empty, formula_name, summaryString);
             if (!response.IsOk())
@@ -148,12 +178,12 @@ namespace Flh.Aliyun
 
         public string AliyunTableName
         {
-            get { return "product"; }
+            get { return "products"; }
         }
 
         public string AliyunAppName
         {
-            get { return "Flh"; }
+            get { return "products"; }
         }
     }
     public interface IQuery
@@ -858,10 +888,10 @@ namespace Flh.Aliyun
         /// </summary>
         int? RerankSize { get; set; }
     }
-    public class AliyunConfig
-    {
-        public static String AccessKeyId = "LTAI631tzQg1whIy";
-        public static String AccessKeySecret = "FI4KWXvfMYWhxsf8O0CIPgahEJJZW3";
-        public static String Host = "http://opensearch-cn-hangzhou.aliyuncs.com";
-    }
+    //public class AliyunConfig
+    //{
+    //    public static String AccessKeyId = "LTAI631tzQg1whIy";
+    //    public static String AccessKeySecret = "FI4KWXvfMYWhxsf8O0CIPgahEJJZW3";
+    //    public static String Host = "http://opensearch-cn-hangzhou.aliyuncs.com";
+    //}
 }

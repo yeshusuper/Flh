@@ -1,4 +1,5 @@
 ﻿using Flh.Aliyun;
+using Flh.IO;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,25 +15,52 @@ namespace Flh.Business
         IEnumerable<Data.Product> Search(ProductSearchArgs args, out int count);
         IQueryable<Data.Product> GetProductList(ProductListArgs args);
         IQueryable<Data.Product> EnabledProducts { get; }
+        IQueryable<Data.Product> AllProducts { get; }
         void Delete(long uid, long[] pids);
     }
     public class ProductManager : IProductManager
     {
         private readonly Data.IProductRepository _Repository;
-        public ProductManager(Data.IProductRepository repository)
+        private readonly IFileStore _FileStore;
+        public ProductManager(Data.IProductRepository repository, IFileStore fileStore)
         {
             _Repository = repository;
+            _FileStore = fileStore;
         }
 
+        void VeriryEntity(Data.Product newProduct)
+        {
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.name, "", "产品名称不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.description, "", "产品详细说明不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.size, "", "产品尺寸不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.color, "", "产品颜色不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.material, "", "产品材质不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.technique, "", "产品工艺不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.keywords, "", "产品关键词不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.imagePath, "", "产品图片不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(newProduct.classNo, "", "产品分类编号不能为空");
+            ExceptionHelper.ThrowIfTrue(newProduct.minQuantity <= 0, "", "产品起订量必须大于0");
+            ExceptionHelper.ThrowIfTrue(newProduct.deliveryDay < 0, "", "产品发货日必须大于或等于0");
+            ExceptionHelper.ThrowIfTrue(newProduct.unitPrice <= 0, "", "产品单价必须大于0");
+            ExceptionHelper.ThrowIfTrue(newProduct.updater <= 0, "", "没有传入更新者的userID");
+        }
+        
         public void AddOrUpdateProducts(Data.Product[] products)
         {
             ExceptionHelper.ThrowIfNull(products, "products");
             if (products.Any())
             {
+                foreach (var item in products)
+                {
+                    VeriryEntity(item);
+                }
                 List<long> searchIndexPids = new List<long>();
+
+                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
+
                 var pids = products.Where(p => p.pid > 0).Select(p => p.pid).ToArray();
                 var existsProducts = _Repository.EnabledProduct.Where(p => pids.Contains(p.pid)).ToArray();
-                var addingProducts = products.Where(p => p.pid <= 0).ToArray();
+                
                 using (var scope = new System.Transactions.TransactionScope())
                 {
                     //更新已存在的产品
@@ -55,30 +83,50 @@ namespace Flh.Business
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.imagePath, (p, v) => p.imagePath = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
-                        oldProduct.minQuantity = newProduct.minQuantity;
-                        oldProduct.deliveryDay = newProduct.deliveryDay;
-                        oldProduct.unitPrice = newProduct.unitPrice;
-                        oldProduct.sortNo = newProduct.sortNo;
-                        oldProduct.updated = DateTime.Now;
-                        searchIndexPids.Add(oldProduct.pid);
+                            if (oldProduct.imagePath != newProduct.imagePath)
+                            {
+                                var newFileID = FileId.FromFileName(newProduct.imagePath);
+                                _FileStore.Copy(FileId.FromFileId(newProduct.imagePath), FileId.FromFileName(newProduct.imagePath));//将临时文件复制到永久文件处
+                                oldProduct.imagePath = newFileID.Id;
+                            }
+                        
+                            OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
+                            oldProduct.minQuantity = newProduct.minQuantity;
+                            oldProduct.deliveryDay = newProduct.deliveryDay;
+                            oldProduct.unitPrice = newProduct.unitPrice;
+                            oldProduct.sortNo = newProduct.sortNo;
+                            oldProduct.updated = DateTime.Now;
+                            if (newProduct.updater > 0)
+                            {
+                                oldProduct.updater = newProduct.updater;
+                            }                        
+                            searchIndexPids.Add(oldProduct.pid);
                     }
 
                     //新增的产品
                     foreach (var item in addingProducts)
                     {
-                        AddEnabledProduct(item);
-                        searchIndexPids.Add(item.pid);
+                            item.created = DateTime.Now;
+                            item.updated = DateTime.Now;
+                            item.enabled = true;
+                            //try
+                            //{
+                                _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
+                            //}
+                            //catch
+                            //{
+                            //}
+                            _Repository.Add(item);
+                            searchIndexPids.Add(item.pid);
                     }
                     _Repository.SaveChanges();
-                    scope.Complete();
-                }
+                        scope.Complete();
+                    }
 
-                //重新更新索引
-                foreach (var item in existsProducts)
-                {
-                    UpdateSearchIndex(item.pid);
+                    //重新更新索引
+                    foreach (var item in existsProducts)
+                    {
+                        UpdateSearchIndex(item.pid);
                 }
                 foreach (var item in addingProducts)
                 {
@@ -93,14 +141,14 @@ namespace Flh.Business
             var query = _Repository.EnabledProduct;
             if (args != null)
             {
-                if (!String.IsNullOrWhiteSpace(args.ClassNo))
-                {
-                    query = query.Where(d => d.classNo.StartsWith(args.ClassNo));
-                }
-                if (args.Pids != null && args.Pids.Any())
-                {
-                    query = query.Where(d => args.Pids.Contains(d.pid));
-                }
+            if (!String.IsNullOrWhiteSpace(args.ClassNo))
+            {
+                query = query.Where(d => d.classNo.StartsWith(args.ClassNo));
+            }
+            if (args.Pids != null && args.Pids.Any())
+            {
+                query = query.Where(d => args.Pids.Contains(d.pid));
+            }
                 if (args.MinPid > 0)
                 {
                     query = query.Where(d => d.pid > args.MinPid);
@@ -109,12 +157,6 @@ namespace Flh.Business
             return query;
         }
 
-        private void AddEnabledProduct(Data.Product entity)
-        {
-            entity.created = DateTime.Now;
-            entity.enabled = true;
-            _Repository.Add(entity);
-        }
 
         private void OverrideIfNotNullNotWhiteSpace(Data.Product oldEntity, Data.Product newEntity, Func<Data.Product, String> newValue, Action<Data.Product, String> setValue)
         {
@@ -149,7 +191,7 @@ namespace Flh.Business
             //     .Skip(start).Take(limit)
             //     .ToArray();
             return ProductSearchHelper.Search(args, out count);         
-        }
+            }
         public IQueryable<Data.Product> EnabledProducts
         {
             get { return _Repository.EnabledProduct; }
@@ -173,6 +215,11 @@ namespace Flh.Business
                 ProductSearchHelper.UpdateSearchIndex(entity);
             }
         }
+
+        public IQueryable<Data.Product> AllProducts
+        {
+            get { return _Repository.Entities; }
+        }
     }
 
     public class ProductSearchHelper
@@ -181,7 +228,7 @@ namespace Flh.Business
         {
             if (entity != null)
             {
-                AliyunHelper.UpdateIndexDoc(AliyunConfig.AccessKeyId, AliyunConfig.AccessKeySecret, new ProductAliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
+                AliyunHelper.UpdateIndexDoc(new ProductAliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
                 {TableKey,entity.pid},
                 {"name",entity.name},
                 {"enname",entity.enName},
@@ -207,7 +254,7 @@ namespace Flh.Business
                 {"created",entity.created},
                 {"updated",entity.updated},
                 {"enabled",entity.enabled},
-                {"updater",entity.updater},
+                {"updater",entity.updater??0},
                 }
                 });
 
@@ -216,7 +263,7 @@ namespace Flh.Business
 
         public static void DeleteIndex(params long[] pids)
         {
-            AliyunHelper.DeleteIndexDoc(AliyunConfig.AccessKeyId, AliyunConfig.AccessKeySecret, new ProductAliyunIndexer(), TableKey, pids.Select(p => p.ToString()).ToArray());
+            AliyunHelper.DeleteIndexDoc( new ProductAliyunIndexer(), TableKey, pids.Select(p => p.ToString()).ToArray());
         }
         static String TableKey = "pid";
 
@@ -240,10 +287,10 @@ namespace Flh.Business
                 Query = Query.And(querys.ToArray()),
                // Sort = new SortItem("updated", SortKinds.Desc)
             };
-            var result = AliyunHelper.Search(AliyunConfig.AccessKeyId, AliyunConfig.AccessKeySecret, new ProductAliyunIndexer(), query, String.Empty);
+            var result = AliyunHelper.Search( new ProductAliyunIndexer(), query, String.Empty);
             List<Data.Product> products = new List<Data.Product>();
             foreach (var item in result.Items)
-            {
+        {
                 products.Add(GetProduct(item));
             }
             count = result.Total; 
@@ -279,7 +326,7 @@ namespace Flh.Business
             entity.enabled = TryGetDictValue(dic, "enabled").To<bool>();
             entity.updater = TryGetDictValue(dic, "updater").To<long>();
             return entity;
-        }
+    }
 
         static String TryGetDictValue(Dictionary<string, string> dic, String key)
         {
