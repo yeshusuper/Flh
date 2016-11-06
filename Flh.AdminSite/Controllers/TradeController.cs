@@ -70,7 +70,7 @@ namespace Flh.AdminSite.Controllers
         {
             var entity = _TradeManager.GetEnabled(no);
             ViewBag.No = no;
-            return View(new Models.Classes.BatchAddModel.EditModel
+            return SuccessJsonResult(new Models.Classes.BatchAddModel.EditModel
             {
                 EnName = entity.name_en,
                 Name = entity.name,
@@ -81,7 +81,7 @@ namespace Flh.AdminSite.Controllers
         public ActionResult Edit(string no, string name, string name_en, int order)
         {
             _TradeManager.Edit(this.CurrentUser.Uid, no, new Models.Classes.BatchAddModel.EditModel { EnName = name_en, Name = name, Order = order });
-            return RedirectToAction("list", new { pno = no.Substring(0, no.Length - 4) });
+            return SuccessJsonResult();
         }
         [HttpPost]
         public ActionResult Delete(string nos)

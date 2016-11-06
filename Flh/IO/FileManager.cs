@@ -55,5 +55,15 @@ namespace Flh.IO
             ExceptionHelper.ThrowIfNull(id, "id");
             return _FileStore.Exists(id);
         }
+        public Stream GetFile(FileId id)
+        {
+            ExceptionHelper.ThrowIfNull(id, "id");
+            return _FileStore.GetFile(id);
+        }
+        public Stream GetImage(string key)
+        {
+            ExceptionHelper.ThrowIfNullOrEmpty(key, "key");
+            return _FileStore.GetImage(key);
+        }
     }
 }
