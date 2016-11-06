@@ -31,21 +31,91 @@
         </tr>
 
         @foreach (var item in Model.Items)
-        {            
-        <tr>
-            <td>@item.No</td>
-            <td>@item.Name</td>
-            <td>@item.Order</td>
+        {
+            <tr>
+                <td>@item.No</td>
+                <td>@item.Name</td>
+                <td>@item.Order</td>
                 <td class="operating">
-                <a class="btn btn-default" href="@Url.Action("edit", new { no = item.No })" target="_blank">修改</a>
-                <a class="btn btn-default" href="@Url.Action("list", new { pno = item.No })" target="_blank">子分类列表</a>
-                <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
-            </td>
-        </tr>            
+                    <a class="btn btn-default product-modify" href="javascript:;" data-no="@item.No">修改</a>
+                    <a class="btn btn-default" href="@Url.Action("list", new { pno = item.No })" target="_blank">子分类列表</a>
+                    <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
+                </td>
+            </tr>
         }
 
-</table>
-<div class="page">
-    @Html.Pager(Model.Items);
+    </table>
+    <div class="page">
+        @Html.Pager(Model.Items);
+    </div>
+    <div class="popBox-bg"></div>
+    <div class="popBox">
+        <div class="title" style="border:0px;padding: 16px 0px;">修改分类<span class="btn_close span_close"></span></div>
+        <div class="main">
+            <div class="main-list">
+                <span>中文名称：</span>
+                <input type="hidden" name="no" />
+                <input class="main-list-name" type="text" name="name" />
+            </div>
+            <div class="main-list">
+                <span>英文名称：</span>
+                <input class="main-list-name_en" type="text" name="name_en" />
+            </div>
+            <div class="main-list">
+                <span>排序：</span>
+                <input class="main-list-order" type="text" name="order" />
+            </div>
+            <div class="main-list">
+                <span>简介：</span>
+                <textarea class="main-list-introduce" name="introduce"></textarea>
+            </div>
+            <div class="main-list">
+                <span>图片：</span>
+                <ul class="main-upload">
+                    <li>
+                        <img alt=" 正面" src="" />
+                        <a href="javascript:;">上传图片</a>
+                        <input id="file_yyzz" data-type="yyzz" class="file_upload" style="display:none;" name="file_yyzz" type="file">
+                    </li>
+                    <li>
+                        <img alt="背面" src="" />
+                        <a href="javascript:;">上传图片</a>
+                        <input id="file_yyzz" data-type="yyzz" class="file_upload" style="display:none;" name="file_yyzz" type="file">
+                    </li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+        </div>
+        <div class="bottom">
+            <a class="save-btn" href="javascript:;">确定</a>
+            <a class="cancel-btn" href="javascript:;">取消</a>
+            <div class="clear"></div>
+        </div>
+    </div>
 </div>
-</div>
+
+<script>
+    $(function () {
+        $('.product-modify').on('click', function () {
+            var no = $(this).data('no');
+            $.ajax({
+                type: "get",
+                url: "/classes/edit",
+                data: { "no": no },
+                dataType: "json",
+                traditional: true,
+                success: function (res) {
+                    console.log(res);
+                    if (res.data) {
+                        $('.popBox-bg').show();
+                        $('.popBox').show();
+                    }
+                }
+            });
+        });
+
+        $('.fun_close').on('click', function () {
+
+        })
+    })
+</script>
