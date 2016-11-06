@@ -15,6 +15,7 @@ namespace Flh.Business
         IEnumerable<Data.Product> Search(ProductSearchArgs args, out int count);
         IQueryable<Data.Product> GetProductList(ProductListArgs args);
         IQueryable<Data.Product> EnabledProducts { get; }
+        IQueryable<Data.Product> AllProducts { get; }
         void Delete(long uid, long[] pids);
     }
     public class ProductManager : IProductManager
@@ -179,6 +180,12 @@ namespace Flh.Business
             {
                 ProductSearchHelper.UpdateSearchIndex(entity);
             }
+        }
+
+
+        public IQueryable<Data.Product> AllProducts
+        {
+            get { return _Repository.Entities; }
         }
     }
 
