@@ -44,7 +44,7 @@ namespace Flh.Aliyun
       
 
 
-        public static AliyunResponse UpdateIndexDoc(IAliyunIndexer indexer, Dictionary<string, object>[] items)
+        public static void UpdateIndexDoc(IAliyunIndexer indexer, Dictionary<string, object>[] items)
         {
             var baseQuerys = new AliyunBaseQuerys();
             var action = "push";
@@ -62,7 +62,7 @@ namespace Flh.Aliyun
                     { "items", itemsJson }
                 };
             var signature = baseQuerys.GetSignature(AliyunAccessKey.AccessKeyId, AliyunAccessKey.AccessKeySecret, "post", otherQuerys);
-            return _Http.IndexDoc(baseQuerys.Version,
+            var response = _Http.IndexDoc(baseQuerys.Version,
                         AliyunAccessKey.AccessKeyId,
                         signature,
                         baseQuerys.Signature.Method,
@@ -73,9 +73,15 @@ namespace Flh.Aliyun
                         action,
                         indexer.AliyunTableName,
                         itemsJson);
+            if (!response.IsOk())
+            {
+                throw new Exception(String.Format("系统错误,response:{0};Query:{1}",
+                    Newtonsoft.Json.JsonConvert.SerializeObject(response),
+                    Newtonsoft.Json.JsonConvert.SerializeObject(otherQuerys)));
+            }
         }
 
-        public static AliyunResponse DeleteIndexDoc( IAliyunIndexer indexer, string idKey, string[] ids)
+        public static void DeleteIndexDoc( IAliyunIndexer indexer, string idKey, string[] ids)
         {
             var baseQuerys = new AliyunBaseQuerys();
             var action = "push";
@@ -92,7 +98,7 @@ namespace Flh.Aliyun
             };
             var signature = baseQuerys.GetSignature(AliyunAccessKey.AccessKeyId,AliyunAccessKey.AccessKeySecret, "post", otherQuerys);
 
-            return _Http.IndexDoc(baseQuerys.Version,
+            var response = _Http.IndexDoc(baseQuerys.Version,
                         AliyunAccessKey.AccessKeyId,
                         signature,
                         baseQuerys.Signature.Method,
@@ -103,6 +109,12 @@ namespace Flh.Aliyun
                         action,
                         indexer.AliyunTableName,
                         itemsJson);
+            if (!response.IsOk())
+            {
+                throw new Exception(String.Format("系统错误,response:{0};Query:{1}",
+                    Newtonsoft.Json.JsonConvert.SerializeObject(response),
+                    Newtonsoft.Json.JsonConvert.SerializeObject(otherQuerys)));
+            }
         }
 
         public static SearchResponse.SearchResult Search( IAliyunIndexer indexer, QueryBuilder query, string qp, ISummary summary = null, string formula_name = null, string[] fields = null)
