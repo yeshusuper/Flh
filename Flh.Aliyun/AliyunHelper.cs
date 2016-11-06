@@ -888,10 +888,4 @@ namespace Flh.Aliyun
         /// </summary>
         int? RerankSize { get; set; }
     }
-    //public class AliyunConfig
-    //{
-    //    public static String AccessKeyId = "LTAI631tzQg1whIy";
-    //    public static String AccessKeySecret = "FI4KWXvfMYWhxsf8O0CIPgahEJJZW3";
-    //    public static String Host = "http://opensearch-cn-hangzhou.aliyuncs.com";
-    //}
 }
