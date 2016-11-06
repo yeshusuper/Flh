@@ -15,15 +15,15 @@ namespace Flh.AdminSite.Controllers
     [FlhAuthorize]
     public class ProductController : BaseController
     {
-        private readonly IProductManager _ProductManager;
-        private readonly IClassesManager _ClassesManager;
+       private readonly IProductManager _ProductManager;
+       private readonly IClassesManager _ClassesManager;
         private readonly IFileStore _FileStore;
         public ProductController(IProductManager productManager, IClassesManager classesManager, IFileStore fileStore)
-        {
-            _ProductManager = productManager;
-            _ClassesManager = classesManager;
+       {
+           _ProductManager = productManager;
+           _ClassesManager = classesManager;
             _FileStore = fileStore;
-        }
+       }
         public ActionResult List(string no, string keyword, int? page)
         {
             if (!page.HasValue || page.Value < 1)
@@ -42,12 +42,12 @@ namespace Flh.AdminSite.Controllers
                 {
                 }
             }
-            var products = _ProductManager.Search(new ProductSearchArgs
-            {
-                Keyword = keyword,
-                Limit = size,
-                Start = (page.Value - 1) * size,
-                ClassNo = no
+            var products = _ProductManager.Search(new ProductSearchArgs 
+            { 
+                Keyword = keyword, 
+                Limit = size, 
+                Start = (page.Value - 1) * size, 
+                ClassNo = String.IsNullOrWhiteSpace(no) ? "0001" : no
             }, out count);
             return View(new Models.Product.ListModel()
             {
@@ -68,7 +68,7 @@ namespace Flh.AdminSite.Controllers
                                 Technique = p.technique
                             }), page.Value, (int)Math.Ceiling((double)count / (double)size))
             });
-        }
+       }
         public ActionResult Delete(string pids)
         {
             var _Pids = (pids ?? String.Empty).Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(id => long.Parse(id)).ToArray();
@@ -104,12 +104,12 @@ namespace Flh.AdminSite.Controllers
             Product[] items;
             if (pidsArr.Any())
             {
-                var products = _ProductManager.GetProductList(new ProductListArgs { Pids = pidsArr });
+            var products = _ProductManager.GetProductList(new ProductListArgs { Pids = pidsArr });
                 items = products.OrderByDescending(n => n.sortNo)
-                       .ThenByDescending(n => n.created)
-                       .Select(p => p).ToArray();
+                    .ThenByDescending(n => n.created)
+                    .Select(p => p).ToArray();
                 return Json(items, JsonRequestBehavior.AllowGet);
-            }
+        }
             else
             {
                 items = new Product[0];
@@ -125,20 +125,27 @@ namespace Flh.AdminSite.Controllers
         [HttpPost]
         public ActionResult SaveBatchEdit(string models)
         {
-            var items = JsonConvert.DeserializeObject<Flh.Business.Data.Product[]>(models);
-            foreach (var item in items)
+            try
             {
-                if (item.pid > 0)
+            var items = JsonConvert.DeserializeObject<Flh.Business.Data.Product[]>(models);
+                foreach (var item in items)
                 {
-                    item.updater = CurrentUser.Uid;
+                    if (item.pid > 0)
+                    {
+                        item.updater = CurrentUser.Uid;
+                    }
+                    else
+                    {
+                        item.createUid = CurrentUser.Uid;
+                    }
                 }
-                else
-                {
-                    item.createUid = CurrentUser.Uid;
-                }
-            }
             _ProductManager.AddOrUpdateProducts(items);
             return SuccessJsonResult();
+        }
+            catch (ArgumentException ex)
+            {
+                return JsonResult( ErrorCode.ArgError,ex.Message);
+            }          
         }
 
         [HttpPost]
@@ -161,7 +168,14 @@ namespace Flh.AdminSite.Controllers
                     return JsonResult(ErrorCode.ServerError, "只能上传png/jpg/jpeg/gif格式的图片");
                 }
                 var fid = FileId.FromFileName(file.FileName);
-                _FileStore.CreateTemp(fid, file.InputStream);
+                //try
+                //{
+                    _FileStore.CreateTemp(fid, file.InputStream);
+                //}
+                //catch
+                //{
+
+                //}
                 fileNames.Add(fid.Id);
 
                 ////判断Upload文件夹是否存在，不存在就创建
@@ -186,7 +200,7 @@ namespace Flh.AdminSite.Controllers
                 //file.SaveAs(Path.Combine(path, fileName));
 
                 //var imgUrl = "/Upload/" + fileName;
-                fileNames.Add(fid.Id);
+                //fileNames.Add(fid.Id);
             }
             return SuccessJsonResult<List<String>>(fileNames);
         }

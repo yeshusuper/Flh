@@ -36,7 +36,13 @@ namespace Flh.IO
         {
             return Path.Combine("temp", Id);
         }
-
+        public  bool IsTempId
+        {
+            get
+            {
+                return (Id ?? string.Empty).StartsWith("temp");
+            }
+        }
         internal string ToPath(string root)
         {
             var arr = new string[4];
