@@ -12,6 +12,7 @@ namespace Flh.Web.Aliyun
 
         static AliyunHelper() {
             var value = new System.Configuration.AppSettingsReader().GetValue("aliyunAccessKey", typeof(String)) as string;
+            //var value = "djEJuvN3SiwAST84;is4JMGX5AYFS7SQc8dFIvrFsXlpCNa";
             if (value != null)
             {
                 var arr = value.Split(new []{",", ";"}, StringSplitOptions.RemoveEmptyEntries);

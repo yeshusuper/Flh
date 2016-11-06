@@ -1,0 +1,8 @@
+﻿@{
+    ViewBag.Title = "UplaodTest";
+}
+<h2>TestImagePost</h2>
+<form method="post" action="@Url.Action("UploadTemp")" enctype="multipart/form-data">
+    file:<input type="file" name="file" /><br />
+    <input type="submit" value="提交" />
+</form>
