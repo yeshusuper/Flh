@@ -44,7 +44,7 @@ namespace Flh.Business
             ExceptionHelper.ThrowIfTrue(newProduct.unitPrice <= 0, "", "产品单价必须大于0");
             ExceptionHelper.ThrowIfTrue(newProduct.updater <= 0, "", "没有传入更新者的userID");
         }
-        
+
         public void AddOrUpdateProducts(Data.Product[] products)
         {
             ExceptionHelper.ThrowIfNull(products, "products");
@@ -60,12 +60,12 @@ namespace Flh.Business
 
                 var pids = products.Where(p => p.pid > 0).Select(p => p.pid).ToArray();
                 var existsProducts = _Repository.EnabledProduct.Where(p => pids.Contains(p.pid)).ToArray();
-                
+
                 using (var scope = new System.Transactions.TransactionScope())
                 {
                     //更新已存在的产品
                     foreach (var newProduct in existsProducts)
-                    {                        
+                    {
                         var oldProduct = products.FirstOrDefault(p => p.pid == newProduct.pid);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enName, (p, v) => p.enName = v);
@@ -87,7 +87,7 @@ namespace Flh.Business
                             _FileStore.Copy(FileId.FromFileId(newProduct.imagePath), FileId.FromFileName(newProduct.imagePath));//将临时文件复制到永久文件处
                             oldProduct.imagePath = newFileID.Id;
                         }
-                        
+
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
                         oldProduct.minQuantity = newProduct.minQuantity;
                         oldProduct.deliveryDay = newProduct.deliveryDay;
@@ -97,7 +97,7 @@ namespace Flh.Business
                         if (newProduct.updater > 0)
                         {
                             oldProduct.updater = newProduct.updater;
-                        }                        
+                        }
                         searchIndexPids.Add(oldProduct.pid);
                     }
 
@@ -109,7 +109,7 @@ namespace Flh.Business
                         item.enabled = true;
                         //try
                         //{
-                            _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
+                        _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
                         //}
                         //catch
                         //{
@@ -154,7 +154,7 @@ namespace Flh.Business
             }
             return query;
         }
-              
+
 
         private void OverrideIfNotNullNotWhiteSpace(Data.Product oldEntity, Data.Product newEntity, Func<Data.Product, String> newValue, Action<Data.Product, String> setValue)
         {
@@ -167,7 +167,7 @@ namespace Flh.Business
         {
             if (args != null && (!String.IsNullOrWhiteSpace(args.ClassNo) || !String.IsNullOrWhiteSpace(args.Keyword)))
             {
-                return ProductSearchHelper.Search(args, out count); 
+                return ProductSearchHelper.Search(args, out count);
             }
             else
             {
@@ -194,8 +194,8 @@ namespace Flh.Business
                      .ThenByDescending(p => p.updated)
                      .Skip(start).Take(limit)
                      .ToArray();
-            }            
-                    
+            }
+
         }
         public IQueryable<Data.Product> EnabledProducts
         {
@@ -269,18 +269,18 @@ namespace Flh.Business
 
         public static void DeleteIndex(params long[] pids)
         {
-            AliyunHelper.DeleteIndexDoc( new ProductAliyunIndexer(), TableKey, pids.Select(p => p.ToString()).ToArray());
+            AliyunHelper.DeleteIndexDoc(new ProductAliyunIndexer(), TableKey, pids.Select(p => p.ToString()).ToArray());
         }
         static String TableKey = "pid";
 
-        public static Data.Product[] Search(ProductSearchArgs args,out int count)
+        public static Data.Product[] Search(ProductSearchArgs args, out int count)
         {
             var querys = new List<IQuery>();
             if (!String.IsNullOrWhiteSpace(args.Keyword))
             {
                 querys.Add(Query.Or(
                      new QueryItem("keyword", args.Keyword)
-                     ,new QueryItem("enkeyword", args.Keyword)
+                     , new QueryItem("enkeyword", args.Keyword)
                     ));
             }
             if (!String.IsNullOrWhiteSpace(args.ClassNo))
@@ -291,15 +291,15 @@ namespace Flh.Business
             {
                 Config = new Config { Start = Math.Max(0, args.Start), Hit = Math.Max(1, args.Limit) },
                 Query = Query.And(querys.ToArray()),
-               // Sort = new SortItem("updated", SortKinds.Desc)
+                // Sort = new SortItem("updated", SortKinds.Desc)
             };
-            var result = AliyunHelper.Search( new ProductAliyunIndexer(), query, String.Empty);
+            var result = AliyunHelper.Search(new ProductAliyunIndexer(), query, String.Empty);
             List<Data.Product> products = new List<Data.Product>();
             foreach (var item in result.Items)
             {
                 products.Add(GetProduct(item));
             }
-            count = result.Total; 
+            count = result.Total;
             return products.ToArray();
         }
         public static Data.Product GetProduct(Dictionary<string, string> dic)
