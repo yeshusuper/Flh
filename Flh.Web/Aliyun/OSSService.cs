@@ -20,6 +20,7 @@ namespace Flh.Web.Aliyun
 
         public OSSService(string bucketName)
         {
+            _BucketName = bucketName;
             _OssClient = new OssClient(endpoint, AliyunHelper.AliyunAccessKey.AccessKeyId, AliyunHelper.AliyunAccessKey.AccessKeySecret);
         }
 
