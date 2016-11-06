@@ -185,3 +185,4 @@ color: #fff;
 .popBox .cancel-btn{border: 1px solid #aaa; color: #aaa;}
 .popBox .save-btn:hover,.popBox .cancel-btn:hover{opacity:0.8;filter:alpha(opacity=80)}
 /*地区与行业类型弹出框*/
+#popArea,#popTrade{margin-top: -165px;}

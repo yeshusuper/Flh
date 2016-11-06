@@ -3,6 +3,7 @@
     ViewBag.Title = "分类列表";
     Layout = "../Layout/_Manager.cshtml";
 }
+<script src="/Resources/Js/ajaxfileupload.js"></script>   
 <div class="crumbs">
     当前分类：
     @if (Model.ParentClasses != null)
@@ -54,7 +55,7 @@
         <div class="main">
             <div class="main-list">
                 <span>中文名称：</span>
-                <input type="hidden" name="no" />
+                <input class="main-list-no" type="hidden" name="no" />
                 <input class="main-list-name" type="text" name="name" />
             </div>
             <div class="main-list">
@@ -73,20 +74,23 @@
                 <span>图片：</span>
                 <ul class="main-upload">
                     <li>
-                        <img alt="首页图片" class="main-list-indexImage" src="" />
+                        <img alt="首页图片" data-src="" class="main-list-indexImage" src="" />
                         <a href="javascript:;" class="upload-img">上传图片</a>
                     </li>
                     <li>
-                        <img alt="列表图片" class="main-list-listImage" src="" />
+                        <img alt="列表图片" data-src="" class="main-list-listImage" src="" />
                         <a href="javascript:;" class="upload-img">上传图片</a>
                     </li>
                     <div class="clear"></div>
                 </ul>
-                <input id="file-img" class="file_upload" style="display:none;" name="file-img" type="file">
+                <form>
+                    <input id="file" class="file_upload" style="display:none;" name="file" type="file">
+                </form>
+                
             </div>
         </div>
         <div class="bottom">
-            <a class="save-btn" href="javascript:;">确定</a>
+            <a class="save-btn fun_save" href="javascript:;">确定</a>
             <a class="cancel-btn fun_close" href="javascript:;">取消</a>
             <div class="clear"></div>
         </div>
@@ -123,6 +127,7 @@
                             Introduce = res.data.Introduce || "",
                             IndexImage = res.data.IndexImage,
                             ListImage = res.data.ListImage;
+                        $('.main-list-no').val(no);
                         $('.main-list-name').val(Name);
                         $('.main-list-name_en').val(EnName);
                         $('.main-list-order').val(Order);
@@ -146,22 +151,47 @@
         $('.file_upload').live('change', function () {
             var filepath = $(this).val(),
                 _this = this,
-                fileid = $(this).attr('name'),
                 type_data = $(this).data('type'),
                 ileObj = $(this).get(0).files;
             upload_check(filepath, _this);
-            $.ajax({
-                type: "post",
+            $.ajaxFileUpload({
                 url: "/Image/UploadTemp",
-                data: ileObj,
-                dataType: "json",
-                traditional: true,
-                success: function (res) {
-                    console.log(res);
+                secureuri: false,
+                fileElementId: "file",//file标签的id  
+                dataType: 'json',
+                success: function (data, status) {
+                    if (typeof data == "string")
+                        data = JSON.parse(data);
+                    console.log(data);
+
+                },
+                error: function (data, status, e) {
+                    //alert(e);
                 }
             });
 
         })
+        $('.fun_save').on('click', function () {
+            var no = $('.main-list-no').val() || "",
+                Name = $('.main-list-name').val() || "",
+                           EnName = $('.main-list-name_en').val() || "",
+                           Order = $('.main-list-order').val() || "0",
+                           Introduce = $('.main-list-introduce').val() || "",
+                           IndexImage = $('.main-list-indexImage').attr("data-src") || "",
+                           ListImage = $('.main-list-listImage').attr("data-src") || "";
+            var data = { "no": no, "name": Name, "EnName": EnName, "Order": Order, "Introduce": Introduce, "IndexImage": IndexImage, "ListImage": ListImage };
+            $.ajax({
+                type: "post",
+                url: "/classes/edit",
+                data: data,
+                dataType: "json",
+                traditional: true,
+                success: function (res) {
+                    location.reload();
+                }
+            });
+        })
+       
 
         $('.upload-img').on('click', function () {
             $('.file_upload').click()
