@@ -1,4 +1,5 @@
 ﻿using Flh.Aliyun;
+using Flh.IO;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,11 @@ namespace Flh.Business
     public class ProductManager : IProductManager
     {
         private readonly Data.IProductRepository _Repository;
-        public ProductManager(Data.IProductRepository repository)
+        private readonly IFileStore _FileStore;
+        public ProductManager(Data.IProductRepository repository, IFileStore fileStore)
         {
             _Repository = repository;
+            _FileStore = fileStore;
         }
 
         public void AddOrUpdateProducts(Data.Product[] products)
@@ -38,7 +41,8 @@ namespace Flh.Business
                     //更新已存在的产品
                     foreach (var oldProduct in existsProducts)
                     {
-                        ExceptionHelper.ThrowIfNullOrWhiteSpace(oldProduct.enName, "", "产品名称不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(oldProduct.name, "", "产品名称不能为空");
+                        ExceptionHelper.ThrowIfNullOrWhiteSpace(oldProduct.imagePath, "", "产品图片不能为空");
                         //todo:更多空值验证
                         var newProduct = products.FirstOrDefault(p => p.pid == oldProduct.pid);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.name, (p, v) => p.name = v);
@@ -55,7 +59,13 @@ namespace Flh.Business
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enTechnique, (p, v) => p.enTechnique = v);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.keywords, (p, v) => p.keywords = v);
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
-                        OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.imagePath, (p, v) => p.imagePath = v);
+                        if (oldProduct.imagePath != newProduct.imagePath)
+                        {
+                            var newFileID = FileId.FromFileName(newProduct.imagePath);
+                            _FileStore.Copy(FileId.FromFileId(newProduct.imagePath), FileId.FromFileName(newProduct.imagePath));//将临时文件复制到永久文件处
+                            oldProduct.imagePath = newFileID.Id;
+                        }
+                        
                         OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
                         oldProduct.minQuantity = newProduct.minQuantity;
                         oldProduct.deliveryDay = newProduct.deliveryDay;
@@ -68,7 +78,10 @@ namespace Flh.Business
                     //新增的产品
                     foreach (var item in addingProducts)
                     {
-                        AddEnabledProduct(item);
+                        item.created = DateTime.Now;
+                        item.enabled = true;
+                        _FileStore.Copy(FileId.FromFileId(item.imagePath), FileId.FromFileName(item.imagePath));//将临时文件复制到永久文件处
+                        _Repository.Add(item);
                         searchIndexPids.Add(item.pid);
                     }
                     _Repository.SaveChanges();
@@ -108,13 +121,7 @@ namespace Flh.Business
             }
             return query;
         }
-
-        private void AddEnabledProduct(Data.Product entity)
-        {
-            entity.created = DateTime.Now;
-            entity.enabled = true;
-            _Repository.Add(entity);
-        }
+              
 
         private void OverrideIfNotNullNotWhiteSpace(Data.Product oldEntity, Data.Product newEntity, Func<Data.Product, String> newValue, Action<Data.Product, String> setValue)
         {
@@ -181,7 +188,7 @@ namespace Flh.Business
         {
             if (entity != null)
             {
-                AliyunHelper.UpdateIndexDoc(AliyunConfig.AccessKeyId, AliyunConfig.AccessKeySecret, new ProductAliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
+                AliyunHelper.UpdateIndexDoc(new ProductAliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
                 {TableKey,entity.pid},
                 {"name",entity.name},
                 {"enname",entity.enName},
@@ -216,7 +223,7 @@ namespace Flh.Business
 
         public static void DeleteIndex(params long[] pids)
         {
-            AliyunHelper.DeleteIndexDoc(AliyunConfig.AccessKeyId, AliyunConfig.AccessKeySecret, new ProductAliyunIndexer(), TableKey, pids.Select(p => p.ToString()).ToArray());
+            AliyunHelper.DeleteIndexDoc( new ProductAliyunIndexer(), TableKey, pids.Select(p => p.ToString()).ToArray());
         }
         static String TableKey = "pid";
 
@@ -240,7 +247,7 @@ namespace Flh.Business
                 Query = Query.And(querys.ToArray()),
                // Sort = new SortItem("updated", SortKinds.Desc)
             };
-            var result = AliyunHelper.Search(AliyunConfig.AccessKeyId, AliyunConfig.AccessKeySecret, new ProductAliyunIndexer(), query, String.Empty);
+            var result = AliyunHelper.Search( new ProductAliyunIndexer(), query, String.Empty);
             List<Data.Product> products = new List<Data.Product>();
             foreach (var item in result.Items)
             {
