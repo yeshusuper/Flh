@@ -13,6 +13,10 @@ namespace Flh.UpdateSearchConsoleApplication
     {
         static void Main(string[] args)
         {
+            //测试搜索
+            //int count;
+            //var ps = ProductSearchHelper.Search(new ProductSearchArgs { Keyword="红色纽扣",ClassNo="0002"}, out count);
+            //return;
             Console.WriteLine("\n\n正在准备更新索引...");
             var fileName = "updateIndexMaxPid.txt";
             var kernel = new Ninject.StandardKernel(
