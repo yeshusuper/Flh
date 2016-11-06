@@ -207,7 +207,9 @@
     <Content Include="Resources\Js\jquery-3.1.0.min.js" />
     <Content Include="Resources\Js\jquery.datetimepicker.full.min.js" />
     <Content Include="Resources\Js\jquery.magnific-popup.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -232,6 +234,10 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Flh.Aliyun\Flh.Aliyun.csproj">
+      <Project>{69de15dd-a25c-482f-80d8-d6aa59b63213}</Project>
+      <Name>Flh.Aliyun</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Flh.Business\Flh.Business.csproj">
       <Project>{38576e81-2772-4b42-867b-ceaa65bdc7e8}</Project>
       <Name>Flh.Business</Name>

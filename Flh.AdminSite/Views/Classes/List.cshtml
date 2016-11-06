@@ -39,7 +39,8 @@
                 <td class="operating">
                 <a class="btn btn-default" href="@Url.Action("edit", new { no = item.No })" target="_blank">修改</a>
                 <a class="btn btn-default" href="@Url.Action("list", new { pno = item.No })" target="_blank">子分类列表</a>
-                <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
+                    <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
+                <a class="btn btn-default" href="@Url.Action("BatchEdit", "product", new { classNo = item.No })" target="_blank">添加产品</a>
             </td>
         </tr>            
         }

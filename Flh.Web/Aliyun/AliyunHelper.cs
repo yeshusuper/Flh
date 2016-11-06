@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-namespace Flh.Web.Aliyun
-{
-    public class AliyunHelper
-    {
-        public readonly static AliyunAccessKey AliyunAccessKey;
+//namespace Flh.Web.Aliyun
+//{
+    //public class AliyunHelper
+    //{
+        //public readonly static AliyunAccessKey AliyunAccessKey;
 
         static AliyunHelper() {
             var value = new System.Configuration.AppSettingsReader().GetValue("aliyunAccessKey", typeof(String)) as string;

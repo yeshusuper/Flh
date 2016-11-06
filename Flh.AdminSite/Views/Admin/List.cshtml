@@ -4,10 +4,14 @@
     ViewBag.Title = "管理员列表";
 }
 <div class="crumbs">您的位置：辅料汇后台 &gt;  会员管理 &gt; 会员列表</div>
+
 <div class="layout-search">
-    <input class="input-mobile" name="mobile" value="@ViewBag.Mobile" type="text" placeholder="输入手机号码 进行搜索" />
-    <button class="btn btn-default" type="submit">搜索</button>
+    <form>
+        手机号码：<input class="input-mobile" name="mobile" value="@ViewBag.Mobile" type="text" placeholder="输入手机号码 进行搜索" />
+        <button class="btn btn-default" type="submit">搜索</button>
+    </form>
 </div>
+
 <div class="common-list">
     <table class="common-list-table">
         <tr>
@@ -49,12 +53,12 @@
                     AjaxResultHandler(result, function () {
                         alert("操作成功");
                         window.location.reload();
-                    });                   
+                    });
                 }, "json").fail(function () {
                     alert("发生错误了，请重试");
                 });
-            }           
-        });       
+            }
+        });
 
         $('[data-event="add"]').click(function () {
             if (confirm("确实要将【" + $(this).attr("data-name") + "】添加为管理员？")) {
@@ -64,7 +68,7 @@
                         alert("操作成功");
                         window.location.reload();
                     });
-                },"json").fail(function () {
+                }, "json").fail(function () {
                     alert("发生错误了，请重试");
                 });
             }

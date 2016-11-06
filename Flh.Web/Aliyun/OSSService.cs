@@ -1,4 +1,5 @@
 ﻿using Aliyun.OSS;
+using Flh.Aliyun;
 using Aliyun.OSS.Common;
 using Flh.IO;
 using System;
