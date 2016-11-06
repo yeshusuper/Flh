@@ -178,12 +178,12 @@ namespace Flh.Aliyun
 
         public string AliyunTableName
         {
-            get { return "product"; }
+            get { return "products"; }
         }
 
         public string AliyunAppName
         {
-            get { return "Flh"; }
+            get { return "products"; }
         }
     }
     public interface IQuery
