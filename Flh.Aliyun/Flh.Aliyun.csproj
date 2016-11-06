@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core">
-      <HintPath>..\Flh.Business\bin\Debug\Castle.Core.dll</HintPath>
+      <HintPath>..\Resources\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="HttpLease">
-      <HintPath>..\Flh.Business\bin\Debug\HttpLease.dll</HintPath>
+      <HintPath>..\Resources\HttpLease.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AliyunAccessKey.cs" />
     <Compile Include="AliyunHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

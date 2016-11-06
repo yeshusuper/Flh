@@ -177,18 +177,26 @@ namespace Flh.Business
             }
             if (!String.IsNullOrWhiteSpace(info.IndexImage) && info.IndexImage.Trim() != entity.indexImage)
             {
-                var target = FileId.FromFileName(info.IndexImage);
                 var sourceId=FileId.FromFileId(info.IndexImage);
-                _FileManager.Copy(sourceId, target);
-                entity.indexImage = target.Id;
+                if (sourceId.IsTempId)
+                {
+                    var target = FileId.FromFileName(info.IndexImage);
+                    _FileManager.Copy(sourceId, target);
+                    sourceId = target;
+                }
+                entity.indexImage = sourceId.Id;
                 update = true;
             }
             if (!String.IsNullOrWhiteSpace(info.ListImage) && info.ListImage.Trim() != entity.listImage)
             {
-                var target = FileId.FromFileName(info.ListImage);
                 var sourceId = FileId.FromFileId(info.ListImage);
-                _FileManager.Copy(sourceId, target);
-                entity.listImage = target.Id;
+                if (sourceId.IsTempId)
+                {
+                    var target = FileId.FromFileName(info.ListImage);
+                    _FileManager.Copy(sourceId, target);
+                    sourceId = target;
+                }
+                entity.listImage = sourceId.Id;
                 update = true;
             }
             if (update)
