@@ -15,6 +15,8 @@ namespace Flh.IO
         void Copy(FileId sourceId, FileId destId);
         void Delete(FileId id);
         bool Exists(FileId id);
+        Stream GetFile(FileId id);
+        Stream GetImage(string key);
     }
 
     public class SystemFileStroe : IFileStore
@@ -77,6 +79,15 @@ namespace Flh.IO
             {
                 stream.CopyTo(fs);
             }
+        }
+        public Stream GetFile(FileId id)
+        {
+            return File.Open(GetFilename(id), FileMode.Open);
+        }
+
+        public Stream GetImage(string key)
+        {
+            throw new NotImplementedException();
         }
     }
 }
