@@ -2,8 +2,14 @@
     ViewBag.Title = "BatchEdit";
     Layout = "~/Views/Layout/_Manager.cshtml";
 }
-<script type="text/javascript" src="Resources/Js/imgUpload/webuploader.html5only.min.js"></script>
-<script type="text/javascript" src="Resources/Js/imgUpload/diyUpload.js"></script>
+<script>
+    var pageIndex = '@ViewBag.Page';// 页码
+    var pids = '@ViewBag.Pids'; //产品id数组，英文逗号隔开
+    var classNo = '@ViewBag.ClassNo';//产品分类
+</script>
+<script type="text/javascript" src="/Resources/Js/imgUpload/webuploader.html5only.min.js"></script>
+<script type="text/javascript" src="/Resources/Js/imgUpload/diyUpload.js"></script>
+<script type="text/javascript" src="/Resources/Js/product.js"></script>
 <div class="crumbs">您的位置：辅料汇后台 &gt;  产品管理 &gt; 产品添加</div>
 
 <div class="common-list" id="product-edit">
@@ -17,7 +23,7 @@
             <th width="120"><label>名称<input value="" name="" type="checkbox" /></label></th>
             <th width="150"><label>详细说明<input value="" name="" type="checkbox" /></label></th>
             <th width="80"><label>尺寸<input value="" name="" type="checkbox" /></label></th>
-            <th width="80"><label>颜色<input value="" name="" type="checkbox" /></label></th>
+            <th width="80"><label>颜色<input value="" name="" type="checkbox" /></label>  </th>
             <th width="80"><label>材质<input value="" name="" type="checkbox" /></label></th>
             <th width="80"><label>工艺<input value="" name="" type="checkbox" /></label></th>
             <th width="80"><label>起订量<input value="" name="" type="checkbox" /></label></th>
@@ -27,10 +33,16 @@
             <th width="40">排序</th>
             <th>操作</th>
         </tr>
-        <tr class="product-edit-tr">
+        <tr class="product-edit-bottom">
+            <td colspan="13">
+                <a class="fun-save" href="javascript:;">保存</a>
+            </td>
+        </tr>
+        <tr class="product-hide-tr">
             <td>
                 <img src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" width="50" height="50" />
                 <p>英文版：</p>
+                <input type="hidden" name="pid" />
             </td>
             <td>
                 <div class="product-edit-double"><input type="text" name="name" /></div>
@@ -75,32 +87,12 @@
             </td>
             <td style="vertical-align: middle;">
                 <input type="text" name="sortNo" />
-                
+
             </td>
-            <td align="center" style="vertical-align:middle;"> 
+            <td align="center" style="vertical-align:middle;">
                 <a href="javascript:;">删除</a>
             </td>
         </tr>
     </table>
 </div>
-
-
-<!--图片批量上传-->
-<div id="imgUpload"></div>
-<script>
-        var pageIndex = '@ViewBag.Page';// 页码
-        var pids = '@ViewBag.Pids'; //产品id数组，英文逗号隔开
-        var classNo = '@ViewBag.ClassNo';//产品分类
-        $(function () {
-            $('#imgUpload').diyUpload({
-                url: 'server/fileupload.php',
-                success: function (data) {
-                    console.info(data);
-                },
-                error: function (err) {
-                    console.info(err);
-                }
-            });
-        })
-</script>
 

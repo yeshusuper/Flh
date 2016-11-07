@@ -3,6 +3,7 @@
     ViewBag.Title = "分类列表";
     Layout = "../Layout/_Manager.cshtml";
 }
+<script src="/Resources/Js/ajaxfileupload.js"></script>   
 <div class="crumbs">
     当前分类：
     @if (Model.ParentClasses != null)
@@ -50,11 +51,11 @@
     </div>
     <div class="popBox-bg"></div>
     <div class="popBox">
-        <div class="title" style="border:0px;padding: 16px 0px;">修改分类<span class="btn_close span_close"></span></div>
+        <div class="title" style="border:0px;padding: 16px 0px;">修改分类<span class="btn_close span_close fun_close"></span></div>
         <div class="main">
             <div class="main-list">
                 <span>中文名称：</span>
-                <input type="hidden" name="no" />
+                <input class="main-list-no" type="hidden" name="no" />
                 <input class="main-list-name" type="text" name="name" />
             </div>
             <div class="main-list">
@@ -73,22 +74,24 @@
                 <span>图片：</span>
                 <ul class="main-upload">
                     <li>
-                        <img alt=" 正面" src="" />
-                        <a href="javascript:;">上传图片</a>
-                        <input id="file_yyzz" data-type="yyzz" class="file_upload" style="display:none;" name="file_yyzz" type="file">
+                        <img alt="首页图片" data-src="" class="main-list-indexImage" src="" />
+                        <a href="javascript:;" class="upload-img">上传图片</a>
                     </li>
                     <li>
-                        <img alt="背面" src="" />
-                        <a href="javascript:;">上传图片</a>
-                        <input id="file_yyzz" data-type="yyzz" class="file_upload" style="display:none;" name="file_yyzz" type="file">
+                        <img alt="列表图片" data-src="" class="main-list-listImage" src="" />
+                        <a href="javascript:;" class="upload-img">上传图片</a>
                     </li>
                     <div class="clear"></div>
                 </ul>
+                <form>
+                    <input id="file" class="file_upload" style="display:none;" name="file" type="file">
+                </form>
+                
             </div>
         </div>
         <div class="bottom">
-            <a class="save-btn" href="javascript:;">确定</a>
-            <a class="cancel-btn" href="javascript:;">取消</a>
+            <a class="save-btn fun_save" href="javascript:;">确定</a>
+            <a class="cancel-btn fun_close" href="javascript:;">取消</a>
             <div class="clear"></div>
         </div>
     </div>
@@ -96,8 +99,19 @@
 
 <script>
     $(function () {
+        function upload_check(filepath, _this) {
+            var byteSize = _this.files[0].size;
+            if (!/.(gif|jpg|jpeg|png|bmp)$/.test(filepath)) {
+                alert('invoice_cover_main', '仅支持 .jpg .jpeg .bmp .gif .png格式照片！');
+                return false;
+            } else if (byteSize > 2 * 1024 * 1024) {
+                alert('invoice_cover_main', '图片大小不超过2M！');
+                return false;
+            }
+        }
+
         $('.product-modify').on('click', function () {
-            var no = $(this).data('no');
+            var no = $(this).attr('data-no');
             $.ajax({
                 type: "get",
                 url: "/classes/edit",
@@ -107,15 +121,84 @@
                 success: function (res) {
                     console.log(res);
                     if (res.data) {
+                        var Name = res.data.Name || "",
+                            EnName = res.data.EnName || "",
+                            Order = res.data.Order || "",
+                            Introduce = res.data.Introduce || "",
+                            IndexImage = res.data.IndexImage,
+                            ListImage = res.data.ListImage;
+                        $('.main-list-no').val(no);
+                        $('.main-list-name').val(Name);
+                        $('.main-list-name_en').val(EnName);
+                        $('.main-list-order').val(Order);
+                        $('.main-list-introduce').val(Introduce);
+                        if (IndexImage && IndexImage != null) {
+                            $('.main-list-indexImage').attr('src', '/image/show?fid=' + IndexImage + '@@120w_120h_90Q');
+                        } else {
+                            $('.main-list-indexImage').attr('src', "");
+                        }
+                        if (ListImage && ListImage != null) {
+                            $('.main-list-listImage').attr('src', '/image/show?fid=' + ListImage + '@@120w_120h_90Q')
+                        } else {
+                            $('.main-list-listImage').attr('src', "");
+                        }
                         $('.popBox-bg').show();
                         $('.popBox').show();
                     }
                 }
             });
         });
+        $('.file_upload').live('change', function () {
+            var filepath = $(this).val(),
+                _this = this,
+                type_data = $(this).data('type'),
+                ileObj = $(this).get(0).files;
+            upload_check(filepath, _this);
+            $.ajaxFileUpload({
+                url: "/Image/UploadTemp",
+                secureuri: false,
+                fileElementId: "file",//file标签的id  
+                dataType: 'json',
+                success: function (data, status) {
+                    if (typeof data == "string")
+                        data = JSON.parse(data);
+                    console.log(data);
 
+                },
+                error: function (data, status, e) {
+                    //alert(e);
+                }
+            });
+
+        })
+        $('.fun_save').on('click', function () {
+            var no = $('.main-list-no').val() || "",
+                Name = $('.main-list-name').val() || "",
+                           EnName = $('.main-list-name_en').val() || "",
+                           Order = $('.main-list-order').val() || "0",
+                           Introduce = $('.main-list-introduce').val() || "",
+                           IndexImage = $('.main-list-indexImage').attr("data-src") || "",
+                           ListImage = $('.main-list-listImage').attr("data-src") || "";
+            var data = { "no": no, "name": Name, "EnName": EnName, "Order": Order, "Introduce": Introduce, "IndexImage": IndexImage, "ListImage": ListImage };
+            $.ajax({
+                type: "post",
+                url: "/classes/edit",
+                data: data,
+                dataType: "json",
+                traditional: true,
+                success: function (res) {
+                    location.reload();
+                }
+            });
+        })
+       
+
+        $('.upload-img').on('click', function () {
+            $('.file_upload').click()
+        })
         $('.fun_close').on('click', function () {
-
+            $('.popBox-bg').hide();
+            $('.popBox').hide();
         })
     })
 </script>

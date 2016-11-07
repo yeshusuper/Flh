@@ -37,7 +37,7 @@
                 <td>@item.Name</td>
                 <td>@item.Order</td>
                 <td>
-                    <a class="btn btn-default" href="@Url.Action("edit", new { no = item.No })" target="_blank">修改</a>
+                    <a class="btn btn-default product-modify" href="javascript:;" data-no="@item.No">修改</a>
                     <a class="btn btn-default" href="@Url.Action("list", new { pno = item.No })" target="_blank">子类型列表</a>
                     <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
                 </td>
@@ -48,3 +48,85 @@
     @Html.Pager(Model.Items);
 </div>
 </div>
+<div class="popBox-bg"></div>
+<div class="popBox" id="popTrade">
+    <div class="title" style="border:0px;padding: 16px 0px;">修改分类<span class="btn_close span_close fun_close"></span></div>
+    <div class="main">
+        <div class="main-list">
+            <span>中文名称：</span>
+            <input class="main-list-no" type="hidden" name="no" />
+            <input class="main-list-name" type="text" name="name" />
+        </div>
+        <div class="main-list">
+            <span>英文名称：</span>
+            <input class="main-list-name_en" type="text" name="name_en" />
+        </div>
+        <div class="main-list">
+            <span>排序：</span>
+            <input class="main-list-order" type="text" name="order" />
+        </div>
+        <div class="main-list">
+            <span>简介：</span>
+            <textarea class="main-list-introduce" name="introduce"></textarea>
+        </div>
+    </div>
+    <div class="bottom">
+        <a class="save-btn fun_save" href="javascript:;">确定</a>
+        <a class="cancel-btn fun_close" href="javascript:;">取消</a>
+        <div class="clear"></div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.product-modify').on('click', function () {
+            var no = $(this).attr('data-no');
+            $.ajax({
+                type: "get",
+                url: "/trade/edit",
+                data: { "no": no },
+                dataType: "json",
+                traditional: true,
+                success: function (res) {
+                    console.log(res);
+                    if (res.data) {
+                        var Name = res.data.Name || "",
+                            EnName = res.data.EnName || "",
+                            Order = res.data.Order || "",
+                            Introduce = res.data.Introduce || "";
+                        $('.main-list-no').val(no);
+                        $('.main-list-name').val(Name);
+                        $('.main-list-name_en').val(EnName);
+                        $('.main-list-order').val(Order);
+                        $('.main-list-introduce').val(Introduce);
+                        $('.popBox-bg').show();
+                        $('.popBox').show();
+                    }
+                }
+            })
+        });
+        //保存
+        $('.fun_save').on('click', function () {
+            var no = $('.main-list-no').val() || "",
+                Name = $('.main-list-name').val() || "",
+                           EnName = $('.main-list-name_en').val() || "",
+                           Order = $('.main-list-order').val() || "0",
+                           Introduce = $('.main-list-introduce').val() || "";
+            var data = { "no": no, "name": Name, "EnName": EnName, "Order": Order, "Introduce": Introduce };
+            $.ajax({
+                type: "post",
+                url: "/trade/edit",
+                data: data,
+                dataType: "json",
+                traditional: true,
+                success: function (res) {
+                    location.reload();
+                }
+            });
+        })
+        //关闭
+        $('.fun_close').on('click', function () {
+            $('.popBox-bg').hide();
+            $('.popBox').hide();
+        })
+    })
+</script>
