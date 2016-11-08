@@ -133,14 +133,14 @@
                         $('.main-list-order').val(Order);
                         $('.main-list-introduce').val(Introduce);
                         if (IndexImage && IndexImage != null) {
-                            $('.main-list-indexImage').attr('src', '/image/show?fid=' + IndexImage + '@@120w_120h_90Q');
+                            $('.main-list-indexImage').attr('src', 'http://img.fuliaohui.com/' + IndexImage + '?x-oss-process=style/product-list').attr('data-src', IndexImage);
                         } else {
-                            $('.main-list-indexImage').attr('src', "");
+                            $('.main-list-indexImage').attr('src', "").attr('data-src', "");
                         }
                         if (ListImage && ListImage != null) {
-                            $('.main-list-listImage').attr('src', '/image/show?fid=' + ListImage + '@@120w_120h_90Q')
+                            $('.main-list-listImage').attr('src', 'http://img.fuliaohui.com/' + ListImage + '?x-oss-process=style/product-list').attr('data-src', ListImage)
                         } else {
-                            $('.main-list-listImage').attr('src', "");
+                            $('.main-list-listImage').attr('src', "").attr('data-src', "");
                         }
                         $('.popBox-bg').show();
                         $('.popBox').show();
@@ -164,7 +164,7 @@
                     if (typeof data == "string") {
                         data = JSON.parse(data);
                     }
-                    $('.' + imgClass).attr('src', '/image/show?fid=' + data.data.id + '@@90w_90h_90Q').attr('data-src', data.data.id);
+                    $('.' + imgClass).attr('src', 'http://img.fuliaohui.com/' + data.data.id + '?x-oss-process=style/product-list').attr('data-src', data.data.id);
                     
 
                 },
