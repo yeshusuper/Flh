@@ -30,7 +30,7 @@
             <th width="75"><label>起订量<input value="" name="minQuantity" type="checkbox" autocomplete="off" /></label></th>
             <th width="80"><label>发货日<input value="" name="deliveryDay" type="checkbox" autocomplete="off" /></label></th>
             <th width="115"><label>关键字<input value="" name="keywords" type="checkbox" autocomplete="off" /></label></th>
-            <th width="80"><label>单价<input value="" name="unitPrice " type="checkbox" autocomplete="off" /></label></th>
+            <th width="80"><label>单价<input value="" name="unitPrice" type="checkbox" autocomplete="off" /></label></th>
             <th width="40">排序</th>
             <th>操作</th>
         </tr>
@@ -94,7 +94,7 @@
 
             </td>
             <td align="center" style="vertical-align:middle;">
-                <a class="produc-del" href="javascript:;">删除</a>
+                <a onclick="producDel(this)" href="javascript:;">取消</a>
             </td>
         </tr>
     </table>
@@ -112,6 +112,15 @@
         } else {
             $(obj).val(num);
         }
+    }
+    //删除
+    function producDel(obj) {
+        $(obj).parents('.product-edit-tr').remove();
+        var list_num = $('.list_num'),
+            num = 1;
+        $.each(list_num, function (key, item) {
+            $(item).text(num++);
+        })
     }
 </script>
 

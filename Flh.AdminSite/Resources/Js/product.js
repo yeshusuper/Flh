@@ -37,7 +37,6 @@
                     //alert(e);
                 }
             });
-
         })
     //触发图片上传
     $('.upload-img').on('click', function () {
@@ -96,6 +95,7 @@
                 ennameALL=$('[name="en'+name+'"]',olisr);
             $.each(nameALL,function(key_c,item_c){
                 if($(item_c).val()==""){
+                    alert($('[name="'+name+'"]',olist_first).val())
                     $(item_c).val($('[name="'+name+'"]',olist_first).val());
                 }
             })
@@ -199,13 +199,4 @@
                 alert("请上传图片后编辑产品信息再保存，谢谢。")
             }
         })
-    //删除
-    $('.produc-del').live(function(){
-        $(this).parents('.product-edit-tr').remove();
-        var list_num=$('.list_num'),
-            num=0;
-        $.each(list_num,function(key,item){
-            $(item).text(num++);
-        })
-    })
 })
