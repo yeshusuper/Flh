@@ -16,7 +16,7 @@
         <tr>
             <td style="vertical-align:top;"><label><input value="" name="" type="checkbox" class="check-all">全选</label></td>
             <td colspan="7" >
-                <a class="btn btn-default product-list-edit">批量修改</a>
+                <a href="javascript:;" target="_blank" class="btn btn-default product-list-edit">批量修改</a>
                 <a class="btn btn-default product-list-delete">批量删除</a>
                 <a class="btn btn-default product-list-add" style="float:right;">添加产品</a>
                 <div class="clear"></div>
@@ -86,10 +86,10 @@
 
         $("input[name='pid']").change(function () {
             var ids = getCheckedIds().join(",");
-            $('[data-event="modify"]').attr("href", "/Product/BatchEdit?pids=" + ids);
+            $('.product-list-edit').attr("href", "/Product/BatchEdit?pids=" + ids);
         });
 
-        $('[data-event="modify"]').click(function () {
+        $('.product-list-edit').click(function () {
             if (getCheckedIds().length == 0) {
                 alert("请选择要编辑的产品");
             }
