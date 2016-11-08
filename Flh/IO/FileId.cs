@@ -34,7 +34,7 @@ namespace Flh.IO
 
         public string ToTempId()
         {
-            return Path.Combine("temp", Id);
+            return String.Format("temp/{0}", Id);
         }
         public  bool IsTempId
         {
