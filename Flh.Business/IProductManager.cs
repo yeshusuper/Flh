@@ -165,7 +165,7 @@ namespace Flh.Business
         }
         public IEnumerable<Data.Product> Search(ProductSearchArgs args, out int count)
         {
-            if (args != null && (!String.IsNullOrWhiteSpace(args.ClassNo) || !String.IsNullOrWhiteSpace(args.Keyword)))
+            if (args != null && (!String.IsNullOrWhiteSpace(args.ClassNo) && args.ClassNo!="0001" || !String.IsNullOrWhiteSpace(args.Keyword)))
             {
             return ProductSearchHelper.Search(args, out count);         
             }
@@ -291,7 +291,7 @@ namespace Flh.Business
             {
                 Config = new Config { Start = Math.Max(0, args.Start), Hit = Math.Max(1, args.Limit) },
                 Query = Query.And(querys.ToArray()),
-               // Sort = new SortItem("updated", SortKinds.Desc)
+                Sort = new SourtItemCollection(new SortItem("sortno",SortKinds.Asc),new SortItem("updated", SortKinds.Desc)),
             };
             var result = AliyunHelper.Search(new ProductAliyunIndexer(), query, String.Empty);
             List<Data.Product> products = new List<Data.Product>();
