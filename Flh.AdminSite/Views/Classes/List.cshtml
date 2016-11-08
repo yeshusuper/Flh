@@ -84,7 +84,7 @@
                     <div class="clear"></div>
                 </ul>
                 <form>
-                    <input id="file" class="file_upload" style="display:none;" name="file" type="file">
+                    <input id="file" class="file_upload" data-class="" style="display:none;" name="file" type="file">
                 </form>
                 
             </div>
@@ -150,6 +150,7 @@
         });
         $('.file_upload').live('change', function () {
             var filepath = $(this).val(),
+                imgClass = $(this).attr('data-class'),
                 _this = this,
                 type_data = $(this).data('type'),
                 ileObj = $(this).get(0).files;
@@ -160,9 +161,11 @@
                 fileElementId: "file",//file标签的id  
                 dataType: 'json',
                 success: function (data, status) {
-                    if (typeof data == "string")
+                    if (typeof data == "string") {
                         data = JSON.parse(data);
-                    console.log(data);
+                    }
+                    $('.' + imgClass).attr('src', '/image/show?fid=' + data.data.id + '@@90w_90h_90Q').attr('data-src', data.data.id);
+                    
 
                 },
                 error: function (data, status, e) {
@@ -194,6 +197,8 @@
        
 
         $('.upload-img').on('click', function () {
+            var $class = $(this).prev('img').attr('class');
+            $('.file_upload').attr('data-class', $class);
             $('.file_upload').click()
         })
         $('.fun_close').on('click', function () {
