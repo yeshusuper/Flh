@@ -40,8 +40,14 @@ namespace Flh.IO
         {
             get
             {
-                return (Id ?? string.Empty).StartsWith("temp");
+                return (Id ?? string.Empty).StartsWith("temp/");
             }
+        }
+        public FileId ToStorageId()
+        {
+            if (IsTempId)
+                return FileId.FromFileId(Path.GetFileName(Id));
+            return this;
         }
         internal string ToPath(string root)
         {

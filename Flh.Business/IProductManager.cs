@@ -80,21 +80,11 @@ namespace Flh.Business
                             OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.enKeywords, (p, v) => p.enKeywords = v);
                             OverrideIfNotNullNotWhiteSpace(oldProduct, newProduct, p => p.classNo, (p, v) => p.classNo = v);
 
-                            String oldImage = oldProduct.imagePath;
                             var newProductFileId = FileId.FromFileId(newProduct.imagePath);
-                            var newFileID = FileId.FromFileName(newProduct.imagePath);
-                            var imgChange = oldProduct.imagePath != newProduct.imagePath;
+                            var newFileID = newProductFileId.ToStorageId();
+                            var imgChange = oldProduct.imagePath != newProduct.imagePath && oldProduct.imagePath != newFileID.Id;
                             if (imgChange)
-                            {
-                                if (newProductFileId.IsTempId)
-                                {   
-                                    oldProduct.imagePath = newFileID.Id;
-                                }
-                                else
-                                {
-                                    oldProduct.imagePath = newProduct.imagePath;
-                                }
-                            }
+                                oldProduct.imagePath = newFileID.Id;
                             oldProduct.minQuantity = newProduct.minQuantity;
                             oldProduct.deliveryDay = newProduct.deliveryDay;
                             oldProduct.unitPrice = newProduct.unitPrice;
@@ -106,17 +96,14 @@ namespace Flh.Business
                             }
                             _Repository.SaveChanges();
                             UpdateSearchIndex(oldProduct.pid);//更新索引
-                            _FileStore.Copy(newProductFileId, newFileID);//将临时文件复制到永久文件处                           
-                            if (imgChange)
-                            {
-                                _FileStore.Delete(FileId.FromFileId(oldImage));//删掉旧图片
-                            }                            
+                            if(newProductFileId.IsTempId)
+                                _FileStore.Copy(newProductFileId, newFileID);//将临时文件复制到永久文件处                     
                             scope.Complete();
                         }
                     }
                 }
 
-                //新增的产品  
+                //新增的产品
                 var addingProducts = products.Where(p => p.pid <= 0).ToArray();
                 foreach (var entity in addingProducts)
                 {
@@ -126,15 +113,13 @@ namespace Flh.Business
                         entity.updated = DateTime.Now;
                         entity.enabled = true;
 
-                        var temFileId = FileId.FromFileName(entity.imagePath);
-                        var newFileID = FileId.FromFileId(entity.imagePath);
-                        if (temFileId.IsTempId)
-                        {  
-                            entity.imagePath = newFileID.Id;
-                        }
+                        var temFileId = FileId.FromFileId(entity.imagePath);
+                        var newFileID = temFileId.ToStorageId();
+                        entity.imagePath = newFileID.Id;
                         _Repository.Add(entity);
                         _Repository.SaveChanges();
-                        _FileStore.Copy(temFileId, newFileID);//将临时文件复制到永久文件处
+                        if (temFileId.IsTempId)
+                            _FileStore.Copy(temFileId, newFileID);//将临时文件复制到永久文件处
                         UpdateSearchIndex(entity.pid);  //更新索引
                         scope.Complete();
                     }
@@ -148,14 +133,14 @@ namespace Flh.Business
             var query = _Repository.EnabledProduct;
             if (args != null)
             {
-                if (!String.IsNullOrWhiteSpace(args.ClassNo))
-                {
-                    query = query.Where(d => d.classNo.StartsWith(args.ClassNo));
-                }
-                if (args.Pids != null && args.Pids.Any())
-                {
-                    query = query.Where(d => args.Pids.Contains(d.pid));
-                }
+            if (!String.IsNullOrWhiteSpace(args.ClassNo))
+            {
+                query = query.Where(d => d.classNo.StartsWith(args.ClassNo));
+            }
+            if (args.Pids != null && args.Pids.Any())
+            {
+                query = query.Where(d => args.Pids.Contains(d.pid));
+            }
                 if (args.MinPid > 0)
                 {
                     query = query.Where(d => d.pid > args.MinPid);
@@ -182,7 +167,7 @@ namespace Flh.Business
         {
             if (args != null && (!String.IsNullOrWhiteSpace(args.ClassNo) || !String.IsNullOrWhiteSpace(args.Keyword)))
             {
-                return ProductSearchHelper.Search(args, out count);
+            return ProductSearchHelper.Search(args, out count);         
             }
             else
             {
@@ -306,15 +291,15 @@ namespace Flh.Business
             {
                 Config = new Config { Start = Math.Max(0, args.Start), Hit = Math.Max(1, args.Limit) },
                 Query = Query.And(querys.ToArray()),
-                // Sort = new SortItem("updated", SortKinds.Desc)
+               // Sort = new SortItem("updated", SortKinds.Desc)
             };
             var result = AliyunHelper.Search(new ProductAliyunIndexer(), query, String.Empty);
             List<Data.Product> products = new List<Data.Product>();
             foreach (var item in result.Items)
-            {
+        {
                 products.Add(GetProduct(item));
             }
-            count = result.Total;
+            count = result.Total; 
             return products.ToArray();
         }
 
@@ -375,7 +360,7 @@ namespace Flh.Business
             entity.enabled = TryGetDictValue(dic, enabled).To<bool>();
             entity.updater = TryGetDictValue(dic, updater).To<long>();
             return entity;
-        }
+    }
 
         static String TryGetDictValue(Dictionary<string, string> dic, String key)
         {
