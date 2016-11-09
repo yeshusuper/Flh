@@ -53,6 +53,7 @@
             traditional: true,
             success: function (res) {
                $.each(res,function(key,item){
+                    $('.upload-img').hide();
                     var html=$(".product-hide-tr").html();
                     $('.product-edit-bottom').before('<tr class="product-edit-tr">'+html+'</tr>');
                     var obj=$('.common-list-table .product-edit-tr:last');
@@ -189,9 +190,9 @@
                         dataType: "json",
                         traditional: true,
                         success: function (res) {
-                            _this.text('保存');
-                            alert('保存成功！');
-
+                            //_this.text('保存');
+                            //alert('保存成功！');
+                             window.location.href="/product/list";
                         }
                     });
                 }
