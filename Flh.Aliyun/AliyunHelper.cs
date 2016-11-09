@@ -203,7 +203,7 @@ namespace Flh.Aliyun
     {
         public IConfig Config { get; set; }
         public IQuery Query { get; set; }
-        public ISort Sort { get; set; }
+        public SourtItemCollection Sort { get; set; }
         public IFilter Filter { get; set; }
         public IGroupBy GroupBy { get; set; }
 
@@ -739,6 +739,25 @@ namespace Flh.Aliyun
         protected override string EscapeKeyword(string keyword)
         {
             return keyword == null ? String.Empty : keyword.Replace("\"", "\\\"");
+        }
+    }
+
+    public class SourtItemCollection : ISort
+    {
+        public SourtItemCollection() { 
+        }
+        public SourtItemCollection(params ISort[] items)
+        {
+            _Items.AddRange(items);
+        }
+        private List<ISort> _Items = new List<ISort>();
+        public void Add(ISort item)
+        {
+            _Items.Add(item);
+        }
+        public override string ToString()
+        {
+            return String.Join(";", _Items.Select(d => d.ToString()).ToArray());
         }
     }
     public class SortItem : ISort
