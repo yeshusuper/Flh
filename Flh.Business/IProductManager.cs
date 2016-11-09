@@ -165,7 +165,7 @@ namespace Flh.Business
         }
         public IEnumerable<Data.Product> Search(ProductSearchArgs args, out int count)
         {
-            if (args != null && (!String.IsNullOrWhiteSpace(args.ClassNo) || !String.IsNullOrWhiteSpace(args.Keyword)))
+            if (args != null && (!String.IsNullOrWhiteSpace(args.ClassNo) && args.ClassNo!="0001" || !String.IsNullOrWhiteSpace(args.Keyword)))
             {
             return ProductSearchHelper.Search(args, out count);         
             }
@@ -207,8 +207,12 @@ namespace Flh.Business
             pids = (pids ?? Enumerable.Empty<long>()).Where(id => id > 0).Distinct().ToArray();
             if (pids.Length > 0)
             {
-                _Repository.Update(p => pids.Contains(p.pid) && p.enabled, c => new Data.Product { enabled = false, updated = DateTime.Now, updater = uid });
-                ProductSearchHelper.DeleteIndex(pids);//删除索引
+                using (var scope = new System.Transactions.TransactionScope())
+                {
+                    _Repository.Update(p => pids.Contains(p.pid) && p.enabled, c => new Data.Product { enabled = false, updated = DateTime.Now, updater = uid });
+                    ProductSearchHelper.DeleteIndex(pids);//删除索引
+                    scope.Complete();
+                }               
             }
         }
 
@@ -291,7 +295,7 @@ namespace Flh.Business
             {
                 Config = new Config { Start = Math.Max(0, args.Start), Hit = Math.Max(1, args.Limit) },
                 Query = Query.And(querys.ToArray()),
-               // Sort = new SortItem("updated", SortKinds.Desc)
+                Sort = new SourtItemCollection(new SortItem("sortno",SortKinds.Asc),new SortItem("updated", SortKinds.Desc)),
             };
             var result = AliyunHelper.Search(new ProductAliyunIndexer(), query, String.Empty);
             List<Data.Product> products = new List<Data.Product>();

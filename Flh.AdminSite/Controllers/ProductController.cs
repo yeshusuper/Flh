@@ -96,7 +96,7 @@ namespace Flh.AdminSite.Controllers
             return View();
         }
 
-        //[HttpPost]//todo:改成post请求
+        [HttpPost]
         public ActionResult BatchEditList(string pids)
         {
             pids = pids ?? String.Empty;
