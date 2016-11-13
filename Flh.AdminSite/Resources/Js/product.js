@@ -190,9 +190,12 @@
                         dataType: "json",
                         traditional: true,
                         success: function (res) {
-                            //_this.text('保存');
-                            //alert('保存成功！');
-                             window.location.href="/product/list";
+                            if(res.code>0){
+                                alert(res.msg)
+                            }else{
+                                 window.location.href="/product/list";
+                            }
+                            
                         }
                     });
                 }
