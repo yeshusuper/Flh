@@ -122,7 +122,7 @@ namespace Flh.Business
             nos = (nos ?? Enumerable.Empty<string>()).Where(n => !String.IsNullOrWhiteSpace(n)).Distinct().ToArray();
             if (nos.Length > 0)
             {
-                _AreaRepositor.Update(c => nos.Contains(c.area_no) && c.enabled, c => new Data.Area { enabled = false, updated = DateTime.Now, updater = uid });
+                _AreaRepositor.Update(c => nos.Any(n => c.area_no.StartsWith(n)) && c.enabled, c => new Data.Area { enabled = false, updated = DateTime.Now, updater = uid });
             }
         }
 
