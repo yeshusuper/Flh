@@ -11,7 +11,7 @@
         int count = Model.ParentClasses.Count;
         foreach (var c in Model.ParentClasses)
         {
-            <a href="@Url.Action(" list", new { pno=c.Key })">@c.Value</a>
+            <a href="@Url.Action("list", new { pno=c.Key })">@c.Value</a>
             index++;
             if (index < count)
             {
@@ -38,6 +38,7 @@
                 <td>@item.Order</td>
                 <td>
                     <a class="btn btn-default product-modify" href="javascript:;" data-no="@item.No">修改</a>
+                    <a class="btn btn-default product-delete" href="javascript:;" data-no="@item.No">删除</a>
                     <a class="btn btn-default" href="@Url.Action("list", new { pno = item.No })" target="_blank">子类型列表</a>
                     <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
                 </td>
@@ -122,4 +123,29 @@
             $('.popBox').hide();
         })
     })
+    $('.product-delete').on('click', function () {
+        var statu = confirm("删除之后不能撤销，确定要删除吗?");
+        if (!statu) {
+            return false;
+        }
+        var no = $(this).attr('data-no');
+        $.ajax({
+            type: "post",
+            url: "/trade/Delete",
+            data: { "nos": no },
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 0) {
+                    alert("删除成功！");
+                    window.location.reload();
+                }
+                else {
+                    alert("删除失败，请重试");
+                }
+            },
+            error: function (data, status, e) {
+                alert("删除失败，请重试");
+            }
+        });
+    });
 </script>

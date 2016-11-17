@@ -3,7 +3,7 @@
     ViewBag.Title = "分类列表";
     Layout = "../Layout/_Manager.cshtml";
 }
-<script src="/Resources/Js/ajaxfileupload.js"></script>   
+<script src="/Resources/Js/ajaxfileupload.js"></script>
 <div class="crumbs">
     当前分类：
     @if (Model.ParentClasses != null)
@@ -12,7 +12,7 @@
         int count = Model.ParentClasses.Count;
         foreach (var c in Model.ParentClasses)
         {
-            <a href="@Url.Action(" list", new { pno=c.Key })">@c.Value</a>
+            <a href="@Url.Action("list", new { pno=c.Key })">@c.Value</a>
             index++;
             if (index < count)
             {
@@ -23,7 +23,7 @@
 </div>
 <div class="common-list" id="product-categories">
     <table class="common-list-table">
-        <tr><td colspan="4">@Model.ParentFullName <a class="btn-add-all btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a></td></tr>
+        <tr><td colspan="4"><a class="btn-add-all btn-default" href="@Url.Action("batchadd", new { pno = Model.ParentNo })" target="_blank">批量添加</a></td></tr>
         <tr>
             <th width="20%">分类编号</th>
             <th width="35%">分类名称</th>
@@ -39,6 +39,7 @@
                 <td>@item.Order</td>
                 <td class="operating">
                     <a class="btn btn-default product-modify" href="javascript:;" data-no="@item.No">修改</a>
+                    <a class="btn btn-default product-delete " href="javascript:;" data-no="@item.No">删除</a>
                     <a class="btn btn-default" href="@Url.Action("list", new { pno = item.No })" target="_blank">子分类列表</a>
                     <a class="btn btn-default" href="@Url.Action("batchadd", new { pno = item.No })" target="_blank">批量添加</a>
                     <a class="btn btn-default" href="/Product/BatchEdit?classNo=@item.No" target="_blank">添加产品</a>
@@ -88,7 +89,7 @@
                 <form>
                     <input id="file" class="file_upload" data-class="" style="display:none;" name="file" type="file">
                 </form>
-                
+
             </div>
         </div>
         <div class="bottom">
@@ -160,14 +161,14 @@
             $.ajaxFileUpload({
                 url: "/Image/UploadTemp",
                 secureuri: false,
-                fileElementId: "file",//file标签的id  
+                fileElementId: "file",//file标签的id
                 dataType: 'json',
                 success: function (data, status) {
                     if (typeof data == "string") {
                         data = JSON.parse(data);
                     }
                     $('.' + imgClass).attr('src', 'http://img.fuliaohui.com/' + data.data.id + '?x-oss-process=style/product-list').attr('data-src', data.data.id);
-                    
+
 
                 },
                 error: function (data, status, e) {
@@ -196,7 +197,7 @@
                 }
             });
         })
-       
+
 
         $('.upload-img').on('click', function () {
             var $class = $(this).prev('img').attr('class');
@@ -208,4 +209,30 @@
             $('.popBox').hide();
         })
     })
+
+    $('.product-delete').on('click', function () {
+        var statu = confirm("删除之后不能撤销，确定要删除吗?");
+        if (!statu) {
+            return false;
+        }
+        var no = $(this).attr('data-no');
+        $.ajax({
+            type: "post",
+            url: "/classes/Delete",
+            data: { "nos": no },
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 0) {
+                    alert("删除成功！");
+                    window.location.reload();
+                }
+                else {
+                    alert("删除失败，请重试");
+                }
+            },
+            error: function (data, status, e) {
+                alert("删除失败，请重试");
+            }
+        });
+    });
 </script>
