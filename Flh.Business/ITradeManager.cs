@@ -119,7 +119,7 @@ namespace Flh.Business
             nos = (nos ?? Enumerable.Empty<string>()).Where(n => !String.IsNullOrWhiteSpace(n)).Distinct().ToArray();
             if (nos.Length>0)
             {
-                _TradeRepository.Update(c => nos.Contains(c.no) && c.enabled, c => new Data.Trade { enabled = false, updated = DateTime.Now, updater = uid });
+                _TradeRepository.Update(c => nos.Any(n => c.no.StartsWith(n)) && c.enabled, c => new Data.Trade { enabled = false, updated = DateTime.Now, updater = uid });
             }
         }
 

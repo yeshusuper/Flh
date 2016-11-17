@@ -207,8 +207,12 @@ namespace Flh.Business
             pids = (pids ?? Enumerable.Empty<long>()).Where(id => id > 0).Distinct().ToArray();
             if (pids.Length > 0)
             {
-                _Repository.Update(p => pids.Contains(p.pid) && p.enabled, c => new Data.Product { enabled = false, updated = DateTime.Now, updater = uid });
-                ProductSearchHelper.DeleteIndex(pids);//删除索引
+                using (var scope = new System.Transactions.TransactionScope())
+                {
+                    _Repository.Update(p => pids.Contains(p.pid) && p.enabled, c => new Data.Product { enabled = false, updated = DateTime.Now, updater = uid });
+                    ProductSearchHelper.DeleteIndex(pids);//删除索引
+                    scope.Complete();
+                }               
             }
         }
 
