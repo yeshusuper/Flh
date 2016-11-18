@@ -9,13 +9,14 @@
                 return false;
             }
         }
-    //上传
+    //单图片上传
     $('.file_upload').live('change', function () {
             var filepath = $(this).val(),
                 _this = this,
                 type_data = $(this).data('type'),
                 ileObj = $(this).get(0).files;
             upload_check(filepath, _this);
+            $(".product-loading").show();
             $.ajaxFileUpload({
                 url: "/Image/UploadTemp",
                 secureuri: false,
@@ -32,16 +33,74 @@
                     $('[name="classNo"]',obj).val(classNo);
                     $('[name="imagePath"]',obj).val(data.data.id );
                     $('img',obj).attr('src','http://img.fuliaohui.com/' + data.data.id + '?x-oss-process=style/product-list');
+                    $(".product-loading").hide();
                 },
                 error: function (data, status, e) {
+                    $(".product-loading").hide();
                     //alert(e);
                 }
             });
         })
+    //多图片上传
+    $("#inputfiles").change(function(){
+        //创建FormData对象
+        var data = new FormData(),
+        UploadError="";
+        //为FormData对象添加数据
+        $.each($('#inputfiles')[0].files, function(i, file) {
+            if (!/.(gif|jpg|jpeg|png|bmp)$/.test(file.name)) {
+                UploadError+=file.name+"不是 .jpg .jpeg .bmp .gif .png格式的图片！\n"
+            } else if (file > 2 * 1024 * 1024) {
+                UploadError+=file.name+"图片大小不超过2M！\n"
+            }else{
+                 data.append('upload_file'+i, file);
+            }
+        });
+        $(".product-loading").show();    //显示加载图片
+        //发送数据
+        $.ajax({
+            url:'/Product/UploadImages',
+            type:'POST',
+            data:data,
+            cache: false,
+            contentType: false,        //不可缺参数
+            processData: false,        //不可缺参数
+            success:function(res){
+                 if (typeof res == "string") {
+                        res = JSON.parse(res);
+                    }
+                var img_data=res.data;
+                    for(var i=0;i<img_data.length;i++){
+                        var html=$(".product-hide-tr").html();
+                        $('.product-edit-bottom').before('<tr class="product-edit-tr">'+html+'</tr>');
+                        var obj=$('.common-list-table .product-edit-tr:last');
+                        $('.list_num',obj).text($('.product-edit-tr').length)
+                        $('[name="classNo"]',obj).val(classNo);
+                        $('[name="imagePath"]',obj).val(img_data[i]);
+                        console.log(img_data[i])
+                        $('img',obj).attr('src','http://img.fuliaohui.com/' + img_data[i] + '?x-oss-process=style/product-list');
+                    }
+                $(".product-loading").hide();    //加载成功移除加载图片
+                if(UploadError!=""){
+                    alert(UploadError)
+                }
+            },
+            error:function(){
+                alert('上传出错');
+                $(".product-loading").hide();    //加载失败移除加载图片
+                if(UploadError!=""){
+                    alert(UploadError)
+                }
+            }
+        });
+    });
     //触发图片上传
     $('.upload-img').on('click', function () {
             $('.file_upload').click()
         })
+    $('.upload-images').on('click',function(){
+        $('#inputfiles').click()
+    })
 
     if(pids && pids!=""){
         var num=1;
@@ -54,6 +113,7 @@
             success: function (res) {
                $.each(res,function(key,item){
                     $('.upload-img').hide();
+                    $('.upload-images').hide();
                     var html=$(".product-hide-tr").html();
                     $('.product-edit-bottom').before('<tr class="product-edit-tr">'+html+'</tr>');
                     var obj=$('.common-list-table .product-edit-tr:last');
