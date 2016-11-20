@@ -129,7 +129,7 @@
             }
         });
         if(UploadError!=""){
-            var confirm_text="选择了"+all_num+"张图片 \n"+UploadError+"能上传有"+normal_num+"张，你确定要上传吗?"
+            var confirm_text="选择了"+all_num+"个文件 \n"+UploadError+"能上传的图片有"+normal_num+"张，你确定要上传吗?"
             if (confirm(confirm_text)) {  
                 $('.loading-text').text("上传中，请稍等...");
                 $(".product-pop-box").show();
