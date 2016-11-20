@@ -169,7 +169,7 @@ namespace Flh.AdminSite.Controllers
                 }
                 var fid = FileId.FromFileName(file.FileName);
                 _FileStore.CreateTemp(fid, file.InputStream);
-                fileNames.Add(fid.Id);
+                fileNames.Add(fid.ToTempId());
             }
             return SuccessJsonResult<List<String>>(fileNames);
         }
