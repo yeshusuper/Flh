@@ -13,8 +13,8 @@
 
 <div class="common-list" id="product-edit">
     <div class="product-edit-top">
-        <a class="upload-img" href="javascript:;">上传图片</a>
-        <a class="upload-images" href="javascript:;">上传多张图片</a>
+        <a class="upload-img" href="javascript:;" style="display:none;">上传图片</a>
+        <a class="upload-images" href="javascript:;">上传图片</a>
         <a class="fun-insert" href="javascript:;">把选中的第一个值应用到所有项中</a>
         <input id="file" class="file_upload" style="display:none;" name="file" type="file">
         <input id="inputfiles" multiple="multiple" style="display:none;" name="file" type="file">
@@ -101,8 +101,15 @@
         </tr>
     </table>
 </div>
-<div class="product-loading">
-    <img alt="loading..." src="/Resources/img/loading.gif" />
+<div class="product-pop-bg product-pop-box"></div>
+<div class="product-pop-main product-pop-box">
+    <div class="loading-main">
+        <div class="loading-box">
+            <div class="loading-bg"></div>
+            <div class="loading-title">0%</div>
+        </div>
+        <div class="loading-text">上传中，请稍等...</div>
+    </div>
 </div>
 <script>
     function clearNoNum(obj) {
