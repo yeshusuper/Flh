@@ -9,13 +9,80 @@
                 return false;
             }
         }
-    //上传
+    function uploadFailed(evt) {
+        $('.product-pop-box').hide();
+        alert("上传出错.");
+    }
+ 
+    function uploadCanceled(evt) {
+        $('.product-pop-box').hide();
+        alert("上传已由用户或浏览器取消删除连接.");
+    } 
+    //进度条上传
+    function load_upload(data,num){
+        var xhr = new XMLHttpRequest();
+         //上传中设置上传的百分比
+        xhr.upload.addEventListener("progress", function(evt){
+            $('.loading-bg').css("width","0%")
+            $('.loading-title').text("0%");
+            if (evt.lengthComputable) {
+                var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+                if(percentComplete=="100"){
+                    percentComplete=percentComplete-1;
+                }
+                $('.loading-bg').css('width',percentComplete+"%");
+                $('.loading-title').text(percentComplete+"%");
+            }else {
+
+                $('.loading-title').text("无法计算");
+            }
+        }, false);
+         //请求完成后执行的操作
+        xhr.addEventListener("load", function(evt){
+            $('.loading-bg').css('width',"100%");
+            $('.loading-title').text("100%");
+            var message = evt.target.responseText,
+                res = eval("("+message+")"),
+                img_data=res.data,
+                success_num=0;
+                $(".product-loading").hide();
+                for(var i=0;i<img_data.length;i++){
+                    success_num+=1;
+                    var html=$(".product-hide-tr").html();
+                    $('.product-edit-bottom').before('<tr class="product-edit-tr">'+html+'</tr>');
+                    var obj=$('.common-list-table .product-edit-tr:last');
+                    $('.list_num',obj).text($('.product-edit-tr').length)
+                    $('[name="classNo"]',obj).val(classNo);
+                    $('[name="imagePath"]',obj).val(img_data[i]);
+                    $('img',obj).attr('src','http://img.fuliaohui.com/' + img_data[i] + '?x-oss-process=style/product-list');
+                }
+            if(res.code == 0){
+                $('.loading-text').text("选择了"+num+"张图片,成功上传："+success_num+"张。");
+                setTimeout(function(){ 
+                     $('.product-pop-box').hide();
+                },1000);
+            }else{
+                $('.product-pop-box').hide();
+                alert(res.msg);
+            }
+            
+        }, false);
+        //请求error
+        xhr.addEventListener("error", uploadFailed, false);
+        //请求中断
+        xhr.addEventListener("abort", uploadCanceled, false);
+        //发送请求
+        xhr.open("POST", "/Product/UploadImages");
+        xhr.send(data);  
+    }
+    //单图片上传
     $('.file_upload').live('change', function () {
             var filepath = $(this).val(),
                 _this = this,
                 type_data = $(this).data('type'),
                 ileObj = $(this).get(0).files;
             upload_check(filepath, _this);
+            $(".product-loading").show();
             $.ajaxFileUpload({
                 url: "/Image/UploadTemp",
                 secureuri: false,
@@ -32,16 +99,55 @@
                     $('[name="classNo"]',obj).val(classNo);
                     $('[name="imagePath"]',obj).val(data.data.id );
                     $('img',obj).attr('src','http://img.fuliaohui.com/' + data.data.id + '?x-oss-process=style/product-list');
+                    $(".product-loading").hide();
                 },
                 error: function (data, status, e) {
+                    $(".product-loading").hide();
                     //alert(e);
                 }
             });
         })
+    //多图片上传
+    $("#inputfiles").change(function(){
+        $('.loading-bg').css("width","0%")
+        $('.loading-title').text("0%");
+        //创建FormData对象
+        var data = new FormData(),
+        UploadError="",
+        all_num=0,
+        normal_num=0;
+        //为FormData对象添加数据
+        $.each($('#inputfiles')[0].files, function(i, file) {
+            all_num+=1;
+            if (!/.(gif|jpg|jpeg|png|bmp)$/.test(file.name)) {
+                UploadError+=file.name+"不是 .jpg .jpeg .bmp .gif .png格式的图片！\n"
+            } else if (file > 2 * 1024 * 1024) {
+                UploadError+=file.name+"图片大小不超过2M！\n"
+            }else{
+                normal_num+=1;
+                 data.append('upload_file'+i, file);
+            }
+        });
+        if(UploadError!=""){
+            var confirm_text="选择了"+all_num+"个文件 \n"+UploadError+"能上传的图片有"+normal_num+"张，你确定要上传吗?"
+            if (confirm(confirm_text)) {  
+                $('.loading-text').text("上传中，请稍等...");
+                $(".product-pop-box").show();
+                load_upload(data,all_num);
+            }  
+        }else{
+            $('.loading-text').text("上传中，请稍等...");
+            $(".product-pop-box").show();
+             load_upload(data,all_num);
+        }  
+    });
     //触发图片上传
     $('.upload-img').on('click', function () {
             $('.file_upload').click()
         })
+    $('.upload-images').on('click',function(){
+        $('#inputfiles').click()
+    })
 
     if(pids && pids!=""){
         var num=1;
@@ -54,6 +160,7 @@
             success: function (res) {
                $.each(res,function(key,item){
                     $('.upload-img').hide();
+                    $('.upload-images').hide();
                     var html=$(".product-hide-tr").html();
                     $('.product-edit-bottom').before('<tr class="product-edit-tr">'+html+'</tr>');
                     var obj=$('.common-list-table .product-edit-tr:last');
@@ -96,7 +203,6 @@
                 ennameALL=$('[name="en'+name+'"]',olisr);
             $.each(nameALL,function(key_c,item_c){
                 if($(item_c).val()==""){
-                    alert($('[name="'+name+'"]',olist_first).val())
                     $(item_c).val($('[name="'+name+'"]',olist_first).val());
                 }
             })

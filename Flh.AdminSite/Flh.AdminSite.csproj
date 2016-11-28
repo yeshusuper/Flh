@@ -211,6 +211,7 @@
     <Content Include="Resources\Js\jquery.datetimepicker.full.min.js" />
     <Content Include="Resources\Js\jquery.magnific-popup.min.js" />
     <Content Include="Resources\Js\product.js" />
+    <Content Include="Resources\img\loading.gif" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

@@ -8,21 +8,23 @@
     var classNo = '@ViewBag.ClassNo';//产品分类
 </script>
 <script type="text/javascript" src="/Resources/Js/product.js"></script>
-<script src="/Resources/Js/ajaxfileupload.js"></script> 
+<script src="/Resources/Js/ajaxfileupload.js"></script>
 <div class="crumbs">您的位置：辅料汇后台 &gt;  产品管理 &gt; 产品添加</div>
 
 <div class="common-list" id="product-edit">
     <div class="product-edit-top">
-        <a class="upload-img" href="javascript:;">上传图片</a>
+        <a class="upload-img" href="javascript:;" style="display:none;">上传图片</a>
+        <a class="upload-images" href="javascript:;">上传图片</a>
         <a class="fun-insert" href="javascript:;">把选中的第一个值应用到所有项中</a>
-        <input id="file" class="file_upload"  style="display:none;" name="file" type="file">
+        <input id="file" class="file_upload" style="display:none;" name="file" type="file">
+        <input id="inputfiles" multiple="multiple" style="display:none;" name="file" type="file">
     </div>
     <table class="common-list-table">
         <tr class="product-edit-th">
             <th width="30">序号</th>
             <th width="60">图片</th>
             <th width="120"><label>名称<input value="" name="name" type="checkbox" autocomplete="off" /></label></th>
-            <th width="150"><label>详细说明<input value="" name="description" type="checkbox" autocomplete="off" /></label></th>
+            <th ><label>详细说明<input value="" name="description" type="checkbox" autocomplete="off" /></label></th>
             <th width="75"><label>尺寸<input value="" name="size" type="checkbox" autocomplete="off" /></label></th>
             <th width="75"><label>颜色<input value="" name="color" type="checkbox" autocomplete="off" /></label>  </th>
             <th width="75"><label>材质<input value="" name="material" type="checkbox" autocomplete="off" /></label></th>
@@ -32,7 +34,7 @@
             <th width="115"><label>关键字<input value="" name="keywords" type="checkbox" autocomplete="off" /></label></th>
             <th width="80"><label>单价<input value="" name="unitPrice" type="checkbox" autocomplete="off" /></label></th>
             <th width="40">排序</th>
-            <th>操作</th>
+            <th width="55">操作</th>
         </tr>
         <tr class="product-edit-bottom">
             <td colspan="14">
@@ -87,7 +89,7 @@
                 <div class="product-edit-double"><input type="text" name="enKeywords" placeholder="多个用“，”分隔" /></div>
             </td>
             <td style="vertical-align: middle;">
-                <div class="product-edit-unit"><input type="text" name="unitPrice" onkeyup="clearNoNum(this)"  /><span>元</span></div>
+                <div class="product-edit-unit"><input type="text" name="unitPrice" onkeyup="clearNoNum(this)" /><span>元</span></div>
             </td>
             <td style="vertical-align: middle;">
                 <input type="text" name="sortNo" onkeyup="onlyNum(this)" />
@@ -98,6 +100,16 @@
             </td>
         </tr>
     </table>
+</div>
+<div class="product-pop-bg product-pop-box"></div>
+<div class="product-pop-main product-pop-box">
+    <div class="loading-main">
+        <div class="loading-box">
+            <div class="loading-bg"></div>
+            <div class="loading-title">0%</div>
+        </div>
+        <div class="loading-text">上传中，请稍等...</div>
+    </div>
 </div>
 <script>
     function clearNoNum(obj) {

@@ -9,6 +9,7 @@
     <form>
         手机号码：<input class="input-mobile" name="mobile" value="@ViewBag.Mobile" type="text" placeholder="输入手机号码 进行搜索" />
         <button class="btn btn-default" type="submit">搜索</button>
+        <span style="margin-left:20px;color:#666;">若要【添加管理员】，请选输入手机号码，搜索出对应账号，然后点击右边的【设为管理员】按钮即可</span>
     </form>
 </div>
 
@@ -21,25 +22,44 @@
             <th width="20%">设置时间</th>
             <th>操作</th>
         </tr>
-        @foreach (var item in Model)
+        @if (Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.UserName</td>
+                    <td>@item.Mobile</td>
+                    <td>@(item.IsAdmin ? "是" : "否")</td>
+                    <td>@(item.CreateDate.HasValue ? item.CreateDate.Value.ToString("yyyy-MM-dd") : "--")</td>
+                    <td>
+                        @if (item.IsAdmin)
+                        {
+                            <button data-event="remove" data-uid="@item.Uid" data-name="@item.UserName" type="button">删除管理员</button>
+                        }
+                        else
+                        {
+                            <button data-event="add" data-uid="@item.Uid" data-name="@item.UserName" type="button">设为管理员</button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@item.UserName</td>
-                <td>@item.Mobile</td>
-                <td>@(item.IsAdmin ? "是" : "否")</td>
-                <td>@(item.CreateDate.HasValue ? item.CreateDate.Value.ToString("yyyy-MM-dd") : "--")</td>
-                <td>
-                    @if (item.IsAdmin)
+                <td colspan="5">
+                    @if (!String.IsNullOrWhiteSpace(ViewBag.Mobile))
                     {
-                        <button data-event="remove" data-uid="@item.Uid" data-name="@item.UserName" type="button">删除管理员</button>
+                    <div style="text-align:center;padding:30px;">没有找到对应的账号</div>
                     }
                     else
                     {
-                        <button data-event="add" data-uid="@item.Uid" data-name="@item.UserName" type="button">设为管理员</button>
-                    }
+                        <div style="text-align: center; padding: 30px;">还没有设置任何管理员</div>
+                    }                    
                 </td>
             </tr>
-        }
+           
+        }  
     </table>
 </div>
 
