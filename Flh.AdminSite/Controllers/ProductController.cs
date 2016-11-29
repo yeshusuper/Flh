@@ -159,11 +159,12 @@ namespace Flh.AdminSite.Controllers
                 {
                     continue;
                 }
-                var ext = Path.GetExtension(file.FileName);
+                var ext = (Path.GetExtension(file.FileName)??String.Empty).ToLower();
                 if (ext != ".png"
                     && ext != ".jpg"
                     && ext != ".jpeg"
-                    && ext != ".gif")
+                    && ext != ".gif"
+                    && ext !=".bmp")
                 {
                     return JsonResult(ErrorCode.ServerError, "只能上传png/jpg/jpeg/gif格式的图片");
                 }
