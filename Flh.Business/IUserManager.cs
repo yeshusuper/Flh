@@ -1,4 +1,5 @@
-﻿using Flh.Business.Users;
+﻿using Flh.Business.Mobile;
+using Flh.Business.Users;
 using Flh.Data;
 using System;
 using System.Collections.Generic;
@@ -10,26 +11,32 @@ namespace Flh.Business
 {
     public interface IUserManager
     {
-        IUser Register(IRegisterInfo info);
+        IUserService Register(IRegisterInfo info);
         bool IsUsableMobile(string mobile);
         bool IsUsableEmail(string email);
-        IUser Login(string mobileOrEmail, string password, string ip);
-        IUser[] GetUsersByIds(long[] uids);
+        IUserService Login(string mobileOrEmail, string password, string ip);
+        IUserService[] GetUsersByIds(long[] uids);
+        void ResetPassword(string mobile, string password);
+        IUserService Get(long uid);
+        IQueryable<Data.User> GetUsers(long[] uids);
     }
 
     internal class UserManager : IUserManager
     {
         private readonly Data.IUserRepository _UserRepository;
         private readonly IRepository<Data.LoginHistory> _LoginHistoryRepository;
+        private readonly IMobileManager _MobileManager;
 
         public UserManager(Data.IUserRepository userRepository,
-            IRepository<Data.LoginHistory> loginHistoryRepository)
+            IRepository<Data.LoginHistory> loginHistoryRepository,
+            IMobileManager mobileManager)
         {
             _UserRepository = userRepository;
             _LoginHistoryRepository = loginHistoryRepository;
+            _MobileManager = mobileManager;
         }
 
-        public IUser Register(IRegisterInfo info)
+        public IUserService Register(IRegisterInfo info)
         {
             ExceptionHelper.ThrowIfNull(info, "info");
             ExceptionHelper.ThrowIfTrue(!StringRule.VerifyMobile(info.Mobile), "mobile", "手机格式不正确");
@@ -37,35 +44,39 @@ namespace Flh.Business
             ExceptionHelper.ThrowIfTrue(!StringRule.VerifyPassword(info.Password), "password", "密码格式不正确，密码长度为6-20位");
             ExceptionHelper.ThrowIfNullOrWhiteSpace(info.Name, "name", "名称不能为空");
             ExceptionHelper.ThrowIfNullOrWhiteSpace(info.Company, "company", "公司不能为空");
-            //ExceptionHelper.ThrowIfNullOrWhiteSpace(info.AreaNo, "areaNo", "没有选择地区");
-            //ExceptionHelper.ThrowIfNullOrWhiteSpace(info.Address, "address", "地址不能为空");
-            //ExceptionHelper.ThrowIfNullOrWhiteSpace(info.IndustryNo, "industryNo", "没有选择行业类别");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(info.AreaNo, "areaNo", "没有选择地区");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(info.Address, "address", "地址不能为空");
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(info.IndustryNo, "industryNo", "没有选择行业类别");
 
             ExceptionHelper.ThrowIfTrue(!IsUsableMobile(info.Mobile), "mobile", "此手机号已经被注册");
             ExceptionHelper.ThrowIfTrue(!IsUsableEmail(info.Email), "email", "此邮箱已经被注册");
-
-            var entity = new Data.User
+            using (var scope = new System.Transactions.TransactionScope())
             {
-                address = info.Address.SafeTrim(),
-                area_no = info.AreaNo.SafeTrim(),
-                industry_no = info.IndustryNo.SafeTrim(),
-                company = info.Company.Trim(),
-                email = info.Email.Trim(),
-                employees_count_type = info.EmployeesCountRange,
-                is_purchaser = info.IsPurchaser,
-                mobile = info.Mobile.Trim(),
-                name = info.Name.Trim(),
-                neet_invoice = info.NeetInvoice,
-                tel = info.Tel == null ? null : info.Tel.Trim(),
-                pwd = new Security.MD5().Encrypt(info.Password.Trim()),
-                last_login_date = DateTime.Now,
-                register_date = DateTime.Now,
-                enabled = true,
-            };
-            _UserRepository.Add(entity);
-            _UserRepository.SaveChanges();
+                _MobileManager.Verify(info.Code, info.Mobile);
+                var entity = new Data.User
+                {
+                    address = info.Address.SafeTrim(),
+                    area_no = info.AreaNo.SafeTrim(),
+                    industry_no = info.IndustryNo.SafeTrim(),
+                    company = info.Company.Trim(),
+                    email = info.Email.Trim(),
+                    employees_count_type = info.EmployeesCountRange,
+                    is_purchaser = info.IsPurchaser,
+                    mobile = info.Mobile.Trim(),
+                    name = info.Name.Trim(),
+                    neet_invoice = info.NeetInvoice,
+                    tel = info.Tel == null ? null : info.Tel.Trim(),
+                    pwd = new Security.MD5().Encrypt(info.Password.Trim()),
+                    last_login_date = DateTime.Now,
+                    register_date = DateTime.Now,
+                    enabled = true,
+                };
+                _UserRepository.Add(entity);
+                _UserRepository.SaveChanges();
+                scope.Complete();
 
-            return GetUser(entity);
+                return GetUser(entity);
+            }
         }
 
         public bool IsUsableMobile(string mobile)
@@ -80,7 +91,7 @@ namespace Flh.Business
         }
 
 
-        public IUser Login(string mobileOrEmail, string password, string ip)
+        public IUserService Login(string mobileOrEmail, string password, string ip)
         {
             ExceptionHelper.ThrowIfNullOrWhiteSpace(mobileOrEmail, "mobileOrEmail", "账号不能为空");
             ExceptionHelper.ThrowIfNullOrWhiteSpace(password, "password", "密码不能为空");
@@ -93,11 +104,11 @@ namespace Flh.Business
                 ExceptionHelper.ThrowIfTrue(true, "mobileOrEmail", "请输入手机或者邮箱进行登陆");
 
             var user = source.FirstOrDefault();
-            if(user == null)
+            if (user == null)
                 throw new FlhException(ErrorCode.NotExists, "账号不存在");
-            if(!user.enabled)
+            if (!user.enabled)
                 throw new FlhException(ErrorCode.Locked, "账号已被锁定");
-            if(!new Security.MD5().Verify(password.Trim(), user.pwd))
+            if (!new Security.MD5().Verify(password.Trim(), user.pwd))
                 throw new FlhException(ErrorCode.ErrorUserNoOrPwd, "账号或密码错误");
 
             ip = (ip ?? String.Empty).Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? String.Empty;
@@ -117,20 +128,41 @@ namespace Flh.Business
             return GetUser(user);
         }
 
-        private IUser GetUser(Data.User entity)
+        private IUserService GetUser(Data.User entity)
         {
-            return new User(entity);
+            return new UserService(entity, _UserRepository, this);
         }
 
-        public IUser[] GetUsersByIds(long[] uids)
+        public IUserService[] GetUsersByIds(long[] uids)
         {
             var users = _UserRepository.Entities.Where(u => uids.Contains(u.uid)).ToArray();
-            List<IUser> results = new List<IUser>();
+            List<IUserService> results = new List<IUserService>();
             foreach (var user in users)
             {
-                results.Add(new User(user));
+                results.Add(new UserService(user, _UserRepository, this));
             }
             return results.ToArray();
+        }
+        public void ResetPassword(string mobile, string password)
+        {
+            ExceptionHelper.ThrowIfNullOrWhiteSpace(mobile, "mobile", "手机号码不能为空");
+            ExceptionHelper.ThrowIfTrue(!StringRule.VerifyPassword(password), "password", "密码格式不正确，密码长度为6-20位");
+
+            var user = _UserRepository.Entities.Where(u => u.mobile == mobile.Trim()).FirstOrDefault();
+            if (user == null)
+                throw new FlhException(ErrorCode.NotExists, "用户不存在");
+            user.pwd = new Security.MD5().Encrypt(password);
+            _UserRepository.SaveChanges();
+        }
+        public IUserService Get(long uid)
+        {
+            return new UserService(uid, _UserRepository, this);
+        }
+        public IQueryable<Data.User> GetUsers(long[] uids)
+        {
+            uids = (uids ?? Enumerable.Empty<long>()).Where(id => id > 0).Distinct().ToArray();
+            if (uids.Length == 0) return Enumerable.Empty<Data.User>().AsQueryable();
+            return _UserRepository.Entities.Where(u => uids.Contains(u.uid));
         }
     }
 

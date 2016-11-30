@@ -98,6 +98,15 @@
           <Property Name="enabled" Type="bit" Nullable="false" />
           <Property Name="updater" Type="bigint" />
         </EntityType>
+        <EntityType Name="SmsHistory">
+          <Key>
+            <PropertyRef Name="hid" />
+          </Key>
+          <Property Name="hid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="content" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="mobile" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="created" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="Trade">
           <Key>
             <PropertyRef Name="no" />
@@ -135,6 +144,15 @@
           <Property Name="last_login_date" Type="datetime" Nullable="false" />
           <Property Name="enabled" Type="bit" Nullable="false" />
           <Property Name="enabled_memo" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="VerifyCode">
+          <Key>
+            <PropertyRef Name="mobile" />
+          </Key>
+          <Property Name="mobile" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="createDate" Type="datetime" Nullable="false" />
+          <Property Name="endDate" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK_Admin_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
@@ -239,8 +257,10 @@
           <EntitySet Name="Classes" EntityType="Self.Classes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoginHistory" EntityType="Self.LoginHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SmsHistory" EntityType="Self.SmsHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Trade" EntityType="Self.Trade" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VerifyCode" EntityType="Self.VerifyCode" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Admin_User" Association="Self.FK_Admin_User">
             <End Role="User" EntitySet="User" />
             <End Role="Admin" EntitySet="Admin" />
@@ -336,11 +356,11 @@
           <Property Name="order_by" Type="Int32" Nullable="false" />
           <Property Name="name_en" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="full_name_en" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Admin" Relationship="Self.FK_Classes_Admin_creater" FromRole="Classes" ToRole="Admin" />
-          <NavigationProperty Name="Admin1" Relationship="Self.FK_Classes_Admin_updater" FromRole="Classes" ToRole="Admin" />
           <Property Name="indexImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="listImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="introduce" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Admin" Relationship="Self.FK_Classes_Admin_creater" FromRole="Classes" ToRole="Admin" />
+          <NavigationProperty Name="Admin1" Relationship="Self.FK_Classes_Admin_updater" FromRole="Classes" ToRole="Admin" />
         </EntityType>
         <EntityType Name="LoginHistory">
           <Key>
@@ -424,6 +444,15 @@
           <Property Name="enabled_memo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Admin" Relationship="Self.FK_Admin_User" FromRole="User" ToRole="Admin" />
           <NavigationProperty Name="LoginHistory" Relationship="Self.FK_LoginHistory_User" FromRole="User" ToRole="LoginHistory" />
+        </EntityType>
+        <EntityType Name="VerifyCode">
+          <Key>
+            <PropertyRef Name="mobile" />
+          </Key>
+          <Property Name="mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="endDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <Association Name="FK_Admin_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
@@ -530,6 +559,7 @@
           <EntitySet Name="Product" EntityType="Self.Product" />
           <EntitySet Name="Trade" EntityType="Self.Trade" />
           <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="VerifyCode" EntityType="Self.VerifyCode" />
           <AssociationSet Name="FK_Admin_User" Association="Self.FK_Admin_User">
             <End Role="User" EntitySet="User" />
             <End Role="Admin" EntitySet="Admin" />
@@ -562,8 +592,18 @@
             <End Role="User" EntitySet="User" />
             <End Role="LoginHistory" EntitySet="LoginHistory" />
           </AssociationSet>
+          <EntitySet Name="SmsHistory" EntityType="TestModel.SmsHistory" />
         </EntityContainer>
         <EnumType Name="EmployeesCountRanges" UnderlyingType="Byte" a:ExternalTypeName="Flh.Business.Users.EmployeesCountRanges" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EntityType Name="SmsHistory">
+          <Key>
+            <PropertyRef Name="hid" />
+          </Key>
+          <Property Name="hid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="content" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="mobile" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -610,9 +650,6 @@
           <EntitySetMapping Name="Classes">
             <EntityTypeMapping TypeName="TestModel.Classes">
               <MappingFragment StoreEntitySet="Classes">
-                <ScalarProperty Name="introduce" ColumnName="introduce" />
-                <ScalarProperty Name="listImage" ColumnName="listImage" />
-                <ScalarProperty Name="indexImage" ColumnName="indexImage" />
                 <ScalarProperty Name="no" ColumnName="no" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="full_name" ColumnName="full_name" />
@@ -624,6 +661,9 @@
                 <ScalarProperty Name="order_by" ColumnName="order_by" />
                 <ScalarProperty Name="name_en" ColumnName="name_en" />
                 <ScalarProperty Name="full_name_en" ColumnName="full_name_en" />
+                <ScalarProperty Name="indexImage" ColumnName="indexImage" />
+                <ScalarProperty Name="listImage" ColumnName="listImage" />
+                <ScalarProperty Name="introduce" ColumnName="introduce" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -639,7 +679,6 @@
           <EntitySetMapping Name="Product">
             <EntityTypeMapping TypeName="TestModel.Product">
               <MappingFragment StoreEntitySet="Product">
-                <ScalarProperty Name="updater" ColumnName="updater" />
                 <ScalarProperty Name="pid" ColumnName="pid" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="enName" ColumnName="enName" />
@@ -665,6 +704,7 @@
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="updated" ColumnName="updated" />
                 <ScalarProperty Name="enabled" ColumnName="enabled" />
+                <ScalarProperty Name="updater" ColumnName="updater" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -705,6 +745,26 @@
                 <ScalarProperty Name="last_login_date" ColumnName="last_login_date" />
                 <ScalarProperty Name="enabled" ColumnName="enabled" />
                 <ScalarProperty Name="enabled_memo" ColumnName="enabled_memo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VerifyCode">
+            <EntityTypeMapping TypeName="TestModel.VerifyCode">
+              <MappingFragment StoreEntitySet="VerifyCode">
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SmsHistory">
+            <EntityTypeMapping TypeName="TestModel.SmsHistory">
+              <MappingFragment StoreEntitySet="SmsHistory">
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="hid" ColumnName="hid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

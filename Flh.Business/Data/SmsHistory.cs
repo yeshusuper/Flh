@@ -12,12 +12,11 @@ namespace Flh.Business.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class LoginHistory
+    public partial class SmsHistory
     {
-        public long uid { get; set; }
-        public System.DateTime login_date { get; set; }
-        public string ip { get; set; }
-    
-        public virtual User User { get; set; }
+        public long hid { get; set; }
+        public string content { get; set; }
+        public string mobile { get; set; }
+        public System.DateTime created { get; set; }
     }
 }

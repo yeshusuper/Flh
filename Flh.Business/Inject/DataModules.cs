@@ -20,6 +20,9 @@ namespace Flh.Business.Inject
             Bind<Data.IAreaRepository>().To<Data.AreaRepository>();
             Bind<Data.ITradeRepository>().To<Data.TradeRepository>();
             Bind<Data.IProductRepository>().To<Data.ProductRepository>();
+            Bind<IRepository<Data.VerifyCode>>().To<Data.DbSetRepository<Data.FlhContext, Data.VerifyCode>>();
+            Bind<IRepository<Data.SmsHistory>>().To<Data.DbSetRepository<Data.FlhContext, Data.SmsHistory>>();
+
             
         }
     }

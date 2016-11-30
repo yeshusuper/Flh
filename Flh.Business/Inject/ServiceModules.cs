@@ -20,6 +20,7 @@ namespace Flh.Business.Inject
             Bind<ITradeManager>().To<TradeManager>();
             Bind<IAreaManager>().To<AreaManager>();
             Bind<IProductManager>().To<ProductManager>();
+            Bind<Mobile.IMobileManager>().To<Mobile.MobileManager>();
             
         }
     }

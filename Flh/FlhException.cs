@@ -69,6 +69,10 @@ namespace Flh
         /// </summary>
         Exists = 0x00000007,
         /// <summary>
+        /// 验证码已过期
+        /// </summary>
+        VerifyCodeExpire = 0x00000008,
+        /// <summary>
         /// 系统错误
         /// </summary>
         ServerError = 0x00000010,

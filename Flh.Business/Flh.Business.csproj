@@ -61,22 +61,13 @@
   <ItemGroup>
     <Compile Include="Admins\IAdmin.cs" />
     <Compile Include="Admins\IAdminManager.cs" />
-    <Compile Include="IProductManager.cs" />
-    <Compile Include="Data\Area.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\IAreaRePository.cs" />
-    <Compile Include="Data\IProductRepository.cs" />
-    <Compile Include="Data\Trade.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\TradeRePository.cs" />    
-    <Compile Include="Data\IAdminModifyHistoryRepository.cs" />    
-    <Compile Include="Data\Product.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FlhConfig.cs" />
     <Compile Include="Data\Admin.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\AdminModifyHistory.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Area.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Classes.cs">
@@ -96,17 +87,32 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FlhContext.edmx</DependentUpon>
-    </Compile>   
+    </Compile>
     <Compile Include="Data\LoginHistory.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>   
-    <Compile Include="Data\PartialEntity.cs" />
-    <Compile Include="Data\User.cs">
-      <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>  
-    <Compile Include="Data\AdminModifyHistory.cs">
+    </Compile>
+    <Compile Include="Data\Product.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\SmsHistory.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Trade.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\User.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\VerifyCode.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IProductManager.cs" />
+    <Compile Include="Data\IAreaRePository.cs" />
+    <Compile Include="Data\IProductRepository.cs" />
+    <Compile Include="Data\TradeRePository.cs" />
+    <Compile Include="Data\IAdminModifyHistoryRepository.cs" />
+    <Compile Include="FlhConfig.cs" />
+    <Compile Include="Data\PartialEntity.cs" />
     <Compile Include="Data\IClassesRepository.cs" />
     <Compile Include="Data\DbSetRepository.cs" />
     <Compile Include="Data\IAdminRepository.cs" />
@@ -118,11 +124,14 @@
     <Compile Include="Inject\DataModules.cs" />
     <Compile Include="Inject\ServiceModules.cs" />
     <Compile Include="ITradeManager.cs" />
-    <Compile Include="IUser.cs" />
+    <Compile Include="IUserService.cs" />
     <Compile Include="IUserManager.cs" />
+    <Compile Include="Mobile\IMobileManager.cs" />
+    <Compile Include="Mobile\VerifyType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users\EmployeesCountRanges.cs" />
     <Compile Include="Users\IRegisterInfo.cs" />
+    <Compile Include="Users\IUserInfo.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>

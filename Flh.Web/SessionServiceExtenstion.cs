@@ -38,5 +38,13 @@ namespace Flh.Web
             SetCurrentUser(session, entry);
             return entry;
         }
+        public static string GetCurrentVerifyMobile(this HttpSessionStateBase session)
+        {
+            return HttpContext.Current.Session[Config.Current.VERIFY_MOBILE] as string;
+        }
+        public static void SetCurrentVerifyMobile(this HttpSessionStateBase session, string mobile)
+        {
+            HttpContext.Current.Session[Config.Current.VERIFY_MOBILE] = mobile;
+        }
     }
 }

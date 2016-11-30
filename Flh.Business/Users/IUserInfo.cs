@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Flh.Business.Users
 {
-    public interface IRegisterInfo
+    public interface  IUserInfo
     {
         string Mobile { get; }
         string Email { get; }
-        string Password { get; }
         string Name { get; }
         string Company { get; }
         string AreaNo { get; }
@@ -20,6 +19,5 @@ namespace Flh.Business.Users
         bool IsPurchaser { get; }
         bool NeetInvoice { get; }
         string Tel { get; }
-        string Code { get; set; }
     }
 }

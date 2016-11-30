@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 
 namespace Flh.Business.Admins
 {
-    public interface IAdmin : IUser
+    public interface IAdmin 
     {
+        long Uid { get; }
+        string Name { get; }
+        string Mobile { get; }
         DateTime CreateTime { get; }
     }
 
     internal class Admin : IAdmin
     {
-        private readonly IUser _User;
+        private readonly IUserService _User;
         private readonly Data.Admin _Entity;
 
-        public Admin(Data.Admin entity, IUser user)
+        public Admin(Data.Admin entity, IUserService user)
         {
             _Entity = entity;
             _User = user;

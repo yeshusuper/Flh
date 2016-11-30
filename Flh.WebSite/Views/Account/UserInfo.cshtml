@@ -1,0 +1,63 @@
+﻿@model Flh.WebSite.Models.Account.UserInfoModel
+@{
+    Layout = "~/Views/Layout/_header.cshtml";
+    ViewBag.Title = "修改资料";
+}
+<form action="@Url.Action("UpdateInfo")" method="post" enctype="application/x-www-form-urlencoded">
+    <table class="common_table">
+        <tr>
+            <td>*手机：</td>
+            <td><input name="Mobile" value="@Model.Mobile" /></td>
+        </tr>
+        <tr>
+            <td>*邮箱：</td>
+            <td><input name="Email" value="@Model.Email" /></td>
+        </tr>
+        <tr>
+            <td>*姓名：</td>
+            <td><input name="Name" value="@Model.Name" /></td>
+        </tr>
+        <tr>
+            <td>*公司名称：</td>
+            <td><input name="Company" value="@Model.Company" /></td>
+        </tr>
+        <tr>
+            <td>公司地址：</td>
+            <td><input name="Address" value="@Model.Address" /></td>
+        </tr>
+        <tr>
+            <td>*从业人员：</td>
+            <td>
+                @Html.DropDownList("EmployeesCountRange", Util.GetEmployeesCountRangeSelectListItems(true, null),new{@checked=@Model.EmployeesCountRange} )
+            </td>
+        </tr>
+        <tr>
+            <td>行业类别：</td>
+            <td><input name="IndustryNo" value="@Model.IndustryNo" /></td>
+        </tr>
+        <tr>
+            <td>*采购权限：</td>
+            <td>
+                <input name="IsPurchaser" value="true" type="radio" checked="@Model.IsPurchaser" />有
+                &nbsp;
+                <input name="IsPurchaser" value="false" type="radio" checked="@(!Model.IsPurchaser)" />无
+            </td>
+        </tr>
+        <tr>
+            <td>*是否需要发票：</td>
+            <td>
+                <input name="NeetInvoice" value="false" type="radio" checked="@(!Model.NeetInvoice)" />不需要
+                &nbsp;
+                <input name="NeetInvoice" value="true" type="radio" checked="@Model.NeetInvoice" />需要
+            </td>
+        </tr>
+        <tr>
+            <td>电话：</td>
+            <td><input name="Tel" value="@Model.Tel" /></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input value="提交" type="submit" /></td>
+        </tr>
+    </table>
+</form>

@@ -30,5 +30,8 @@ namespace Flh.WebSite.Models.Account
         public bool NeetInvoice { get; set; }
 
         public string Tel { get; set; }
+
+
+        public string Code { get; set; }
     }
 }

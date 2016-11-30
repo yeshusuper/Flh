@@ -19,6 +19,7 @@ namespace Flh.Web
                 BACK_URL_KEY = "backurl",
                 SESSION_USER_KEY = "SessionUserKey",
                 CERT_CODE = "CertCode",
+                VERIFY_MOBILE="VerifyMobile"
 
             };
         }
@@ -27,5 +28,6 @@ namespace Flh.Web
         public string BACK_URL_KEY { get; set; }
         public string SESSION_USER_KEY { get; set; }
         public string CERT_CODE { get; set; }
+        public string VERIFY_MOBILE { get; set; }
     }
 }
