@@ -24,9 +24,9 @@ namespace Flh.WebSite.Models.Account
 
         public string IndustryNo { get; set; }
 
-        public bool IsPurchaser { get; set; }
+        public bool? IsPurchaser { get; set; }
 
-        public bool NeetInvoice { get; set; }
+        public bool? NeetInvoice { get; set; }
 
         public string Tel { get; set; }
         public UserInfoModel()

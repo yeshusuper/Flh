@@ -16,8 +16,8 @@ namespace Flh.Business.Users
         string Address { get; }
         EmployeesCountRanges EmployeesCountRange { get; }
         string IndustryNo { get; }
-        bool IsPurchaser { get; }
-        bool NeetInvoice { get; }
+        bool? IsPurchaser { get; }
+        bool? NeetInvoice { get; }
         string Tel { get; }
     }
 }

@@ -70,11 +70,11 @@ namespace Flh.Business
             if (info.EmployeesCountRange != null)
                 _LazyUser.Value.employees_count_type = info.EmployeesCountRange;
             if (info.IsPurchaser != null)
-                _LazyUser.Value.is_purchaser = info.IsPurchaser;
+                _LazyUser.Value.is_purchaser = info.IsPurchaser.Value;
             if (!String.IsNullOrWhiteSpace(info.Name))
                 _LazyUser.Value.name = info.Name.Trim();
             if (info.NeetInvoice != null)
-                _LazyUser.Value.neet_invoice = info.NeetInvoice;
+                _LazyUser.Value.neet_invoice = info.NeetInvoice.Value;
             if (!String.IsNullOrWhiteSpace(info.Tel))
                 _LazyUser.Value.tel = info.Tel.Trim();
             _UserRepository.SaveChanges();
