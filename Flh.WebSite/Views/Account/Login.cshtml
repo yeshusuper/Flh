@@ -2,90 +2,31 @@
     Layout = "~/Views/Layout/_header.cshtml";
     ViewBag.Title = "登陆";
 }
-<div id="low-main" class="login-low-main login-main">
-    <div class="login-main-bg">
-        <table class="common-table">
-            <tr class="common-table-tr">
-                <td width="93" align="right">账&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
-                <td colspan="2"><input name="UserName" placeholder="手机号/邮箱" class="input-control" /></td>
-            </tr>
-            <tr class="common-table-tr">
-                <td width="93" align="right">密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
-                <td colspan="2"><input name="Password" placeholder="密码" class="input-control" type="password" /></td>
-            </tr>
-            <tr class="common-table-tr">
-                <td width="93" align="right">验证码：</td>
-                <td width="163"><input name="CertCode" placeholder="验证码" class="input-control" style="width:163px;" /></td>
-                <td><img style="cursor: pointer; vertical-align:middle" src="@Url.Action("VerifyImage", "Account")" class="VerifyImage" title="看不清？点击换一个" /></td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <a class="btn-primary j-login-submit" href="javascript:;">登 录</a>
-                </td>
-            </tr>
-        </table>
+
+<div class="flh-layout-main">
+    <div class="flh-login-main">
+        <form action="@Url.Action("Login")" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="flh-login-list">
+                <span>账号：</span>
+                <input name="UserName" placeholder="手机号/邮箱" />
+                <label></label>
+            </div>
+            <div class="flh-login-list">
+                <span>密码：</span>
+                <input name="Password" />
+                <label></label>
+            </div>
+            <div class="flh-login-list">
+                <span>验证码：</span>
+                <input name="Password" />
+                <label></label>
+            </div>
+            <div class="flh-login-submit"><input value="登陆" type="submit" /></div>
+            <div class="flh-login-other">
+                <a href="javascript:;">注册</a>
+                <a href="javascript:;">忘记密码</a>
+            </div>
+        </form>
     </div>
-
 </div>
-<script>
-    (function () {
-        $(".j-login-submit").click(function () {
-            var omain=$(this).parents('.login-main');
-            var data = {
-                UserName: $.trim($("[name=UserName]",omain).val()),
-                Password: $.trim($("[name=Password]",omain).val()),
-                CertCode: $.trim($("[name=CertCode]",omain).val())
-            };
-            data['@Flh.Web.Config.Current.BACK_URL_KEY'] = '@Request.GetBackUrl()';
-            $.ajax({
-                url: '@Url.Action("Login")',
-                type:"post",
-                data: data,
-                dataType: "json",
-                success: function (data) {
-                    if (data.code == 0) {
-                        data.data ? location.href = data.data : '@Url.Action("index", "home")';
-                    } else {
-                        alert(data.msg)
-                        var url="@Url.Action("VerifyImage", "Account")?r="+Math.random();
-                             $(".VerifyImage").attr('src',url)
-                    }
-                },
-                error: function () {
-                    alert("网络错误，请重试");
-                    var url="@Url.Action("VerifyImage", "Account")?r="+Math.random();
-                    $(".VerifyImage").attr('src',url)
-                }
-            })
-            return false;
-        });
-    })();
-    $(function () {
-        var w_h = $(window).height();
-        $('.login-main').css({ 'height': w_h });
-        if (window.applicationCache) {
-            $('#advanced-main').show();
-        } else {
-            $('#low-main').show();
-        }
 
-        $('.login-advanced-main').bind('keyup', function (event) {
-            if (event.keyCode == "13") {
-                //回车执行查询
-                $('.j-login-submit', '.login-advanced-main').click();
-            }
-        });
-        $('.login-low-main').bind('keyup', function (event) {
-            if (event.keyCode == "13") {
-                //回车执行查询
-                $('.j-login-submit', '.login-low-main').click();
-            }
-        });
-
-
-        $('.VerifyImage').on('click', function () {
-            var url="@Url.Action("VerifyImage", "Account")?r="+Math.random();
-            $(".VerifyImage").attr('src',url)
-        })
-    })
-</script>
