@@ -1,0 +1,32 @@
+﻿@model Flh.WebSite.Models.Product.ListModel
+@{
+    ViewBag.Title = "产品列表";
+    //Layout = "../Layout/_Manager.cshtml";
+}
+<h2>Index</h2>
+<form>
+    <input type="text" name="kw" value="@Model.Keyword" />
+    <button type="submit">搜索</button>
+</form>
+<div>
+    <ul style="list-style:none;">
+        @foreach (var item in Model.ClassItems)
+        {
+        <li style="float:left;margin-right:10px;"><a href="/Product?no=@item.No">@item.Name</a></li>    
+        }
+    </ul>
+</div>
+<div style="clear:both;"></div>
+@foreach (var item in Model.Items)
+{
+    <div style="width:100px;float:left;border:1px solid lightblue;">
+        <img src="@item.Image" style="width:80px;"  />
+        产品名称：@item.Name<br />
+        尺寸：@item.Size<br />
+        颜色：@item.Color<br />
+        材质：@item.Material<br />
+    </div>
+}
+<div class="page">
+    @Html.Pager(Model.Items);
+</div>

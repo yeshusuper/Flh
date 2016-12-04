@@ -5,6 +5,7 @@ using Flh.Web;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -152,26 +153,72 @@ namespace Flh.AdminSite.Controllers
         public ActionResult UploadImages()
         {
             List<String> fileNames = new List<string>();
-            foreach (string item in Request.Files)
+            foreach (var keyItem in Request.Form.Keys)
             {
-                HttpPostedFileBase file = Request.Files[item] as HttpPostedFileBase;
-                if (file == null && file.ContentLength == 0)
+                var key =  keyItem.ToString();
+                if (key.StartsWith("upload_file"))
                 {
-                    continue;
+                    var base64=Request.Form[key];
+                    SaveBase64Image(base64, (stream, file) => {
+                        var fid = FileId.FromFileName(file);
+                        _FileStore.CreateTemp(fid, stream);
+                        fileNames.Add(fid.ToTempId());
+                    });
                 }
-                var ext = Path.GetExtension(file.FileName);
-                if (ext != ".png"
-                    && ext != ".jpg"
-                    && ext != ".jpeg"
-                    && ext != ".gif")
-                {
-                    return JsonResult(ErrorCode.ServerError, "只能上传png/jpg/jpeg/gif格式的图片");
-                }
-                var fid = FileId.FromFileName(file.FileName);
-                _FileStore.CreateTemp(fid, file.InputStream);
-                fileNames.Add(fid.ToTempId());
-            }
+            }            
             return SuccessJsonResult<List<String>>(fileNames);
+        }
+
+        /// <summary>
+        /// 保存base64格式的图片
+        /// </summary>
+        /// <param name="base64"></param>
+        /// <param name="saveImage"></param>
+        private static void SaveBase64Image(string base64, Action<Stream, String> saveImage)
+        {
+            var parts = base64.Split(',');
+            var formatePart = parts[0].ToLower();
+            var dataPart = parts[1];
+            System.Drawing.Imaging.ImageFormat format;
+            var extend = "";
+            if (formatePart.Contains("jpeg"))
+            {
+                format = System.Drawing.Imaging.ImageFormat.Jpeg;
+                extend = ".jpg";
+            }
+            else if (formatePart.Contains("bmp"))
+            {
+                format = System.Drawing.Imaging.ImageFormat.Bmp;
+                extend = ".bmp";
+            }
+            else if (formatePart.Contains("gif"))
+            {
+                format = System.Drawing.Imaging.ImageFormat.Gif;
+                extend = ".gif";
+            }
+            else if (formatePart.Contains("png"))
+            {
+                format = System.Drawing.Imaging.ImageFormat.Png;
+                extend = ".png";
+            }
+            else
+            {
+                throw new Exception("图片格式不支持");
+            }
+            byte[] arr = Convert.FromBase64String(dataPart);
+            using (MemoryStream ms = new MemoryStream(arr))
+            {
+                using (Bitmap bmp = new Bitmap(ms))
+                {
+                    using (MemoryStream img = new MemoryStream())
+                    {
+                        var fileName = Guid.NewGuid().ToString() + extend;
+                        bmp.Save(img, format);
+                        img.Position = 0;
+                        saveImage(img, fileName);
+                    }
+                }
+            }
         }
     }
 }
