@@ -30,18 +30,30 @@
         return new Blob( [ab] , {type : 'image/png'});
     }*/
     //图片压缩
-    function compression_img(ofiles,num){
-        $('.loading-text').text("上传中，请稍等...");
+    function setcompression_img(uploadPicture,num){
+        if(uploadPicture.length>0){
+            lrz(uploadPicture[0], {width: 1240}).then(function (rst) {
+                load_upload(rst.base64,num);
+                uploadPicture.shift();
+                if(uploadPicture.length>0){
+                    setcompression_img(uploadPicture,num);
+                }
+                
+            })
+        } 
+    }
+    function getcompression_img(ofiles,num){
+        $('.loading-text').html("上传中，请稍等 (<span>0</span>/"+num+") ...");
         $(".product-pop-box").show();
         $('.loading-bg').css("width","0%");
-        $('.loading-title').html('<span>0</span>/'+num);
+        $('.loading-title').text("0%");
+        var uploadPicture=[];
         $.each(ofiles, function(i, file) {
             if (/.(gif|jpg|jpeg|png|bmp|GIF|JPG|JPEG|PNG|BMP)$/.test(file.name)) {
-                lrz(file, {width: 1240}).then(function (rst) {
-                    load_upload(rst.base64,num);
-                })
+                uploadPicture.push(file);
             }
         })
+        setcompression_img(uploadPicture,num);
     }
     //图片上传
     function load_upload(file,num,frequency_num){
@@ -51,33 +63,18 @@
         frequency=frequency_num||0;
         frequency++;
         data.append('upload_file',file);
-         //上传中设置上传的百分比
-        /*xhr.upload.addEventListener("progress", function(evt){
-            $('.loading-bg').css("width","0%")
-            $('.loading-title').text("0%");
-            if (evt.lengthComputable) {
-                var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-                if(percentComplete=="100"){
-                    percentComplete=percentComplete-1;
-                }
-                $('.loading-bg').css('width',percentComplete+"%");
-                $('.loading-title').text(percentComplete+"%");
-            }else {
-
-                $('.loading-title').text("无法计算");
-            }
-        }, false);*/
          //请求完成后执行的操作
         xhr.addEventListener("load", function(evt){
             var message = evt.target.responseText,
                 res = eval("("+message+")"),
                 img_data=res.data;
             if(res.code == 0){
-                var completed_num=Number($('.loading-title span').text())+1,
+                var completed_num=Number($('.loading-text span').text())+1,
                     completion_rate=Math.round(completed_num/num * 100);
                 uploadPicture_total++;
                 $('.loading-bg').css('width',completion_rate+"%");
-                $('.loading-title span').text(completed_num);
+                $('.loading-title').text(completion_rate+"%");
+                $('.loading-text span').text(completed_num);
                 for(var i=0;i<img_data.length;i++){
                     var html=$(".product-hide-tr").html();
                     $('.product-edit-bottom').before('<tr class="product-edit-tr">'+html+'</tr>');
@@ -99,7 +96,7 @@
                 }else{
                     uploadPicture_total++
                     if(uploadPicture_total==num){
-                        var completed_num=$('.loading-title span').text()
+                        var completed_num=$('.loading-text span').text()
                         $('.loading-text').text("选择了"+num+"张图片,成功上传："+completed_num+"张。");
                         setTimeout(function(){ 
                             $('.product-pop-box').hide();
@@ -169,11 +166,11 @@
                 if(normal_num==0){
                     alert("您太为难我了，这文件~我没办法上传~~请上传图片！")
                 }else{
-                    compression_img(ofiles,normal_num);
+                    getcompression_img(ofiles,normal_num);
                 }
             }  
         }else{
-             compression_img(ofiles,normal_num);
+             getcompression_img(ofiles,normal_num);
         }   
     });
     //触发图片上传
