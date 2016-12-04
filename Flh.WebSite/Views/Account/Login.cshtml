@@ -2,19 +2,31 @@
     Layout = "~/Views/Layout/_header.cshtml";
     ViewBag.Title = "登陆";
 }
-<form action="@Url.Action("Login")" method="post" enctype="application/x-www-form-urlencoded">
-    <table class="common_table"><tr>
-        <tr>
-            <td>账号：</td>
-            <td><input name="UserName" placeholder="手机号/邮箱" /></td>
-        </tr>
-        <tr>
-            <td>密码：</td>
-            <td><input name="Password" /></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td><input value="登陆" type="submit" /></td>
-        </tr>
-    </table>
-</form>
+
+<div class="flh-layout-main">
+    <div class="flh-login-main">
+        <form action="@Url.Action("Login")" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="flh-login-list">
+                <span>账号：</span>
+                <input name="UserName" placeholder="手机号/邮箱" />
+                <label></label>
+            </div>
+            <div class="flh-login-list">
+                <span>密码：</span>
+                <input name="Password" />
+                <label></label>
+            </div>
+            <div class="flh-login-list">
+                <span>验证码：</span>
+                <input name="Password" />
+                <label></label>
+            </div>
+            <div class="flh-login-submit"><input value="登陆" type="submit" /></div>
+            <div class="flh-login-other">
+                <a href="javascript:;">注册</a>
+                <a href="javascript:;">忘记密码</a>
+            </div>
+        </form>
+    </div>
+</div>
+
