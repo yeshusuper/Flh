@@ -18,76 +18,6 @@ namespace Flh.Business
     {
         public Data.Product[] Search(ProductSearchArgs args, out int count)
         {
-            return ProductSearchHelper.Search(args, out count);
-        }
-
-
-        public void DeleteIndex(params long[] pids)
-        {
-            ProductSearchHelper.DeleteIndex(pids);
-        }
-
-        public void UpdateSearchIndex(Data.Product entity)
-        {
-            ProductSearchHelper.UpdateSearchIndex(entity);
-        }
-
-        public Data.Product[] SearchProductByPids(long[] pids)
-        {
-            ExceptionHelper.ThrowIfNull(pids,"pids");
-            int count;
-            return ProductSearchHelper.Search(new ProductSearchArgs { Pids = pids }, out count);
-        }
-    }
-
-    public class ProductSearchHelper
-    {
-        public static void UpdateSearchIndex(Data.Product entity)
-        {
-            if (entity != null)
-            {
-                AliyunHelper.UpdateIndexDoc(new ProductAliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
-                {TableKey,entity.pid},
-                {name,entity.name},
-                {enname,entity.enName},
-                {description,entity.description},
-                {endescription,entity.enDescription},
-                {size,entity.size},
-                {ensize,entity.enSize},
-                {color,entity.color},
-                {encolor,entity.enColor},
-                {material,entity.material},
-                {enmaterial,entity.enMaterial},
-                {technique,entity.technique},
-                {entechnique,entity.enTechnique},
-                {minquantity,entity.minQuantity},
-                {deliveryday,entity.deliveryDay},
-                {keywords,entity.keywords},
-                {enkeywords,entity.enKeywords},
-                {unitprice,entity.unitPrice},
-                {imagepath,entity.imagePath},
-                {classno,entity.classNo},
-                {sortno,entity.sortNo},
-                {createuid,entity.createUid},
-                {created,entity.created},
-                {updated,entity.updated},
-                {enabled,entity.enabled},
-                {updater,entity.updater??0},
-                {viewcount,entity.viewCount??0},
-                }
-                });
-
-            }
-        }
-
-        public static void DeleteIndex(params long[] pids)
-        {
-            AliyunHelper.DeleteIndexDoc(new ProductAliyunIndexer(), TableKey, pids.Select(p => p.ToString()).ToArray());
-        }
-        static String TableKey = "pid";
-
-        public static Data.Product[] Search(ProductSearchArgs args, out int count)
-        {
             var querys = new List<IQuery>();
             if (!String.IsNullOrWhiteSpace(args.Keyword))
             {
@@ -145,35 +75,57 @@ namespace Flh.Business
             return products.ToArray();
         }
 
-        //阿里云索引表结构字段
-        static String name = "name";
-        static String enname = "enname";
-        static String description = "description";
-        static String endescription = "endescription";
-        static String size = "size";
-        static String ensize = "ensize";
-        static String color = "color";
-        static String encolor = "encolor";
-        static String material = "material";
-        static String enmaterial = "enmaterial";
-        static String technique = "technique";
-        static String entechnique = "entechnique";
-        static String minquantity = "minquantity";
-        static String deliveryday = "deliveryday";
-        static String keywords = "keywords";
-        static String enkeywords = "enkeywords";
-        static String unitprice = "unitprice";
-        static String imagepath = "imagepath";
-        static String classno = "classno";
-        static String sortno = "sortno";
-        static String createuid = "createuid";
-        static String created = "created";
-        static String updated = "updated";
-        static String enabled = "enabled";
-        static String updater = "updater";
-        static String viewcount = "viewcount";
+        public void DeleteIndex(params long[] pids)
+        {
+            AliyunHelper.DeleteIndexDoc(new ProductAliyunIndexer(), TableKey, pids.Select(p => p.ToString()).ToArray());
+        }
 
-        public static Data.Product GetProduct(Dictionary<string, string> dic)
+        public void UpdateSearchIndex(Data.Product entity)
+        {
+            if (entity != null)
+            {
+                AliyunHelper.UpdateIndexDoc(new ProductAliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
+                {TableKey,entity.pid},
+                {name,entity.name},
+                {enname,entity.enName},
+                {description,entity.description},
+                {endescription,entity.enDescription},
+                {size,entity.size},
+                {ensize,entity.enSize},
+                {color,entity.color},
+                {encolor,entity.enColor},
+                {material,entity.material},
+                {enmaterial,entity.enMaterial},
+                {technique,entity.technique},
+                {entechnique,entity.enTechnique},
+                {minquantity,entity.minQuantity},
+                {deliveryday,entity.deliveryDay},
+                {keywords,entity.keywords},
+                {enkeywords,entity.enKeywords},
+                {unitprice,entity.unitPrice},
+                {imagepath,entity.imagePath},
+                {classno,entity.classNo},
+                {sortno,entity.sortNo},
+                {createuid,entity.createUid},
+                {created,entity.created},
+                {updated,entity.updated},
+                {enabled,entity.enabled},
+                {updater,entity.updater??0},
+                {viewcount,entity.viewCount??0},
+                }
+                });
+            }
+        }
+
+        public Data.Product[] SearchProductByPids(long[] pids)
+        {
+            ExceptionHelper.ThrowIfNull(pids,"pids");
+            int count;
+            return Search(new ProductSearchArgs { Pids = pids }, out count);
+        }
+
+        #region 辅助方法
+        static Data.Product GetProduct(Dictionary<string, string> dic)
         {
             Data.Product entity = new Data.Product();
             entity.pid = TryGetDictValue(dic, TableKey).To<long>();
@@ -202,7 +154,7 @@ namespace Flh.Business
             entity.updated = FieldHelper.ToDateTime(TryGetDictValue(dic, updated).To<int>());
             entity.enabled = TryGetDictValue(dic, enabled).To<bool>();
             entity.updater = TryGetDictValue(dic, updater).To<long>();
-            entity.viewcount = TryGetDictValue(dic, viewcount).To<int>();
+            entity.viewCount = TryGetDictValue(dic, viewcount).To<int>();
             return entity;
         }
 
@@ -217,5 +169,36 @@ namespace Flh.Business
                 return String.Empty;
             }
         }
+
+        static String TableKey = "pid";
+
+        //阿里云索引表结构字段
+        static String name = "name";
+        static String enname = "enname";
+        static String description = "description";
+        static String endescription = "endescription";
+        static String size = "size";
+        static String ensize = "ensize";
+        static String color = "color";
+        static String encolor = "encolor";
+        static String material = "material";
+        static String enmaterial = "enmaterial";
+        static String technique = "technique";
+        static String entechnique = "entechnique";
+        static String minquantity = "minquantity";
+        static String deliveryday = "deliveryday";
+        static String keywords = "keywords";
+        static String enkeywords = "enkeywords";
+        static String unitprice = "unitprice";
+        static String imagepath = "imagepath";
+        static String classno = "classno";
+        static String sortno = "sortno";
+        static String createuid = "createuid";
+        static String created = "created";
+        static String updated = "updated";
+        static String enabled = "enabled";
+        static String updater = "updater";
+        static String viewcount = "viewcount"; 
+        #endregion
     }
 }

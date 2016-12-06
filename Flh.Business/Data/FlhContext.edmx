@@ -97,6 +97,7 @@
           <Property Name="updated" Type="datetime" Nullable="false" />
           <Property Name="enabled" Type="bit" Nullable="false" />
           <Property Name="updater" Type="bigint" />
+          <Property Name="viewCount" Type="int" />
         </EntityType>
         <EntityType Name="Trade">
           <Key>
@@ -382,6 +383,7 @@
           <Property Name="updated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="enabled" Type="Boolean" Nullable="false" />
           <Property Name="updater" Type="Int64" />
+          <Property Name="viewCount" Type="Int32" />
         </EntityType>
         <EntityType Name="Trade">
           <Key>
@@ -639,6 +641,7 @@
           <EntitySetMapping Name="Product">
             <EntityTypeMapping TypeName="TestModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="viewCount" ColumnName="viewCount" />
                 <ScalarProperty Name="updater" ColumnName="updater" />
                 <ScalarProperty Name="pid" ColumnName="pid" />
                 <ScalarProperty Name="name" ColumnName="name" />

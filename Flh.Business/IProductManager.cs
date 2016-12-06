@@ -271,6 +271,8 @@ namespace Flh.Business
         public String ClassNo { get; set; }
         public string Keyword { get; set; }
         public long[] Pids { get; set; }
+        public decimal? PriceMin { get; set; }
+        public decimal? PriceMax { get; set; }
         public int Start { get; set; }
         public int Limit { get; set; }
 
