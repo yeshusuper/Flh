@@ -70,8 +70,8 @@
     <Compile Include="Data\Trade.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\TradeRePository.cs" />    
-    <Compile Include="Data\IAdminModifyHistoryRepository.cs" />    
+    <Compile Include="Data\TradeRePository.cs" />
+    <Compile Include="Data\IAdminModifyHistoryRepository.cs" />
     <Compile Include="Data\Product.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
@@ -96,14 +96,14 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FlhContext.edmx</DependentUpon>
-    </Compile>   
+    </Compile>
     <Compile Include="Data\LoginHistory.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>   
+    </Compile>
     <Compile Include="Data\PartialEntity.cs" />
     <Compile Include="Data\User.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
-    </Compile>  
+    </Compile>
     <Compile Include="Data\AdminModifyHistory.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
@@ -117,6 +117,8 @@
     <Compile Include="IClassesManager.cs" />
     <Compile Include="Inject\DataModules.cs" />
     <Compile Include="Inject\ServiceModules.cs" />
+    <Compile Include="IProductSearchManager.cs" />
+    <Compile Include="IProductService.cs" />
     <Compile Include="ITradeManager.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IUserManager.cs" />

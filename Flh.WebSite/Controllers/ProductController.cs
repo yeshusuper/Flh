@@ -19,7 +19,7 @@ namespace Flh.WebSite.Controllers
             _ClassesManager = classesManager;
         }
 
-        public ActionResult Index(string no, string kw, int? page)
+        public ActionResult Index(string no, string kw, int? page,SortType? sort)
         {
             if (!page.HasValue || page.Value < 1)
             {
@@ -36,7 +36,8 @@ namespace Flh.WebSite.Controllers
                 Keyword = kw,
                 Limit = size,
                 Start = (page.Value - 1) * size,
-                ClassNo = String.IsNullOrWhiteSpace(no) ? String.Empty : no
+                ClassNo = String.IsNullOrWhiteSpace(no) ? String.Empty : no,
+                Sort=sort
             }, out count);
             return View(new Models.Product.ListModel()
             {
@@ -81,6 +82,7 @@ namespace Flh.WebSite.Controllers
             return query.Take(30).ToArray();
         }
     }
+   
     public class ProductDetailModel
     {
         public ProductDetailModel()

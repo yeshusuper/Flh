@@ -22,10 +22,14 @@ namespace Flh.Business
     {
         private readonly Data.IProductRepository _Repository;
         private readonly IFileStore _FileStore;
-        public ProductManager(Data.IProductRepository repository, IFileStore fileStore)
+        private readonly IProductSearchManager _SearchManager;
+        public ProductManager(Data.IProductRepository repository, 
+            IFileStore fileStore,
+            IProductSearchManager searchManager)
         {
             _Repository = repository;
             _FileStore = fileStore;
+            _SearchManager = searchManager;
         }
 
         void VeriryEntity(Data.Product newProduct)
@@ -96,7 +100,7 @@ namespace Flh.Business
                             }
                             _Repository.SaveChanges();
                             UpdateSearchIndex(oldProduct.pid);//更新索引
-                            if(newProductFileId.IsTempId)
+                            if (newProductFileId.IsTempId)
                                 _FileStore.Copy(newProductFileId, newFileID);//将临时文件复制到永久文件处                     
                             scope.Complete();
                         }
@@ -133,14 +137,14 @@ namespace Flh.Business
             var query = _Repository.EnabledProduct;
             if (args != null)
             {
-            if (!String.IsNullOrWhiteSpace(args.ClassNo))
-            {
-                query = query.Where(d => d.classNo.StartsWith(args.ClassNo));
-            }
-            if (args.Pids != null && args.Pids.Any())
-            {
-                query = query.Where(d => args.Pids.Contains(d.pid));
-            }
+                if (!String.IsNullOrWhiteSpace(args.ClassNo))
+                {
+                    query = query.Where(d => d.classNo.StartsWith(args.ClassNo));
+                }
+                if (args.Pids != null && args.Pids.Any())
+                {
+                    query = query.Where(d => args.Pids.Contains(d.pid));
+                }
                 if (args.MinPid > 0)
                 {
                     query = query.Where(d => d.pid > args.MinPid);
@@ -165,9 +169,13 @@ namespace Flh.Business
         }
         public IEnumerable<Data.Product> Search(ProductSearchArgs args, out int count)
         {
-            if (args != null && (!String.IsNullOrWhiteSpace(args.ClassNo) && args.ClassNo!="0001" || !String.IsNullOrWhiteSpace(args.Keyword)))
+            if (args != null
+                && args.Sort==null 
+                && !String.IsNullOrWhiteSpace(args.Keyword)
+                && args.ClassNo != "0001"
+                )
             {
-            return ProductSearchHelper.Search(args, out count);         
+                return _SearchManager.Search(args, out count);
             }
             else
             {
@@ -190,10 +198,24 @@ namespace Flh.Business
                         limit = args.Limit;
                 }
                 count = source.Count();
-                return source.OrderByDescending(p => p.sortNo)
-                     .ThenByDescending(p => p.updated)
-                     .Skip(start).Take(limit)
-                     .ToArray();
+                if (args.Sort == null)
+                {
+                    source = source.OrderByDescending(p => p.sortNo)
+                   .ThenByDescending(p => p.updated);
+                }
+                else if (args.Sort == SortType.TimeDesc)
+                {
+                    source = source.OrderByDescending(p => p.updated);
+                }
+                else if (args.Sort == SortType.PriceAsc)
+                {
+                    source = source.OrderBy(p => p.unitPrice);
+                }
+                else if (args.Sort == SortType.ViewDesc)
+                {
+                    source = source.OrderBy(p => p.viewCount);
+                }
+                return source.Skip(start).Take(limit).ToArray();
             }
 
         }
@@ -210,9 +232,9 @@ namespace Flh.Business
                 using (var scope = new System.Transactions.TransactionScope())
                 {
                     _Repository.Update(p => pids.Contains(p.pid) && p.enabled, c => new Data.Product { enabled = false, updated = DateTime.Now, updater = uid });
-                    ProductSearchHelper.DeleteIndex(pids);//删除索引
+                     _SearchManager.DeleteIndex(pids);//删除索引
                     scope.Complete();
-                }               
+                }
             }
         }
 
@@ -221,7 +243,7 @@ namespace Flh.Business
             var entity = _Repository.EnabledProduct.FirstOrDefault(d => d.pid == pid);
             if (entity != null)
             {
-                ProductSearchHelper.UpdateSearchIndex(entity);
+                _SearchManager.UpdateSearchIndex(entity);
             }
         }
 
@@ -232,152 +254,7 @@ namespace Flh.Business
         }
     }
 
-    public class ProductSearchHelper
-    {
-        public static void UpdateSearchIndex(Data.Product entity)
-        {
-            if (entity != null)
-            {
-                AliyunHelper.UpdateIndexDoc(new ProductAliyunIndexer(), new Dictionary<string, object>[]{ new Dictionary<string, object>{ 
-                {TableKey,entity.pid},
-                {name,entity.name},
-                {enname,entity.enName},
-                {description,entity.description},
-                {endescription,entity.enDescription},
-                {size,entity.size},
-                {ensize,entity.enSize},
-                {color,entity.color},
-                {encolor,entity.enColor},
-                {material,entity.material},
-                {enmaterial,entity.enMaterial},
-                {technique,entity.technique},
-                {entechnique,entity.enTechnique},
-                {minquantity,entity.minQuantity},
-                {deliveryday,entity.deliveryDay},
-                {keywords,entity.keywords},
-                {enkeywords,entity.enKeywords},
-                {unitprice,entity.unitPrice},
-                {imagepath,entity.imagePath},
-                {classno,entity.classNo},
-                {sortno,entity.sortNo},
-                {createuid,entity.createUid},
-                {created,entity.created},
-                {updated,entity.updated},
-                {enabled,entity.enabled},
-                {updater,entity.updater??0},
-                }
-                });
-
-            }
-        }
-
-        public static void DeleteIndex(params long[] pids)
-        {
-            AliyunHelper.DeleteIndexDoc(new ProductAliyunIndexer(), TableKey, pids.Select(p => p.ToString()).ToArray());
-        }
-        static String TableKey = "pid";
-
-        public static Data.Product[] Search(ProductSearchArgs args, out int count)
-        {
-            var querys = new List<IQuery>();
-            if (!String.IsNullOrWhiteSpace(args.Keyword))
-            {
-                querys.Add(Query.Or(
-                     new QueryItem("keyword", args.Keyword)
-                     , new QueryItem("enkeyword", args.Keyword)
-                    ));
-            }
-            if (!String.IsNullOrWhiteSpace(args.ClassNo))
-            {
-                querys.Add(new KeywordQuery("classno", String.Format("^{0}", args.ClassNo)));
-            }
-            var query = new QueryBuilder
-            {
-                Config = new Config { Start = Math.Max(0, args.Start), Hit = Math.Max(1, args.Limit) },
-                Query = Query.And(querys.ToArray()),
-                Sort = new SourtItemCollection(new SortItem("sortno",SortKinds.Asc),new SortItem("updated", SortKinds.Desc)),
-            };
-            var result = AliyunHelper.Search(new ProductAliyunIndexer(), query, String.Empty);
-            List<Data.Product> products = new List<Data.Product>();
-            foreach (var item in result.Items)
-        {
-                products.Add(GetProduct(item));
-            }
-            count = result.Total; 
-            return products.ToArray();
-        }
-
-        //阿里云索引表结构字段
-        static String name = "name";
-        static String enname = "enname";
-        static String description = "description";
-        static String endescription = "endescription";
-        static String size = "size";
-        static String ensize = "ensize";
-        static String color = "color";
-        static String encolor = "encolor";
-        static String material = "material";
-        static String enmaterial = "enmaterial";
-        static String technique = "technique";
-        static String entechnique = "entechnique";
-        static String minquantity = "minquantity";
-        static String deliveryday = "deliveryday";
-        static String keywords = "keywords";
-        static String enkeywords = "enkeywords";
-        static String unitprice = "unitprice";
-        static String imagepath = "imagepath";
-        static String classno = "classno";
-        static String sortno = "sortno";
-        static String createuid = "createuid";
-        static String created = "created";
-        static String updated = "updated";
-        static String enabled = "enabled";
-        static String updater = "updater";
-
-        public static Data.Product GetProduct(Dictionary<string, string> dic)
-        {
-            Data.Product entity = new Data.Product();
-            entity.pid = TryGetDictValue(dic, TableKey).To<long>();
-            entity.name = TryGetDictValue(dic, name);
-            entity.enName = TryGetDictValue(dic, enname);
-            entity.description = TryGetDictValue(dic, description);
-            entity.enDescription = TryGetDictValue(dic, endescription);
-            entity.size = TryGetDictValue(dic, size);
-            entity.enSize = TryGetDictValue(dic, ensize);
-            entity.color = TryGetDictValue(dic, color);
-            entity.enColor = TryGetDictValue(dic, encolor);
-            entity.material = TryGetDictValue(dic, material);
-            entity.enMaterial = TryGetDictValue(dic, enmaterial);
-            entity.technique = TryGetDictValue(dic, technique);
-            entity.enTechnique = TryGetDictValue(dic, entechnique);
-            entity.minQuantity = TryGetDictValue(dic, minquantity).To<int>();
-            entity.deliveryDay = TryGetDictValue(dic, deliveryday).To<int>();
-            entity.keywords = TryGetDictValue(dic, keywords);
-            entity.enKeywords = TryGetDictValue(dic, enkeywords);
-            entity.unitPrice = TryGetDictValue(dic, unitprice).To<decimal>();
-            entity.imagePath = TryGetDictValue(dic, imagepath);
-            entity.classNo = TryGetDictValue(dic, classno);
-            entity.sortNo = TryGetDictValue(dic, sortno).To<int>();
-            entity.createUid = TryGetDictValue(dic, createuid).To<long>();
-            entity.created = FieldHelper.ToDateTime(TryGetDictValue(dic, created).To<int>());
-            entity.updated = FieldHelper.ToDateTime(TryGetDictValue(dic, updated).To<int>());
-            entity.enabled = TryGetDictValue(dic, enabled).To<bool>();
-            entity.updater = TryGetDictValue(dic, updater).To<long>();
-            return entity;
-    }
-
-        static String TryGetDictValue(Dictionary<string, string> dic, String key)
-        {
-            if (dic.ContainsKey(key))
-            {
-                return dic[key];
-            }
-            else
-            {
-                return String.Empty;
-            }
-        }
-    }
+    
     public class ProductListArgs
     {
         public ProductListArgs()
@@ -393,7 +270,17 @@ namespace Flh.Business
     {
         public String ClassNo { get; set; }
         public string Keyword { get; set; }
+        public long[] Pids { get; set; }
         public int Start { get; set; }
         public int Limit { get; set; }
+
+        public SortType? Sort { get; set; }
+    }
+
+    public enum SortType
+    {
+        TimeDesc = 0,
+        ViewDesc = 1,
+        PriceAsc = 2,
     }
 }
