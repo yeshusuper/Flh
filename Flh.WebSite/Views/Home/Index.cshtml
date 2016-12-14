@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Flh.WebSite.Controllers.HomeController.IndexPageClassModel
+@{
     ViewBag.Title = "首页";
     Layout = "~/Views/Layout/_header.cshtml";
 }
@@ -7,568 +8,80 @@
     <div class="flh-index-header layout-width">
         <div class="flh-index-header-left lf">
             <div class="flh-index-header-nav">
-                <div class="flh-index-header-nav-list">
+                @foreach (var item in Model.TopLeftItems)
+                {
+                  <div class="flh-index-header-nav-list">
                     <a class="flh-index-header-nav-lista" href="javascript:;">
                         <i class="nav-icon-left" id="nav-icon-1"></i>
-                        花边
+                        @item.Name
                         <i class="nav-icon-right">&gt;</i>
                     </a>
                     <div class="flh-index-header-nav-main">
                         <ul>
-                            <li><a href="javascript:;">花边1</a></li>
-                            <li><a href="javascript:;">花边2</a></li>
-                            <li><a href="javascript:;">花边3</a></li>
-                            <li><a href="javascript:;">花边4</a></li>
-                            <li><a href="javascript:;">花边5</a></li>
+                            @foreach (var sub in item.Children)
+                            {
+                                <li><a href="javascript:;">@sub.Name</a></li>
+                            }                            
                         </ul>
                     </div>
-                </div>
-                <div class="flh-index-header-nav-list">
-                    <a class="flh-index-header-nav-lista" href="javascript:;">
-                        <i class="nav-icon-left" id="nav-icon-1"></i>
-                        花边
-                        <i class="nav-icon-right">&gt;</i>
-                    </a>
-                    <div class="flh-index-header-nav-main">
-                        <ul>
-                            <li><a href="javascript:;">花边1</a></li>
-                            <li><a href="javascript:;">花边2</a></li>
-                            <li><a href="javascript:;">花边3</a></li>
-                            <li><a href="javascript:;">花边4</a></li>
-                            <li><a href="javascript:;">花边5</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="flh-index-header-nav-list">
-                    <a class="flh-index-header-nav-lista" href="javascript:;">
-                        <i class="nav-icon-left" id="nav-icon-1"></i>
-                        花边
-                        <i class="nav-icon-right">&gt;</i>
-                    </a>
-                    <div class="flh-index-header-nav-main">
-                        <ul>
-                            <li><a href="javascript:;">花边1</a></li>
-                            <li><a href="javascript:;">花边2</a></li>
-                            <li><a href="javascript:;">花边3</a></li>
-                            <li><a href="javascript:;">花边4</a></li>
-                            <li><a href="javascript:;">花边5</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="flh-index-header-nav-list">
-                    <a class="flh-index-header-nav-lista" href="javascript:;">
-                        <i class="nav-icon-left" id="nav-icon-1"></i>
-                        花边
-                        <i class="nav-icon-right">&gt;</i>
-                    </a>
-                    <div class="flh-index-header-nav-main">
-                        <ul>
-                            <li><a href="javascript:;">花边1</a></li>
-                            <li><a href="javascript:;">花边2</a></li>
-                            <li><a href="javascript:;">花边3</a></li>
-                            <li><a href="javascript:;">花边4</a></li>
-                            <li><a href="javascript:;">花边5</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="flh-index-header-nav-list">
-                    <a class="flh-index-header-nav-lista" href="javascript:;">
-                        <i class="nav-icon-left" id="nav-icon-1"></i>
-                        花边
-                        <i class="nav-icon-right">&gt;</i>
-                    </a>
-                    <div class="flh-index-header-nav-main">
-                        <ul>
-                            <li><a href="javascript:;">花边1</a></li>
-                            <li><a href="javascript:;">花边2</a></li>
-                            <li><a href="javascript:;">花边3</a></li>
-                            <li><a href="javascript:;">花边4</a></li>
-                            <li><a href="javascript:;">花边5</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="flh-index-header-nav-list">
-                    <a class="flh-index-header-nav-lista" href="javascript:;">
-                        <i class="nav-icon-left" id="nav-icon-1"></i>
-                        花边
-                        <i class="nav-icon-right">&gt;</i>
-                    </a>
-                    <div class="flh-index-header-nav-main">
-                        <ul>
-                            <li><a href="javascript:;">花边1</a></li>
-                            <li><a href="javascript:;">花边2</a></li>
-                            <li><a href="javascript:;">花边3</a></li>
-                            <li><a href="javascript:;">花边4</a></li>
-                            <li><a href="javascript:;">花边5</a></li>
-                        </ul>
-                    </div>
-                </div>
+                </div>       
+                }                        
             </div>
         </div>
         <div class="flh-index-header-right lf">
             <ul>
+                @foreach (var item in Model.TopRightItems)
+                {
                 <li>
                     <a href="javascript:;">
-                        <img alt="拉链" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
+                        <img alt="@item.Name" src="@item.Img" />
                         <div class="flh-index-header-right-bg"></div>
-                        <div class="flh-index-header-right-text">拉链</div>
+                        <div class="flh-index-header-right-text">@item.Name</div>
                     </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <img alt="拉链" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                        <div class="flh-index-header-right-bg"></div>
-                        <div class="flh-index-header-right-text">拉链</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <img alt="拉链" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                        <div class="flh-index-header-right-bg"></div>
-                        <div class="flh-index-header-right-text">拉链</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <img alt="拉链" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                        <div class="flh-index-header-right-bg"></div>
-                        <div class="flh-index-header-right-text">拉链</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <img alt="拉链" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                        <div class="flh-index-header-right-bg"></div>
-                        <div class="flh-index-header-right-text">拉链</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <img alt="拉链" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                        <div class="flh-index-header-right-bg"></div>
-                        <div class="flh-index-header-right-text">拉链</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <img alt="拉链" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                        <div class="flh-index-header-right-bg"></div>
-                        <div class="flh-index-header-right-text">拉链</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <img alt="拉链" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                        <div class="flh-index-header-right-bg"></div>
-                        <div class="flh-index-header-right-text">拉链</div>
-                    </a>
-                </li>
+                </li>    
+                }                
                 <div class="clear"></div>
             </ul>
         </div>
         <div class="clear"></div>
     </div>
     <div class="flh-index-main layout-width">
-        <div class="flh-index-main-list">
+        @foreach (var item in Model.BottomRightItems)
+        {
+          <div class="flh-index-main-list">
             <div class="flh-index-main-left">
-                <div class="flh-index-main-list-title">分类</div>
+                <div class="flh-index-main-list-title">@item.Name</div>
                 <a href="javascript:;">
-                    <img alt="分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
+                    <img alt="@item.Name" src="@item.Img" />
                 </a>
             </div>
             <div class="flh-index-main-right">
                 <ul>
-                    <li>
+                    @foreach (var sub in item.Children)
+                    {
+                      <li>
                         <a href="javascript:;">
                             <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
+                                <img alt="@sub.Name" src="@sub.Img" />
                             </div>
-                            <p>二级分类</p>
+                            <p>@sub.Name</p>
                         </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
+                    </li>   
+                    }                   
                     <div class="clear"></div>
                 </ul>
             </div>
             <div class="clear"></div>
-        </div>
-        <div class="flh-index-main-list">
-            <div class="flh-index-main-left">
-                <div class="flh-index-main-list-title">分类</div>
-                <a href="javascript:;">
-                    <img alt="分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                </a>
-            </div>
-            <div class="flh-index-main-right">
-                <ul>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <div class="clear"></div>
-                </ul>
-            </div>
-            <div class="clear"></div>
-        </div>
-        <div class="flh-index-main-list">
-            <div class="flh-index-main-left">
-                <div class="flh-index-main-list-title">分类</div>
-                <a href="javascript:;">
-                    <img alt="分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                </a>
-            </div>
-            <div class="flh-index-main-right">
-                <ul>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="二级分类" src="http://preview.quanjing.com/chineseview034/east-a51-571477.jpg" />
-                            </div>
-                            <p>二级分类</p>
-                        </a>
-                    </li>
-                    <div class="clear"></div>
-                </ul>
-            </div>
-            <div class="clear"></div>
-        </div>
+        </div>   
+        }       
     </div>
 </div>
 <div class="flh-index-horizontal">
     <div class="flh-index-horizontal-main">
-        <a class="current" href="javascript:;">
-            分类
-        </a>
-        <a href="javascript:;">
-            分类
-        </a>
-        <a href="javascript:;">
-            分类
-        </a>
-        <a href="javascript:;">
-            分类
-        </a>
-        <a href="javascript:;">
-            分类
-        </a>
-        <a href="javascript:;" style=" border:0px;">
-            分类
-        </a>
+        @foreach (var item in Model.BottomLeftItems)
+{
+    <a class="current" href="javascript:;">@item.Name</a>
+}
     </div>
 </div>
 <div class="flh-index-advisory">
