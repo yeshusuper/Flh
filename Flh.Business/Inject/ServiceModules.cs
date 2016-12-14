@@ -20,7 +20,6 @@ namespace Flh.Business.Inject
             Bind<ITradeManager>().To<TradeManager>();
             Bind<IAreaManager>().To<AreaManager>();
             Bind<IProductManager>().To<ProductManager>();
-            Bind<IProductService>().To<ProductService>();
             Bind<IProductServiceFactory>().To<ProductServiceFactory>();
             Bind<IProductSearchManager>().To<ProductSearchManager>();
             
