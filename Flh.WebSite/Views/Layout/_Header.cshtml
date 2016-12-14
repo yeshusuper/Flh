@@ -26,17 +26,34 @@
                     }
                 </div>
             </div>
-            <div class="flh-header-nav">
+            <div class="flh-header-main">
+                <div class="flh-header-main-left">
+                    <a href="javascript:;">
+                        <img src="#" alt="辅料汇" />
+                    </a>
+                </div>
+                <div class="flh-header-main-middle">
+                    <input type="text" name="flh-search" value=" " />
+                    <a href="javascript:;">搜索</a>
+                </div>
+                <div class="flh-header-main-right">
+                    <div class="flh-header-main-ewm">
+                        欢迎来到xxxx.com
+                        <img src="#" alt="二维码" />
+                    </div>
+                </div>
+            </div>
+            @*<div class="flh-header-nav" >
                 <ul>
                     <li>
                         <a href="@Url.Action("index", "home")" @(Url.IsCurrent("index", "home") ? "class=\"current\"" : String.Empty)>首页</a>
                     </li>
                     <div class="clear"></div>
                 </ul>
-            </div>
+            </div>*@
         </div>
         @RenderBody()
-        <div class="flh-layout-footer">
+        <div class="flh-layout-footer" style="display:none;">
             <div class="flh-footer-main">
                 <div class="flh-footer-main-left">
                     <div class="flh-footer-main-title">

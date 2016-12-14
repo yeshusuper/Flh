@@ -134,6 +134,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
+    <Content Include="Resources\default.css" />
+    <Content Include="Resources\header.css" />
     <Content Include="Resources\Js\jquery-3.1.0.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
