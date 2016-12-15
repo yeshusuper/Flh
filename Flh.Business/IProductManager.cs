@@ -173,6 +173,7 @@ namespace Flh.Business
                 && args.Sort==null 
                 && !String.IsNullOrWhiteSpace(args.Keyword)
                 && args.ClassNo != "0001"
+                && String.IsNullOrWhiteSpace(args.Color)
                 )
             {
                 return _SearchManager.Search(args, out count);
@@ -192,6 +193,10 @@ namespace Flh.Business
                     {
                         var keyword = args.Keyword.Trim();
                         source = source.Where(d => d.name.Contains(keyword) || d.keywords.Contains(keyword));
+                    }
+                    if (!String.IsNullOrWhiteSpace(args.Color))
+                    {
+                        source = source.Where(d=>d.color.Contains(args.Color));
                     }
                     start = Math.Max(0, args.Start);
                     if (args.Limit > 0)
@@ -275,8 +280,8 @@ namespace Flh.Business
         public decimal? PriceMax { get; set; }
         public int Start { get; set; }
         public int Limit { get; set; }
-
         public SortType? Sort { get; set; }
+        public String Color { get; set; }
     }
 
     public enum SortType

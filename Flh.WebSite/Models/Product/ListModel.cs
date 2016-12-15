@@ -1,4 +1,5 @@
-﻿using Flh.Web;
+﻿using Flh.Business;
+using Flh.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,43 @@ namespace Flh.WebSite.Models.Product
 
         public ListModel()
         {
-            ClassItems=new ClassItem[0];
+            ClassItems = new ClassItem[0];
         }
         public string No { get; set; }
         public string Keyword { get; set; }
-         public decimal? PriceMin { get; set; }
-         public decimal? PriceMax { get; set; }
+        public string Color { get; set; }
+        public Flh.Business.SortType? Sort { get; set; }
+        public decimal? PriceMin { get; set; }
+        public decimal? PriceMax { get; set; }
+        public int? Page { get; set; }
         public PageModel<Item> Items { get; set; }
         public ClassItem[] ClassItems { get; set; }
+        public string GetColorUrl(string color)
+        {
+            UrlParameters["color"] = color;
+            return "/Product?" + String.Join("&", UrlParameters.Select(d => d.Key + "=" + d.Value));
+        }
+        public string GetSortUrl(SortType sort)
+        {
+            UrlParameters["sort"] = sort;
+            return "/Product?" + String.Join("&", UrlParameters.Select(d => d.Key + "=" + d.Value));
+        }
+        Dictionary<string, object> UrlParameters
+        {
+            get
+            {
+                return new Dictionary<string, object> {
+                {"no",this.No},
+                {"kw",this.Keyword},
+                {"page",this.Page},
+                {"sort",this.Sort},
+                {"priceMin",this.PriceMin},
+                {"priceMax",this.PriceMax},
+                {"color",Color},
+                };
+            }
+        }
+       
         public class ClassItem
         {
             public string Name { get; set; }

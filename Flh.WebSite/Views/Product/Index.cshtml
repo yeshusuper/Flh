@@ -23,12 +23,12 @@
     </div>
     <div class="flh-productList-right">
         <div class="flh-productList-condition">
-            <a class="condition-switch current" href="javascript:;">最新</a>
-            <a class="condition-switch" href="javascript:;">人气</a>
-            <a class="condition-switch" href="javascript:;">销量</a>
-            <a class="condition-switch" href="javascript:;">价格</a>
+            <a class="condition-switch@(Model.Sort == Flh.Business.SortType.TimeDesc || Model.Sort == null ? " current" : String.Empty)" href="@Model.GetSortUrl(Flh.Business.SortType.TimeDesc)">最新</a>
+            @*<a class="condition-switch@(Model.Sort == Flh.Business.SortType.ViewDesc ? " current" : String.Empty)" href="@Model.GetSortUrl(Flh.Business.SortType)">人气</a>*@
+            <a class="condition-switch@(Model.Sort == Flh.Business.SortType.ViewDesc ? " current" : String.Empty)" href="@Model.GetSortUrl(Flh.Business.SortType.ViewDesc)">销量</a>
+            <a class="condition-switch@(Model.Sort == Flh.Business.SortType.PriceAsc ? " current" : String.Empty)" href="@Model.GetSortUrl(Flh.Business.SortType.PriceAsc)">价格</a>
             <div class="flh-productList-price">
-                价格：&nbsp;&yen;&nbsp;<span><input type="text" value="" /></span>&nbsp;--&nbsp;&yen;&nbsp;<span><input type="text" value="" /></span>
+                价格：&nbsp;&yen;&nbsp;<span><input type="text" value="@Model.PriceMin" /></span>&nbsp;--&nbsp;&yen;&nbsp;<span><input type="text" value="@Model.PriceMax" /></span>
             </div>
             <a class="condition-submit" href="javascript:;">确定</a>
         </div>
@@ -36,13 +36,13 @@
             <div class="flh-productList-main-filter">
                 <div class="filter-left">
                     <span>颜色：</span>
-                    <a href="javascript:;">多色</a>
-                    <a href="javascript:;">黑色</a>
-                    <a href="javascript:;">白色</a>
-                    <a href="javascript:;">蓝色</a>
-                    <a href="javascript:;">粉色</a>
-                    <a href="javascript:;">宝蓝</a>
-                    <a href="javascript:;">多色</a>
+                    <a href="@Model.GetColorUrl("多色")" class="@(Model.Color == "多色" ? "current" : String.Empty)" >多色</a>
+                    <a href="@Model.GetColorUrl("黑色")" class="@(Model.Color == "黑色" ? "current" : String.Empty)">黑色</a>
+                    <a href="@Model.GetColorUrl("白色")" class="@(Model.Color == "白色" ? "current" : String.Empty)">白色</a>
+                    <a href="@Model.GetColorUrl("蓝色")" class="@(Model.Color == "蓝色" ? "current" : String.Empty)">蓝色</a>
+                    <a href="@Model.GetColorUrl("粉色")" class="@(Model.Color == "粉色" ? "current" : String.Empty)">粉色</a>
+                    <a href="@Model.GetColorUrl("宝蓝")" class="@(Model.Color == "宝蓝" ? "current" : String.Empty)">宝蓝</a>
+                    <a href="@Model.GetColorUrl("多色")" class="@(Model.Color == "多色" ? "current" : String.Empty)">多色</a>
                 </div>
                 <div class="filter-right">
                     <a href="javascript:;">更多&nbsp;&gt;</a>

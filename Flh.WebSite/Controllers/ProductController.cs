@@ -23,7 +23,7 @@ namespace Flh.WebSite.Controllers
             _ProductServiceFactory= productServiceFactory;
         }
 
-        public ActionResult Index(string no, string kw, int? page,SortType? sort,decimal? priceMin,decimal? priceMax)
+        public ActionResult Index(string no, string kw, int? page,SortType? sort,decimal? priceMin,decimal? priceMax,string color)
         {
             if (!page.HasValue || page.Value < 1)
             {
@@ -50,9 +50,11 @@ namespace Flh.WebSite.Controllers
             {
                 No = (no ?? String.Empty).Trim(),
                 Keyword = (kw ?? String.Empty).Trim(),
+                Color=color,
                 ClassItems = classes,
                 PriceMin=priceMin,
                 PriceMax=priceMax,
+                Sort=sort,
                 Items = new PageModel<Models.Product.ListModel.Item>(products
                             .Select(p => new Models.Product.ListModel.Item
                             {
