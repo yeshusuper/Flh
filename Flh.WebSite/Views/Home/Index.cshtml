@@ -78,10 +78,11 @@
 </div>
 <div class="flh-index-horizontal">
     <div class="flh-index-horizontal-main">
-        @foreach (var item in Model.BottomLeftItems)
-{
-    <a class="current" href="javascript:;">@item.Name</a>
-}
+        @for (var i = 0; i < Model.BottomLeftItems.Length; i++)
+        {
+            var item = Model.BottomLeftItems[i];
+            <a class="@(item.No==Model.CurrentClassNo|| i==0 && String.IsNullOrWhiteSpace(Model.CurrentClassNo)?"current":String.Empty)" href="/?no=@item.No">@item.Name</a>
+        }
     </div>
 </div>
 <div class="flh-index-advisory">

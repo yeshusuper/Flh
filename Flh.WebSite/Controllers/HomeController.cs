@@ -16,7 +16,7 @@ namespace Flh.WebSite.Controllers
         {
             _ClassManager = classManager;
         }
-        public ActionResult Index()
+        public ActionResult Index(String no="")
         {
             var allClasses = _ClassManager.EnabledClasses.ToArray();
             var root = new ClassItem(allClasses, new Classes { no = FlhConfig.CLASSNO_CLASS_PREFIX,name=String.Empty});
@@ -30,6 +30,7 @@ namespace Flh.WebSite.Controllers
             model.TopRightItems = root.Children.OrderByDescending(d=>d.Sort).ThenByDescending(d=>d.UpdateTime).ToArray();
             model.BottomLeftItems = root.Children;
             model.BottomRightItems = root.Children.OrderByDescending(d => d.Sort).ThenByDescending(d => d.UpdateTime).ToArray();
+            model.CurrentClassNo = no;
             return View(model);
         }
 
@@ -39,6 +40,7 @@ namespace Flh.WebSite.Controllers
             public ClassItem[] TopRightItems { get; set; }
             public ClassItem[] BottomLeftItems { get; set; }
             public ClassItem[] BottomRightItems { get; set; }
+            public String CurrentClassNo { get; set; }
         }
 
         public class ClassItem
