@@ -1,9 +1,10 @@
-/*函数样式*/
+/***函数样式***/
 .ml-20{margin-left: -20px;}
 .layout-width{ width:1200px;}
 .lf{ float: left;}
 .rl{float: right;}
-/*普通样式*/
+/***普通样式***/
+/*首页*/
 .flh-index-header{ margin: 0px auto;}
 .flh-index-header-left{ width:190px; border:2px solid #C7181D; height: 506px;}
 .flh-index-header-right{ width: 1004px;height: 508px; border:1px solid #C7181D;}
@@ -27,7 +28,6 @@
 .flh-index-header-right li img{ display: block; width: 220px; height: 200px;}
 .flh-index-header-right-bg{position: absolute;bottom: 0px; left: 0px; width: 100%; height: 50px; background: #fff;opacity:0.8;filter:alpha(opacity=80); z-index: 1}
 .flh-index-header-right-text{position: absolute;bottom: 0px; left: 0px; width: 100%; height: 50px;z-index: 2; text-align: center; font-size: 18px; line-height: 50px; }
-
 .flh-index-main{ margin: 0px auto 100px auto;}
 .flh-index-main-list{ width: 1198px;margin-top: 40px; border:1px solid #E1E1E1; height: 380px;}
 .flh-index-main-left{ width: 290px; float: left;}
@@ -49,3 +49,41 @@
 .flh-index-advisory{position: fixed; right: 0px; top: 50%; margin-top: -100px;}
 .flh-index-advisory a{padding: 60px 10px; width: 30px;  display: block; background: #C7181F;font-size: 18px; color: #fff; text-align: center;}
 .flh-index-advisory a:hover{opacity:0.8;filter:alpha(opacity=80); }
+/*产品列表*/
+.flh-productList{ margin: 0px auto;}
+.flh-productList-left{ width: 192px; float: left;}
+.flh-productList-breadCrumbs{ height: 45px; line-height: 45px; font-size: 14px;color: #333; text-align: center; margin-bottom: 15px;}
+.flh-productList-breadCrumbs a{ color: #333;}
+.flh-productList-breadCrumbs a:hover{ color: #C7181F;}
+.flh-productList-classification ul{ width: 100%; height: 100%; background: #F0F0F0;}
+.flh-productList-classification li a{ display: block; height: 35px; line-height: 35px; text-align: center; color: #666; font-size: 14px;}
+.flh-productList-classification li a:hover{background: #E3E3E3; color: #C7181F;}
+.flh-productList-classification .current a{background: #E3E3E3; color: #C7181F;}
+.flh-productList-right{width: 980px; float: right;}
+.flh-productList-condition{ width: 100%; height: 45px; background: #F0F0F0; margin-bottom: 15px;}
+.flh-productList-condition .condition-switch{ float: left; width: 138px; height: 43px; border:1px solid #C7181F; display: block; color: #666; line-height: 43px; text-align: center; font-size: 14px;}
+.flh-productList-condition .current{ background: #C7181F; color: #fff;}
+.flh-productList-condition .condition-switch:hover{ color:#C7181F; }
+.flh-productList-price{ float: left; margin: 0px 10px 0px 25px; line-height: 45px; color: #666; font-size: 14px;}
+.flh-productList-price input{ width: 60px; height: 28px; border:1px solid #D5D5D5; background: #F0F0F0;}
+.flh-productList-condition .condition-submit{display: block; height: 30px; width: 60px; background: #C7181F; color: #fff; line-height: 30px; text-align: center; margin-top:7.5px; font-size: 14px; float: left;}
+.flh-productList-condition .condition-submit:hover{opacity:0.8;filter:alpha(opacity=80);}
+.flh-productList-main{ padding: 0px 10px; background: #F0F0F0;}
+.flh-productList-main-filter{ height: 45px; border-bottom: 1px solid #D7D6DB; padding:0px 25px;}
+.flh-productList-main-filter .filter-left{ float: left; position: relative;padding-left:70px;}
+.flh-productList-main-filter .filter-left span{ position: absolute; top: 0px; left: 0px; display: block; height: 45px; font-size: 16px; color: #666;  line-height: 45px;}
+.flh-productList-main-filter .filter-left a{ line-height: 45px; color: #666; margin-right: 45px; font-size: 14px; display: block; float: left;}
+.flh-productList-main-filter .filter-left a:hover{ color: #C7181F;}
+.flh-productList-main-filter .filter-right{ float: right;}
+.flh-productList-main-filter .filter-right a{ font-size: 16px; color: #666; line-height: 45px; display: block;}
+.flh-productList-main-filter .filter-right a:hover{color: #C7181F;}
+.flh-productList-main ul{ width: 100%; margin-left: -33px; margin-top: 33px;}
+.flh-productList-main li{ float: left; width: 215px; height: 320px; overflow: hidden; background: #FFFFFF; margin-left: 33px; margin-bottom: 33px;}
+.flh-productList-main li img{ width: 215px; height: 215px; display: block;}
+.flh-productList-main li img:hover{opacity:0.8;filter:alpha(opacity=80);}
+.flh-productList-main li a{ font-size: 14px; color: #666;}
+.flh-productList-main li a:hover{ color: #C7181F;}
+.productList-main-name{ line-height: 25px; max-height: 40px; overflow: hidden; font-size: 14px; padding: 0px 2px; margin-top: 15px;}
+.productList-main-name span{ color: #666;}
+.productList-main-Attributes{ padding: 0px 2px;}
+.Attributes-list{ float: left; width: 50%; overflow: hidden; line-height: 20px; color: #666;font-size: 13px;}
