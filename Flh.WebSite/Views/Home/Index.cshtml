@@ -20,7 +20,7 @@
                         <ul>
                             @foreach (var sub in item.Children)
                             {
-                                <li><a href="javascript:;">@sub.Name</a></li>
+                                <li><a href="/Product?no=@sub.No" target="_blank">@sub.Name</a></li>
                             }                            
                         </ul>
                     </div>
@@ -33,8 +33,8 @@
                 @foreach (var item in Model.TopRightItems)
                 {
                 <li>
-                    <a href="javascript:;">
-                        <img alt="@item.Name" src="@item.Img" />
+                    <a href="/Product?no=@item.No" target="_blank">
+                        <img alt="@item.Name" src="http://img.fuliaohui.com/@item.Img" />
                         <div class="flh-index-header-right-bg"></div>
                         <div class="flh-index-header-right-text">@item.Name</div>
                     </a>
@@ -48,11 +48,11 @@
     <div class="flh-index-main layout-width">
         @foreach (var item in Model.BottomRightItems)
         {
-          <div class="flh-index-main-list">
+          <div class="flh-index-main-list" id="c@(item.No)">
             <div class="flh-index-main-left">
                 <div class="flh-index-main-list-title">@item.Name</div>
-                <a href="javascript:;">
-                    <img alt="@item.Name" src="@item.Img" />
+                <a href="/Product?no=@item.No" target="_blank">
+                    <img alt="@item.Name" src="http://img.fuliaohui.com/@item.Img" />
                 </a>
             </div>
             <div class="flh-index-main-right">
@@ -60,12 +60,12 @@
                     @foreach (var sub in item.Children)
                     {
                       <li>
-                        <a href="javascript:;">
-                            <div class="flh-index-main-list-subordinateImg">
-                                <img alt="@sub.Name" src="@sub.Img" />
-                            </div>
-                            <p>@sub.Name</p>
-                        </a>
+                          <a href="/Product?no=@sub.No" target="_blank">
+                              <div class="flh-index-main-list-subordinateImg">
+                                  <img alt="@sub.Name" src="http://img.fuliaohui.com/@sub.Img" />
+                              </div>
+                              <p>@sub.Name</p>
+                          </a>
                     </li>   
                     }                   
                     <div class="clear"></div>
@@ -78,10 +78,10 @@
 </div>
 <div class="flh-index-horizontal">
     <div class="flh-index-horizontal-main">
-        @for (var i = 0; i < Model.BottomLeftItems.Length; i++)
+        @for (var i = 0; i < Model.BottomRightItems.Length; i++)
         {
             var item = Model.BottomLeftItems[i];
-            <a class="@(item.No==Model.CurrentClassNo|| i==0 && String.IsNullOrWhiteSpace(Model.CurrentClassNo)?"current":String.Empty)" href="/?no=@item.No">@item.Name</a>
+            <a class="@(item.No==Model.CurrentClassNo|| i==0 && String.IsNullOrWhiteSpace(Model.CurrentClassNo)?"current":String.Empty)" href="/?no=@item.No#c@(item.No)">@item.Name</a>
         }
     </div>
 </div>

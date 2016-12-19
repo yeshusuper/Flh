@@ -23,21 +23,25 @@ namespace Flh.WebSite.Models.Product
         public int? Page { get; set; }
         public PageModel<Item> Items { get; set; }
         public ClassItem[] ClassItems { get; set; }
+        public String ClassOneNo { get; set; }
+        public String ClassOneName { get; set; }
+        public String ClassTwoName { get; set; }
         public string GetColorUrl(string color)
         {
-            UrlParameters["color"] = color;
-            return "/Product?" + String.Join("&", UrlParameters.Select(d => d.Key + "=" + d.Value));
+            var dic = GetBaseUrlParameters();
+            dic["color"] = color;
+            var url = "/Product?" + String.Join("&", dic.Select(d => d.Key + "=" + d.Value));
+            return url;
         }
         public string GetSortUrl(SortType sort)
         {
-            UrlParameters["sort"] = sort;
-            return "/Product?" + String.Join("&", UrlParameters.Select(d => d.Key + "=" + d.Value));
+            var dic = GetBaseUrlParameters();
+            dic["sort"] = sort;
+            return "/Product?" + String.Join("&", dic.Select(d => d.Key + "=" + d.Value));
         }
-        Dictionary<string, object> UrlParameters
+        Dictionary<string, object> GetBaseUrlParameters()
         {
-            get
-            {
-                return new Dictionary<string, object> {
+            return new Dictionary<string, object> {
                 {"no",this.No},
                 {"kw",this.Keyword},
                 {"page",this.Page},
@@ -46,7 +50,6 @@ namespace Flh.WebSite.Models.Product
                 {"priceMax",this.PriceMax},
                 {"color",Color},
                 };
-            }
         }
        
         public class ClassItem
