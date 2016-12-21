@@ -1,4 +1,7 @@
 /*首页*/
+.layout-width{ width: 1200px; margin: 0px auto;}
+.lf{ float: left;}
+.rf{float: right;}
 .flh-index-header{ margin: 0px auto;}
 .flh-index-header-left{ width:190px; border:2px solid #C7181D; height: 506px;}
 .flh-index-header-right{ width: 1004px;height: 508px; border:1px solid #C7181D;}
