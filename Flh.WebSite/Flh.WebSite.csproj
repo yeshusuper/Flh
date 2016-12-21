@@ -71,10 +71,6 @@
       <Private>True</Private>
       <HintPath>..\Flh\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\Flh\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -136,9 +132,6 @@
     <Content Include="Global.asax" />
     <Content Include="Resources\css\default.css" />
     <Content Include="Resources\css\header.css" />
-    <Content Include="Resources\img\login_left.png" />
-    <Content Include="Resources\img\login_right.png" />
-    <Content Include="Resources\img\QQ_btn.png" />
     <Content Include="Resources\Js\jquery-3.1.0.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -151,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Resources\NewFolder1\" />
     <Folder Include="Views\Common\" />
   </ItemGroup>
   <ItemGroup>

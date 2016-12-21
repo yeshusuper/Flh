@@ -16,7 +16,7 @@ namespace Flh.WebSite.Controllers
         {
             _ClassManager = classManager;
         }
-        public ActionResult Index()
+        public ActionResult Index(String no="")
         {
             var allClasses = _ClassManager.EnabledClasses.ToArray();
             var root = new ClassItem(allClasses, new Classes { no = FlhConfig.CLASSNO_CLASS_PREFIX,name=String.Empty});
@@ -25,12 +25,22 @@ namespace Flh.WebSite.Controllers
             //下面左边是一级，右边是对应的二级，是一个整体的。都是按排序展示，而且全部展示
             //下面的二级如果放不下就按他的两行，一级是全部展示的
 
-            return View();
+            var model = new IndexPageClassModel();
+            model.TopLeftItems = root.Children;
+            model.TopRightItems = root.Children.OrderByDescending(d=>d.Sort).ThenByDescending(d=>d.UpdateTime).ToArray();
+            model.BottomLeftItems = root.Children;
+            model.BottomRightItems = root.Children.OrderByDescending(d => d.Sort).ThenByDescending(d => d.UpdateTime).ToArray();
+            model.CurrentClassNo = no;
+            return View(model);
         }
 
         public class IndexPageClassModel
         {
-
+            public ClassItem[] TopLeftItems { get; set; }
+            public ClassItem[] TopRightItems { get; set; }
+            public ClassItem[] BottomLeftItems { get; set; }
+            public ClassItem[] BottomRightItems { get; set; }
+            public String CurrentClassNo { get; set; }
         }
 
         public class ClassItem
@@ -40,11 +50,13 @@ namespace Flh.WebSite.Controllers
             public ClassItem(Classes[] classes, Classes current)
             {
                 _Classes = classes;
+                _Current = current;
             }
 
             public String No { get { return _Current.no; } }
             public String Name { get { return _Current.name; } }
             public int Sort { get { return _Current.order_by; } }
+            public String Img { get { return _Current.indexImage; } }
             public DateTime UpdateTime { get { return _Current.updated; } }
 
             private ClassItem[] _Children = null;

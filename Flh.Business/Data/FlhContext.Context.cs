@@ -30,8 +30,10 @@ namespace Flh.Business.Data
         public virtual DbSet<Area> Area { get; set; }
         public virtual DbSet<Classes> Classes { get; set; }
         public virtual DbSet<LoginHistory> LoginHistory { get; set; }
-        public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Trade> Trade { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<VerifyCode> VerifyCode { get; set; }
+        public virtual DbSet<SmsHistory> SmsHistory { get; set; }
+        public virtual DbSet<Product> Product { get; set; }
     }
 }

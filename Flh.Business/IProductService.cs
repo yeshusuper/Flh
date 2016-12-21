@@ -14,7 +14,7 @@ namespace Flh.Business
     {
          private readonly Data.IProductRepository _Repository;
          private readonly IProductSearchManager _SearchManager;
-         public ProductServiceFactory(long pid, Data.IProductRepository repository,
+         public ProductServiceFactory(Data.IProductRepository repository,
              IProductSearchManager searchManager)
         {
             _Repository = repository;

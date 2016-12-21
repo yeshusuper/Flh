@@ -61,6 +61,12 @@
   <ItemGroup>
     <Compile Include="Admins\IAdmin.cs" />
     <Compile Include="Admins\IAdminManager.cs" />
+    <Compile Include="Data\SmsHistory.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\VerifyCode.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="IProductManager.cs" />
     <Compile Include="Data\Area.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
@@ -120,11 +126,14 @@
     <Compile Include="IProductSearchManager.cs" />
     <Compile Include="IProductService.cs" />
     <Compile Include="ITradeManager.cs" />
-    <Compile Include="IUser.cs" />
     <Compile Include="IUserManager.cs" />
+    <Compile Include="IUserService.cs" />
+    <Compile Include="Mobile\IMobileManager.cs" />
+    <Compile Include="Mobile\VerifyType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users\EmployeesCountRanges.cs" />
     <Compile Include="Users\IRegisterInfo.cs" />
+    <Compile Include="Users\IUserInfo.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
