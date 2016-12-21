@@ -1,9 +1,3 @@
-/***函数样式***/
-.ml-20{margin-left: -20px;}
-.layout-width{ width:1200px;}
-.lf{ float: left;}
-.rl{float: right;}
-/***普通样式***/
 /*首页*/
 .flh-index-header{ margin: 0px auto;}
 .flh-index-header-left{ width:190px; border:2px solid #C7181D; height: 506px;}
