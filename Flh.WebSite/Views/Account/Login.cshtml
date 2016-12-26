@@ -4,58 +4,9 @@
 }
 <link href="/Resources/css/user.css" rel="stylesheet" />
 
-<div class="flh-user layout-width">
-    <div class="flh-usermain">
-        <div id="flh-verification-mobile">
-            <div class="flh-usermain-content">
-                <div class="flh-usermain-list pl40">
-                    <span class="icon-usermobile"></span>
-                    <div class="flh-usermain-list-nr">
-                        <input class="flh-usermain-input v-UserMobile" type="text" disabled="disabled" name="UserMobile" placeholder="手机" />
-                        <label class="UserName-error">sdsad</label>
-                    </div>
-                </div>
-                <div class="flh-usermain-list pr140">
-                    <a class="flh-usermain-mobileCode fun-getMobileCode">获取验证码</a>
-                    <div class="flh-usermain-list-nr">
-                        <input class="flh-usermain-input indent20 v-Code" type="text" name="Code" placeholder="验证码" />
-                        <label class="Code-error"></label>
-                    </div>
-                </div>
-                <div class="flh-usermain-other">
-                    <a class="other-submit fun-verificationPhone" href="javascript:;">确定</a>
-                </div>
-            </div>
-        </div>
-        <div id="flh-ResetPassword" style="display:none;">
-            <div class="flh-usermain-content">
-                <div class="flh-usermain-list">
-                    <div class="flh-usermain-list-nr">
-                        <input class="flh-usermain-input indent20 v-Password" type="text" name="Password" placeholder="新密码" />
-                        <label class="Password-error"></label>
-                    </div>
-                </div>
-                <div class="flh-usermain-list">
-                    <div class="flh-usermain-list-nr">
-                        <input class="flh-usermain-input indent20 v-ResetPassword" type="text" name="ResetPassword" placeholder="确认密码" />
-                        <label class="ResetPassword-error"></label>
-                    </div>
-                </div>
-                <div class="flh-usermain-other">
-                    <a class="other-submit fun-verificationSubmit" href="javascript:;">确定</a>
-                </div>
-            </div>
-        </div>
-        <div class="flh-user-boxbg"></div>
-    </div>
-</div>
-
-
-
-<div class="flh-user layout-width" style="display:none;">
-    <div class="flh-usermain" id="usermain-resetPassword">
+<div class="flh-user layout-width" >
+    <div class="flh-usermain" id="usermain-login">
         <div class="flh-usermain-content">
-            <form action="@Url.Action("Login")" method="post" enctype="application/x-www-form-urlencoded">
                 <div class="flh-usermain-list pl40">
                     <span class="icon-userName"></span>
                     <div class="flh-usermain-list-nr">
@@ -66,7 +17,7 @@
                 <div class="flh-usermain-list pl40">
                     <span class="icon-password"></span>
                     <div class="flh-usermain-list-nr">
-                        <input class="flh-usermain-input v-Password" type="password" name="Password" placeholder="密码" />
+                        <input class="flh-usermain-input v-Password fun-enter" type="password" name="Password" placeholder="密码" />
                         <label class="password-error"></label>
                     </div>
                 </div>
@@ -80,100 +31,67 @@
                 <div class="flh-usermain-other">
                     <a class="other-automaticLogin" id="automaticLogin"><i></i>自动登录</a>
                     <a class="other-forgetPassword" href="javascript:;">忘记密码?</a>
-                    <a class="other-submit" href="javascript:;">确定</a>
+                    <a class="other-submit fun-submit" href="javascript:;">确定</a>
                     <a class="other-registered" href="/account/register">马上注册新用户</a>
                 </div>
-            </form>
         </div>
         <div class="flh-user-boxbg"></div>
     </div>
 </div>
 <script>
     $(function () {
-        function getData(url,type,data,event,dataType){
-            $.ajax({
-                url: url,
-                type: type || "post",
-                data: data,
-                dataType: dataType || "json",
-                //traditional: true,
-                success: function (res) {
-                    event(res);
-                }
-            })
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
         }
-
-        //获取校验码
-        $('.fun-getMobileCode').on('click', function () {
-            var _this = $(this),
-                isclick = _this.data("isclick") || false,
-                _ancestor = $('#flh-verification-mobile'),
-                _mobile = $.trim($('.v-UserMobile', _ancestor).val());
-            $('label', _ancestor).hide();
-            if (_mobile == "") {
-                $('.UserName-error', _ancestor).html("请输入手机号码").show();
-                return false;
-            }
-            if (!isclick) {
-                _this.data("isclick", true);
-                var success_event = function (data) {
-                    if (data.data) {
-                        alert("成功");
-                        _this.removeData("isclick");
-                    } else {
-                        alert("失败");
-                        _this.removeData("isclick");
-                    }
-                }
-                //getData(url, type, data, success_event, dataType)
-            }
-
-        });
-        //手机验证
-        $('.fun-verificationPhone').on('click', function () {
-            var _mobile = $.trim($('.v-UserMobile').val()),
-                _code = $.trim($('.v-Code').val()),
-                _ancestor = $('#flh-verification-mobile'),
-                _this = $(this);
-            $('label', _ancestor).hide();
-            if (_mobile == "") {
-                $('.UserName-error', _ancestor).html("请输入手机号码").show();
-            }
-            if (_code == "") {
-                $('.Code-error', _ancestor).html("请输入验证码").show();
-                return false;
-            }
-            if (_this.text() == "确定") {
-                _this.text("确定中...").css("letter-spacing", "0px");
-                _ancestor.hide();
-                $('#flh-ResetPassword').fadeIn();
-                var success_event = function (data) {
-                    if (data.data) {
-                        _ancestor.hide();
-                        $('#flh-verification-mobile').fadeIn();
-                        _this.text("确定").css("letter-spacing", "8px");
-                    } else {
-                        alert("失败");
-                        _this.text("确定").css("letter-spacing", "8px");
-                    }
-                }
-                //getData(url, type, data, success_event, dataType)
-            }
-        });
         //提交
-        $('.fun-verificationSubmit').on('click', function () {
+        $('.fun-submit').on('click', function () {
             var _this = $(this),
-                _ancestor = $('#flh-ResetPassword'),
-                nPassword = $.trim($('.v-Password', _ancestor).val()),
-                rPassword = $.trim($('.v-ResetPassword', _ancestor).val());
+                _ancestor = $('#usermain-login'),
+                lUserName = $.trim($('.v-UserName', _ancestor).val()),
+                lPassword = $.trim($('.v-Password', _ancestor).val()),
+                remember = autoLogin.is(":checked") ? 1 : 0;
             $('label', _ancestor).hide();
-            if (nPassword == "") {
-                $('.Password-error', _ancestor).html("请输入新密码").show();
+            if (lUserName == "") {
+                $('.UserName-error', _ancestor).html("请输入账号").show();
             }
-            if (rPassword == "" && nPassword != rPassword) {
-                $('.ResetPassword-error', _ancestor).html("输入的密码不一致").show();
+            if (lPassword == "") {
+                $('.password-error', _ancestor).html("请输入的密码").show();
                 return false;
             }
-        })
+            if (lUserName != "" && lPassword != "" && _this.text() == "确定") {
+                _this.text("确定中...").css("letter-spacing", "0px");
+                $.ajax({
+                    url: '@Url.Action("Login")',
+                    type: "post",
+                    data: { "UserName": lUserName, "Password": lPassword, "remember": remember },
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code == "0") {
+                            var url = getUrlParam('u');
+                            if (url) {
+                                window.location.href = url;
+                            }else{
+                                window.location.href = "/index";
+                            }
+                           
+                            _this.text("确定").css("letter-spacing", "8px");
+                        } else {
+                            alert(res.msg)
+                            _this.text("确定").css("letter-spacing", "8px");
+                        }
+                    }
+                })
+            }
+        });
+        //回车提交
+        $(".fun-enter").keydown(function (e) {
+            var curKey = e.which;
+            if (curKey == 13) {
+                $(".fun-submit").click();
+                return false;
+            }
+        });
     })
 </script>

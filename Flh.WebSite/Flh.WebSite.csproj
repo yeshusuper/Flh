@@ -132,6 +132,13 @@
     <Content Include="Global.asax" />
     <Content Include="Resources\css\default.css" />
     <Content Include="Resources\css\header.css" />
+    <Content Include="Resources\img\password.png" />
+    <Content Include="Resources\img\rectangle.png" />
+    <Content Include="Resources\img\register_bg.jpg" />
+    <Content Include="Resources\img\usermobile.png" />
+    <Content Include="Resources\img\userName.png" />
+    <Content Include="Resources\img\user_bg.jpg" />
+    <Content Include="Resources\Js\ajax.areaSelect.js" />
     <Content Include="Resources\Js\jquery-3.1.0.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -144,7 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Resources\NewFolder1\" />
     <Folder Include="Views\Common\" />
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +196,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Product\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\ChangeMobile.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
