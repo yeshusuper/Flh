@@ -1,91 +1,97 @@
 ﻿@{
     Layout = "~/Views/Layout/_header.cshtml";
-    ViewBag.Title = "登陆";
+    ViewBag.Title = "登录--辅料汇";
 }
-<div id="low-main" class="login-low-main login-main">
-    <div class="login-main-bg">
-        <table class="common-table">
-            <tr class="common-table-tr">
-                <td width="93" align="right">账&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
-                <td colspan="2"><input name="UserName" placeholder="手机号/邮箱" class="input-control" /></td>
-            </tr>
-            <tr class="common-table-tr">
-                <td width="93" align="right">密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
-                <td colspan="2"><input name="Password" placeholder="密码" class="input-control" type="password" /></td>
-            </tr>
-            <tr class="common-table-tr">
-                <td width="93" align="right">验证码：</td>
-                <td width="163"><input name="CertCode" placeholder="验证码" class="input-control" style="width:163px;" /></td>
-                <td><img style="cursor: pointer; vertical-align:middle" src="@Url.Action("VerifyImage", "Account")" class="VerifyImage" title="看不清？点击换一个" /></td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <a class="btn-primary j-login-submit" href="javascript:;">登 录</a>
-                </td>
-            </tr>
-        </table>
-    </div>
+<link href="/Resources/css/user.css" rel="stylesheet" />
 
+<div class="flh-user layout-width" >
+    <div class="flh-usermain" id="usermain-login">
+        <div class="flh-usermain-content">
+                <div class="flh-usermain-list pl40">
+                    <span class="icon-userName"></span>
+                    <div class="flh-usermain-list-nr">
+                        <input class="flh-usermain-input v-UserName" type="text" name="UserName" placeholder="用户名/手机/邮箱" />
+                        <label class="UserName-error"></label>
+                    </div>
+                </div>
+                <div class="flh-usermain-list pl40">
+                    <span class="icon-password"></span>
+                    <div class="flh-usermain-list-nr">
+                        <input class="flh-usermain-input v-Password fun-enter" type="password" name="Password" placeholder="密码" />
+                        <label class="password-error"></label>
+                    </div>
+                </div>
+                <div class="flh-usermain-list pl48 pr140" style="display:none">
+                    <img class="flh-usermain-code" alt="验证码" src="" />
+                    <div class="flh-usermain-list-nr">
+                        <input class="flh-usermain-input" type="text" name="Code" placeholder="验证码" />
+                        <label></label>
+                    </div>
+                </div>
+                <div class="flh-usermain-other">
+                    <a class="other-automaticLogin" id="automaticLogin"><i></i>自动登录</a>
+                    <a class="other-forgetPassword" href="javascript:;">忘记密码?</a>
+                    <a class="other-submit fun-submit" href="javascript:;">确定</a>
+                    <a class="other-registered" href="/account/register">马上注册新用户</a>
+                </div>
+        </div>
+        <div class="flh-user-boxbg"></div>
+    </div>
 </div>
 <script>
-    (function () {
-        $(".j-login-submit").click(function () {
-            var omain=$(this).parents('.login-main');
-            var data = {
-                UserName: $.trim($("[name=UserName]",omain).val()),
-                Password: $.trim($("[name=Password]",omain).val()),
-                CertCode: $.trim($("[name=CertCode]",omain).val())
-            };
-            data['@Flh.Web.Config.Current.BACK_URL_KEY'] = '@Request.GetBackUrl()';
-            $.ajax({
-                url: '@Url.Action("Login")',
-                type:"post",
-                data: data,
-                dataType: "json",
-                success: function (data) {
-                    if (data.code == 0) {
-                        data.data ? location.href = data.data : '@Url.Action("index", "home")';
-                    } else {
-                        alert(data.msg)
-                        var url="@Url.Action("VerifyImage", "Account")?r="+Math.random();
-                             $(".VerifyImage").attr('src',url)
-                    }
-                },
-                error: function () {
-                    alert("网络错误，请重试");
-                    var url="@Url.Action("VerifyImage", "Account")?r="+Math.random();
-                    $(".VerifyImage").attr('src',url)
-                }
-            })
-            return false;
-        });
-    })();
     $(function () {
-        var w_h = $(window).height();
-        $('.login-main').css({ 'height': w_h });
-        if (window.applicationCache) {
-            $('#advanced-main').show();
-        } else {
-            $('#low-main').show();
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
         }
-
-        $('.login-advanced-main').bind('keyup', function (event) {
-            if (event.keyCode == "13") {
-                //回车执行查询
-                $('.j-login-submit', '.login-advanced-main').click();
+        //提交
+        $('.fun-submit').on('click', function () {
+            var _this = $(this),
+                _ancestor = $('#usermain-login'),
+                lUserName = $.trim($('.v-UserName', _ancestor).val()),
+                lPassword = $.trim($('.v-Password', _ancestor).val()),
+                remember = autoLogin.is(":checked") ? 1 : 0;
+            $('label', _ancestor).hide();
+            if (lUserName == "") {
+                $('.UserName-error', _ancestor).html("请输入账号").show();
+            }
+            if (lPassword == "") {
+                $('.password-error', _ancestor).html("请输入的密码").show();
+                return false;
+            }
+            if (lUserName != "" && lPassword != "" && _this.text() == "确定") {
+                _this.text("确定中...").css("letter-spacing", "0px");
+                $.ajax({
+                    url: '@Url.Action("Login")',
+                    type: "post",
+                    data: { "UserName": lUserName, "Password": lPassword, "remember": remember },
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code == "0") {
+                            var url = getUrlParam('u');
+                            if (url) {
+                                window.location.href = url;
+                            }else{
+                                window.location.href = "/index";
+                            }
+                           
+                            _this.text("确定").css("letter-spacing", "8px");
+                        } else {
+                            alert(res.msg)
+                            _this.text("确定").css("letter-spacing", "8px");
+                        }
+                    }
+                })
             }
         });
-        $('.login-low-main').bind('keyup', function (event) {
-            if (event.keyCode == "13") {
-                //回车执行查询
-                $('.j-login-submit', '.login-low-main').click();
+        //回车提交
+        $(".fun-enter").keydown(function (e) {
+            var curKey = e.which;
+            if (curKey == 13) {
+                $(".fun-submit").click();
+                return false;
             }
         });
-
-
-        $('.VerifyImage').on('click', function () {
-            var url="@Url.Action("VerifyImage", "Account")?r="+Math.random();
-            $(".VerifyImage").attr('src',url)
-        })
     })
 </script>

@@ -2,76 +2,211 @@
     Layout = "~/Views/Layout/_header.cshtml";
     ViewBag.Title = "注册";
 }
-<form action="@Url.Action("Register")" method="post" enctype="application/x-www-form-urlencoded">
-    <table class="common_table">
-        <tr>
-            <td>*手机：</td>
-            <td><input name="Mobile" /></td>
-        </tr>
-        <tr>
-            <td>验证码：</td>
-            <td>
-                <input name="VerifyCode" />
-                <a href="#">获取验证码</a>
-            </td>
-        </tr>
-        <tr>
-            <td>*邮箱：</td>
-            <td><input name="Email" /></td>
-        </tr>
-        <tr>
-            <td>*密码：</td>
-            <td><input name="Password" /></td>
-        </tr>
-        <tr>
-            <td>确认密码：</td>
-            <td><input name="ConfirmPwd" /></td>
-        </tr>
-        <tr>
-            <td>*姓名：</td>
-            <td><input name="Name" /></td>
-        </tr>
-        <tr>
-            <td>*公司名称：</td>
-            <td><input name="Company" /></td>
-        </tr>
-        <tr>
-            <td>公司地址：</td>
-            <td><input name="Address" /></td>
-        </tr>
-        <tr>
-            <td>*从业人员：</td>
-            <td>
-                @Html.DropDownList("EmployeesCountRange", Util.GetEmployeesCountRangeSelectListItems(true, null))
-            </td>
-        </tr>
-        <tr>
-            <td>行业类别：</td>
-            <td><input name="IndustryNo" /></td>
-        </tr>
-        <tr>
-            <td>*采购权限：</td>
-            <td>
-                <input name="IsPurchaser" value="true" type="radio" />有
-                &nbsp;
-                <input name="IsPurchaser" value="false" type="radio" />无
-            </td>
-        </tr>
-        <tr>
-            <td>*是否需要发票：</td>
-            <td>
-                <input name="NeetInvoice" value="false" type="radio" />不需要
-                &nbsp;
-                <input name="NeetInvoice" value="true" type="radio" />需要
-            </td>
-        </tr>
-        <tr>
-            <td>电话：</td>
-            <td><input name="Tel" /></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td><input value="注册" type="submit" /></td>
-        </tr>
-    </table>
-</form>
+<link href="/Resources/css/user.css" rel="stylesheet" />
+<script src="/Resources/Js/ajax.areaSelect.js" charset="gb2312"></script>
+<style>
+    body {
+        background: url("/Resources/img/register_bg.jpg") 50% 50% no-repeat;
+        height: 1482px;
+    }
+</style>
+<div class="layout-width">
+    <div class="flh-register" id="usermain-register">
+        <div class="flh-register-content">
+            <div class="flh-register-list pl108">
+                <span class="register-title">手机：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Mobile" type="text" name="Mobile" autocomplete="off" />
+                    <label class="register-error e-Mobile"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">验证码：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input w203 v-VerifyCode" type="text" name="VerifyCode" autocomplete="off" />
+                    <a href="javascript:;">获取验证码</a>
+                    <label class="register-error e-VerifyCode"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">邮箱：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Email" type="text" name="Email" autocomplete="off" />
+                    <label class="register-error e-Email"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">密码：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Password" type="text" name="Password" autocomplete="off" />
+                    <label class="register-error e-Password"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">确认密码：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-ConfirmPwd" type="text" name="ConfirmPwd" autocomplete="off" />
+                    <label class="register-error e-ConfirmPwd"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">姓名：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Name" type="text" name="Name" autocomplete="off" />
+                    <label class="register-error e-Name"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">公司名称：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Company" type="text" name="Company" autocomplete="off" />
+                    <label class="register-error e-Company"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">公司地址：</span>
+                <div class="flh-register-list-nr">
+                    <span id="area-selecter">
+                        <input class="search-areaNo" type="hidden" name="areaNo" />
+                    </span>
+                    <textarea class="flh-register-textarea v-Address" placeholder="详细地址" name="Address"></textarea>
+                    <span class="register-prompt">(用于邮寄样本)</span>
+                    <label class="register-error e-Address"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">从业人数：</span>
+                <div class="flh-register-list-nr">
+                    <select class="v-EmployeesCountRange" name="EmployeesCountRange">
+                        <option>--公司从业人员数--</option>
+                        <option value="1">1-9人</option>
+                        <option value="2">10-99人</option>
+                        <option value="3">100-499人</option>
+                        <option value="4">500-999人</option>
+                        <option value="5">1000人及以上</option>
+                    </select>
+                    <label class="register-error e-EmployeesCountRange"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">从业类别：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-IndustryNo" type="text" name="IndustryNo" autocomplete="off" />
+                    <label class="register-error e-IndustryNo"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">采购权限：</span>
+                <div class="flh-register-list-nr">
+                    <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="true" />有</label>
+                    <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="false" />无</label>
+                    <label class="register-error e-IsPurchaser"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">是否需要发票：</span>
+                <div class="flh-register-list-nr">
+                    <label class="register-radio "><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="false" />不需要</label>
+                    <label class="register-radio"><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="true" />需要</label>
+                    <label class="register-error e-NeetInvoice"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">电话：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Tel" type="text" name="Tel" autocomplete="off" />
+                    <label class="register-error e-Tel"></label>
+                </div>
+            </div>
+            <div class="flh-register-other">
+                <a class="other-submit fun-register-submit" href="javascript:;">完成注册</a>
+            </div>
+        </div>
+        <div class="flh-register-boxbg"></div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var search_area = new areaSelect({
+            "id": "area-selecter",
+            "class": "search-areaNo",
+            "areaType": "2",
+            "defaultVal": $('[name="areaNo"]').val()   //默认地区,选填
+        });
+        $('.fun-register-submit').on('click', function () {
+            var _this = $(this),
+                _ancestor = $('#usermain-register'),
+                Mobile = $.trim($('.v-Mobile', _ancestor).val()),
+                VerifyCode = $.trim($('.v-VerifyCode', _ancestor).val()),
+                Email = $.trim($('.v-Email', _ancestor).val()),
+                Password = $.trim($('.v-Password', _ancestor).val()),
+                ConfirmPwd = $.trim($('.v-ConfirmPwd', _ancestor).val()),
+                Name = $.trim($('.v-Name', _ancestor).val()),
+                Company = $.trim($('.v-Company', _ancestor).val()),
+                areaNo = $.trim($('.search-areaNo', _ancestor).val()),
+                Address = $.trim($('.v-Address', _ancestor).val()),
+                EmployeesCountRange = $.trim($('.v-EmployeesCountRange:selected', _ancestor).val()),
+                IndustryNo = $.trim($('.v-IndustryNo', _ancestor).val()),
+                IsPurchaser = $.trim($('.v-IsPurchaser:checked', _ancestor).val()),
+                NeetInvoice = $.trim($('.v-NeetInvoice:checked', _ancestor).val()),
+                Tel = $.trim($('.v-Tel', _ancestor).val());
+            $('.register-error', _ancestor).hide();
+            if (Mobile == "") {
+                $('.e-Mobile', _ancestor).html("请输入手机").show();
+            }
+            if (VerifyCode == "") {
+                $('.e-VerifyCode', _ancestor).html("请输入验证码").show();
+            }
+            if (Email == "") {
+                $('.e-Email', _ancestor).html("请输入邮箱").show();
+            }
+            if (Password == "") {
+                $('.e-Password', _ancestor).html("请输入密码").show();
+            }
+            if (ConfirmPwd == "" && Password == ConfirmPwd) {
+                $('.e-ConfirmPwd', _ancestor).html("请输入相同的密码").show();
+            }
+            if (Name == "") {
+                $('.e-Name', _ancestor).html("请输入姓名").show();
+            }
+            if (Company == "") {
+                $('.e-Company', _ancestor).html("请输入公司名称").show();
+            }
+            if (areaNo == "" && Address=="") {
+                $('.e-Address', _ancestor).html("请输入公司地址").show();
+            }
+            if (EmployeesCountRange == "") {
+                $('.e-EmployeesCountRange', _ancestor).html("请输入从业人数").show();
+            }
+            if (IndustryNo == "") {
+                $('.e-IndustryNo', _ancestor).html("请输入从业类别").show();
+            }
+            if (IsPurchaser == "") {
+                $('.e-IsPurchaser', _ancestor).html("请选择采购权限").show();
+            }
+            if (NeetInvoice == "") {
+                $('.e-NeetInvoice', _ancestor).html("请选择是否需要发票").show();
+            }
+            if (Tel == "") {
+                $('.e-Tel', _ancestor).html("请输入电话").show();
+                return false;
+            }
+            _this.text("注册中...");
+            $.ajax({
+                url: '@Url.Action("Register")',
+                type: "post",
+                data: _ancestor.serialize(),
+                dataType: "json",
+                success: function (res) {
+                    if (res.code == "0") {
+                        window.location.href = "/login";
+                        _this.text("完成注册");
+                    } else {
+                        alert(res.msg)
+                        _this.text("完成注册");
+                    }
+                }
+            })
+        })
+    })
+</script>

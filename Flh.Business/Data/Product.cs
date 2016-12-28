@@ -40,5 +40,6 @@ namespace Flh.Business.Data
         public System.DateTime updated { get; set; }
         public bool enabled { get; set; }
         public Nullable<long> updater { get; set; }
+        public Nullable<int> viewCount { get; set; }
     }
 }
