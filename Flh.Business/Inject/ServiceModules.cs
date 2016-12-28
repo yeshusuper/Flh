@@ -22,7 +22,7 @@ namespace Flh.Business.Inject
             Bind<IProductManager>().To<ProductManager>();
             Bind<IProductServiceFactory>().To<ProductServiceFactory>();
             Bind<IProductSearchManager>().To<ProductSearchManager>();
-            
+            Bind<Mobile.IMobileManager>().To<Mobile.MobileManager>();
         }
     }
 }
