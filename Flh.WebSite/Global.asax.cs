@@ -14,10 +14,10 @@ namespace Flh.WebSite
         {
             AreaRegistration.RegisterAllAreas();
 
+            InjectConfig.Register();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            InjectConfig.Register();
         }
 
         protected void Application_Error(object sender, EventArgs e)

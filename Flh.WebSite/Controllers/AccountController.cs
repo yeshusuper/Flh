@@ -42,11 +42,6 @@ namespace Flh.WebSite.Controllers
         [HttpPost]
         public ActionResult Login(Models.Account.LoginModel model)
         {
-            if (String.IsNullOrWhiteSpace(model.CertCode) || String.IsNullOrWhiteSpace(Session.GetCurrentCertCode()) || Session.GetCurrentCertCode().ToLower() != model.CertCode.ToLower())
-            {
-                Session.SetCurrentCertCode(String.Empty);
-                return JsonResult(ErrorCode.ArgError, "验证码错误");
-            }
             var user = _UserManager.Login(model.UserName, model.Password, Request.GetCurrentIP());
             var entry = new UserSessionEntry
             {
@@ -54,12 +49,17 @@ namespace Flh.WebSite.Controllers
                 Uid = user.Uid
             };
             Session.SetCurrentUser(entry);
+
+            ICookieService cookieService = new Flh.Web.CookieServiceImpl();
+            cookieService.User = new Flh.Web.CookieUser(user.Uid, model.UserName, model.Password, model.Remember);
             return SuccessJsonResult();
         }
 
         public ActionResult Logout()
         {
             Session.SetCurrentUser(null);
+            ICookieService cookieService = new Flh.Web.CookieServiceImpl();
+            cookieService.Logout();
             return RedirectToAction("index", "home");
         }
         public ActionResult VerifyImage()
@@ -124,6 +124,19 @@ namespace Flh.WebSite.Controllers
         public ActionResult UpdateInfo(Models.Account.UserInfoModel info)
         {
             _UserManager.Get(this.CurrentUser.Uid).UpdateInfo(info);
+            return SuccessJsonResult();
+        }
+        [HttpGet,FlhAuthorize]
+        public ActionResult ChangeMobile()
+        {
+            return View();
+        }
+        [HttpPost,FlhAuthorize]
+        public ActionResult ChangeMobile(string mobile, string code)
+        {
+            _MobileManager.Verify(code, mobile);
+            Session.SetCurrentVerifyMobile(mobile);
+            _UserManager.Get(this.CurrentUser.Uid).ChangeMobile(mobile);
             return SuccessJsonResult();
         }
     }
