@@ -23,7 +23,8 @@ namespace Flh.UpdateSearchConsoleApplication
                 new Flh.Business.Inject.DataModule()
                 , new Flh.Business.Inject.ServiceModule()
                 ,new FileModule());
-            var productManager = kernel.Get<Flh.Business.IProductManager>();           
+            var productManager = kernel.Get<Flh.Business.IProductManager>();
+            var searchManager = kernel.Get<Flh.Business.IProductSearchManager>();
             
             long maxPid = 0;
             var maxEntity = productManager.AllProducts.OrderByDescending(p => p.pid).FirstOrDefault();
@@ -63,11 +64,11 @@ namespace Flh.UpdateSearchConsoleApplication
                 {
                         if (product.enabled)
                         {
-                            ProductSearchHelper.UpdateSearchIndex(product);//更新索引
+                            searchManager.UpdateSearchIndex(product);//更新索引
                         }
                         else
                         {
-                            ProductSearchHelper.DeleteIndex(product.pid);//删除索引
+                            searchManager.DeleteIndex(product.pid);//删除索引
                         }
                     File.WriteAllText(fileName, product.pid.ToString());//保存索引进度
                         Console.WriteLine("正在更新索引：" + product.pid + "/" + maxPid + " " + product.name);

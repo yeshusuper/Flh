@@ -10,7 +10,6 @@
         <EntityTypeShape EntityType="TestModel.Area" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="TestModel.Classes" Width="1.5" PointX="5.25" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TestModel.LoginHistory" Width="1.5" PointX="3" PointY="14.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TestModel.Product" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TestModel.Trade" Width="1.5" PointX="5.25" PointY="10.375" IsExpanded="true" />
         <EntityTypeShape EntityType="TestModel.User" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
         <EntityTypeShape EntityType="TestModel.VerifyCode" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
@@ -23,6 +22,7 @@
         <AssociationConnector Association="TestModel.FK_Trade_Admin_updater" ManuallyRouted="false" />
         <AssociationConnector Association="TestModel.FK_LoginHistory_User" ManuallyRouted="false" />
         <EntityTypeShape EntityType="TestModel.SmsHistory" Width="1.5" PointX="7.375" PointY="7.75" />
+        <EntityTypeShape EntityType="TestModel.Product" Width="1.5" PointX="7.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

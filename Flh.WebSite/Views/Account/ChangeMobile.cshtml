@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/Views/Layout/_header.cshtml";
-    ViewBag.Title = "找回密码";
+    ViewBag.Title = "修改手机";
 }
 <link href="/Resources/css/user.css" rel="stylesheet" />
 <div class="flh-user layout-width">
@@ -8,16 +8,16 @@
         <div id="flh-verification-mobile">
             <div class="flh-usermain-content">
                 <div class="flh-usermain-list pl48">
-                    <span class="icon-usermobile" style="background-color: #E3E3E3;"></span>
+                    <span class="icon-usermobile"></span>
                     <div class="flh-usermain-list-nr">
-                        <input class="flh-usermain-input v-UserMobile" type="text" disabled="disabled" name="UserMobile" placeholder="手机" />
+                        <input class="flh-usermain-input v-UserMobile" type="text" name="UserMobile" placeholder="新手机" autocomplete="off" />
                         <label class="UserName-error">sdsad</label>
                     </div>
                 </div>
                 <div class="flh-usermain-list pr140">
                     <a class="flh-usermain-mobileCode fun-getMobileCode">获取验证码</a>
                     <div class="flh-usermain-list-nr">
-                        <input class="flh-usermain-input indent20 v-Code" type="text" name="Code" placeholder="验证码" />
+                        <input class="flh-usermain-input indent20 v-Code" type="text" name="Code" placeholder="验证码" autocomplete="off" />
                         <label class="Code-error"></label>
                     </div>
                 </div>
@@ -26,43 +26,46 @@
                 </div>
             </div>
         </div>
-        <div id="flh-ResetPassword" style="display:none;">
-            <div class="flh-usermain-content">
-                <div class="flh-usermain-list">
-                    <div class="flh-usermain-list-nr">
-                        <input class="flh-usermain-input indent20 v-Password" type="text" name="Password" placeholder="新密码" />
-                        <label class="Password-error"></label>
-                    </div>
-                </div>
-                <div class="flh-usermain-list">
-                    <div class="flh-usermain-list-nr">
-                        <input class="flh-usermain-input indent20 v-ResetPassword" type="text" name="ResetPassword" placeholder="确认密码" />
-                        <label class="ResetPassword-error"></label>
-                    </div>
-                </div>
-                <div class="flh-usermain-other">
-                    <a class="other-submit fun-verificationSubmit" href="javascript:;">确定</a>
-                </div>
-            </div>
-        </div>
         <div class="flh-user-boxbg"></div>
     </div>
 </div>
+
 <script>
     $(function () {
-        function getData(url, type, data, event, dataType) {
-            $.ajax({
-                url: url,
-                type: type || "post",
-                data: data,
-                dataType: dataType || "json",
-                //traditional: true,
-                success: function (res) {
-                    event(res);
-                }
-            })
-        }
+        $('.fun-verificationPhone').on('click', function () {
+            var _mobile = $.trim($('.v-UserMobile').val()),
+                _code = $.trim($('.v-Code').val()),
+                _ancestor = $('#flh-verification-mobile'),
+                _this = $(this);
+            $('label', _ancestor).hide();
+            if (_mobile == "") {
+                $('.UserName-error', _ancestor).html("请输入手机号码").show();
+            }
+            if (_code == "") {
+                $('.Code-error', _ancestor).html("请输入验证码").show();
+                return false;
+            }
+            if (nPassword != "" && rPassword != "" && _this.text() == "确定") {
+                _this.text("确定中...").css("letter-spacing", "0px");
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    data: {},
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.state.code == "0x00000000") {
+                            window.location.href = "/account/login";
+                        } else {
+                            alert(res.message)
+                        }
+                        _this.text("确定").css("letter-spacing", "8px");
+                    }
+                })
+            }
+        })
 
+
+/*
         //获取校验码
         $('.fun-getMobileCode').on('click', function () {
             var _this = $(this),
@@ -119,21 +122,7 @@
                 }
                 //getData(url, type, data, success_event, dataType)
             }
-        });
-        //提交
-        $('.fun-verificationSubmit').on('click', function () {
-            var _this = $(this),
-                _ancestor = $('#flh-ResetPassword'),
-                nPassword = $.trim($('.v-Password', _ancestor).val()),
-                rPassword = $.trim($('.v-ResetPassword', _ancestor).val());
-            $('label', _ancestor).hide();
-            if (nPassword == "") {
-                $('.Password-error', _ancestor).html("请输入新密码").show();
-            }
-            if (rPassword == "" && nPassword != rPassword) {
-                $('.ResetPassword-error', _ancestor).html("输入的密码不一致").show();
-                return false;
-            }
-        })
+        });*/
+
     })
 </script>

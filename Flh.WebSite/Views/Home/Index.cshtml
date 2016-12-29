@@ -1,5 +1,99 @@
-﻿@{
+﻿@model Flh.WebSite.Controllers.HomeController.IndexPageClassModel
+@{
     ViewBag.Title = "首页";
     Layout = "~/Views/Layout/_header.cshtml";
 }
-<h1>首页</h1>
+<link href="/Resources/css/default.css" rel="stylesheet" />
+<div class="flh-index">
+    <div class="flh-index-header layout-width">
+        <div class="flh-index-header-left lf">
+            <div class="flh-index-header-nav">
+                @foreach (var item in Model.TopLeftItems)
+                {
+                  <div class="flh-index-header-nav-list">
+                    <a class="flh-index-header-nav-lista" href="javascript:;">
+                        <i class="nav-icon-left" id="nav-icon-1"></i>
+                        @item.Name
+                        <i class="nav-icon-right">&gt;</i>
+                    </a>
+                    <div class="flh-index-header-nav-main">
+                        <ul>
+                            @foreach (var sub in item.Children)
+                            {
+                                <li><a href="/Product?no=@sub.No" target="_blank">@sub.Name</a></li>
+                            }                            
+                        </ul>
+                    </div>
+                </div>       
+                }                        
+            </div>
+        </div>
+        <div class="flh-index-header-right lf">
+            <ul>
+                @foreach (var item in Model.TopRightItems)
+                {
+                <li>
+                    <a href="/Product?no=@item.No" target="_blank">
+                        <img alt="@item.Name" src="http://img.fuliaohui.com/@item.Img" />
+                        <div class="flh-index-header-right-bg"></div>
+                        <div class="flh-index-header-right-text">@item.Name</div>
+                    </a>
+                </li>    
+                }                
+                <div class="clear"></div>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="flh-index-main layout-width">
+        @foreach (var item in Model.BottomRightItems)
+        {
+          <div class="flh-index-main-list" id="c@(item.No)">
+            <div class="flh-index-main-left">
+                <div class="flh-index-main-list-title">@item.Name</div>
+                <a href="/Product?no=@item.No" target="_blank">
+                    <img alt="@item.Name" src="http://img.fuliaohui.com/@item.Img" />
+                </a>
+            </div>
+            <div class="flh-index-main-right">
+                <ul>
+                    @foreach (var sub in item.Children)
+                    {
+                      <li>
+                          <a href="/Product?no=@sub.No" target="_blank">
+                              <div class="flh-index-main-list-subordinateImg">
+                                  <img alt="@sub.Name" src="http://img.fuliaohui.com/@sub.Img" />
+                              </div>
+                              <p>@sub.Name</p>
+                          </a>
+                    </li>   
+                    }                   
+                    <div class="clear"></div>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div>   
+        }       
+    </div>
+</div>
+<div class="flh-index-horizontal">
+    <div class="flh-index-horizontal-main">
+        @for (var i = 0; i < Model.BottomRightItems.Length; i++)
+        {
+            var item = Model.BottomLeftItems[i];
+            <a class="@(item.No==Model.CurrentClassNo|| i==0 && String.IsNullOrWhiteSpace(Model.CurrentClassNo)?"current":String.Empty)" href="/?no=@item.No#c@(item.No)">@item.Name</a>
+        }
+    </div>
+</div>
+<div class="flh-index-advisory">
+    <a href="javascript:;">欢迎咨询</a>
+</div>
+<script>
+    $(function () {
+        $('.flh-index-header-nav-list').hover(function () {
+            $(this).addClass('nav-hover');
+        }, function () {
+            $(this).removeClass('nav-hover');
+        })
+    })
+</script>

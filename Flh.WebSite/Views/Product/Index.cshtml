@@ -1,32 +1,89 @@
 ﻿@model Flh.WebSite.Models.Product.ListModel
 @{
     ViewBag.Title = "产品列表";
-    //Layout = "../Layout/_Manager.cshtml";
+    Layout = "~/Views/Layout/_header.cshtml";
 }
-<h2>Index</h2>
-<form>
-    <input type="text" name="kw" value="@Model.Keyword" />
-    <button type="submit">搜索</button>
-</form>
-<div>
-    <ul style="list-style:none;">
-        @foreach (var item in Model.ClassItems)
-        {
-        <li style="float:left;margin-right:10px;"><a href="/Product?no=@item.No">@item.Name</a></li>    
-        }
-    </ul>
-</div>
-<div style="clear:both;"></div>
-@foreach (var item in Model.Items)
-{
-    <div style="width:100px;float:left;border:1px solid lightblue;">
-        <img src="@item.Image" style="width:80px;"  />
-        产品名称：@item.Name<br />
-        尺寸：@item.Size<br />
-        颜色：@item.Color<br />
-        材质：@item.Material<br />
+<link href="/Resources/css/default.css" rel="stylesheet" />
+@*<form>
+        <input type="text" name="kw" value="@Model.Keyword" />
+        <button type="submit">搜索</button>
+    </form>*@
+<div class="flh-productList layout-width">
+    <div class="flh-productList-left">
+        <div class="flh-productList-breadCrumbs"><a href="/">首页</a> > <a href="/Product?no=@Model.ClassOneNo" style="@(String.IsNullOrWhiteSpace(Model.ClassOneNo)?"display:none;":String.Empty)">@Model.ClassOneName</a>@(!String.IsNullOrWhiteSpace(Model.ClassTwoName) ? " > " + Model.ClassTwoName : "") </div>
+        <div class="flh-productList-classification">
+            <ul>
+                @foreach (var item in Model.ClassItems)
+                {
+                <li class="@((String.IsNullOrWhiteSpace(Model.No) ? "0001":Model.No) == item.No ? "current" : String.Empty)"><a href="/Product?no=@item.No">@item.Name</a></li>
+                }
+            </ul>
+        </div>
     </div>
-}
-<div class="page">
-    @Html.Pager(Model.Items);
+    <div class="flh-productList-right">
+        <div class="flh-productList-condition">
+            <a class="condition-switch@(Model.Sort == Flh.Business.SortType.TimeDesc || Model.Sort == null ? " current" : String.Empty)" href="@Model.GetSortUrl(Flh.Business.SortType.TimeDesc)">最新</a>
+            @*<a class="condition-switch@(Model.Sort == Flh.Business.SortType.ViewDesc ? " current" : String.Empty)" href="@Model.GetSortUrl(Flh.Business.SortType)">人气</a>*@
+            <a class="condition-switch@(Model.Sort == Flh.Business.SortType.ViewDesc ? " current" : String.Empty)" href="@Model.GetSortUrl(Flh.Business.SortType.ViewDesc)">销量</a>
+            <a class="condition-switch@(Model.Sort == Flh.Business.SortType.PriceAsc ? " current" : String.Empty)" href="@Model.GetSortUrl(Flh.Business.SortType.PriceAsc)">价格</a>
+            <form id="filter_form">
+                <div class="flh-productList-price">
+                    价格：&nbsp;&yen;&nbsp;<span><input type="text" name="priceMin" value="@Model.PriceMin" /></span>&nbsp;--&nbsp;&yen;&nbsp;<span><input type="text" name="priceMax" value="@Model.PriceMax" /></span>
+                </div>
+                <input type="hidden" name="kw" value="@Model.Keyword" />
+                <input type="hidden" name="sort" value="@Model.Sort" />
+                <input type="hidden" name="color" value="@Model.Color" />
+                <a class="condition-submit" href="javascript:;">确定</a>
+                <script>
+                    $(function () {
+                        $(".condition-submit").click(function () {
+                            $("#filter_form").submit();
+                        });
+                    });
+                </script>
+            </form>
+        </div>
+        <div class="flh-productList-main">
+            <div class="flh-productList-main-filter">
+                <div class="filter-left">
+                    <span>颜色：</span>
+                    <a href="@Model.GetColorUrl("多色")" class="@(Model.Color == "多色" ? "current" : String.Empty)" >多色</a>
+                    <a href="@Model.GetColorUrl("黑色")" class="@(Model.Color == "黑色" ? "current" : String.Empty)">黑色</a>
+                    <a href="@Model.GetColorUrl("白色")" class="@(Model.Color == "白色" ? "current" : String.Empty)">白色</a>
+                    <a href="@Model.GetColorUrl("蓝色")" class="@(Model.Color == "蓝色" ? "current" : String.Empty)">蓝色</a>
+                    <a href="@Model.GetColorUrl("粉色")" class="@(Model.Color == "粉色" ? "current" : String.Empty)">粉色</a>
+                    <a href="@Model.GetColorUrl("宝蓝")" class="@(Model.Color == "宝蓝" ? "current" : String.Empty)">宝蓝</a>
+                    <a href="@Model.GetColorUrl("多色")" class="@(Model.Color == "多色" ? "current" : String.Empty)">多色</a>
+                </div>
+                <div class="filter-right">
+                    <a href="javascript:;">更多&nbsp;&gt;</a>
+                </div>
+            </div>
+            <ul>
+                @foreach (var item in Model.Items)
+                {
+                    <li>
+                        <a href="javascript:;"><img src="@item.Image" alt="@item.Name" /></a>
+                        <div class="productList-main-name"><span>产品名称：</span><a href="javascript:;">@item.Name</a></div>
+                        <div class="productList-main-Attributes">
+                            <div class="Attributes-list">
+                                尺寸：@item.Size
+                            </div>
+                            <div class="Attributes-list">
+                                颜色：@item.Color
+                            </div>
+                            <div class="Attributes-list">
+                                材质：@item.Material
+                            </div>
+                        </div>
+                    </li>
+                }
+                <div class="clear"></div>
+            </ul>
+            <div class="page">
+                @Html.Pager(Model.Items)
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
 </div>

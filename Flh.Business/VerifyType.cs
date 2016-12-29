@@ -11,6 +11,5 @@ namespace Flh.Business.Mobile
         Common = 1,
         FormatPwd = 2,
         Register = 3,
-        ChangeMobile=4,
     }
 }

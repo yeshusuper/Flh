@@ -78,10 +78,9 @@ namespace Flh.Business.Mobile
                     if (!_UserRepository.Entities.Any(u => u.mobile == mobile.Trim()))
                         throw new Flh.FlhException(ErrorCode.NotExists, "该手机未注册");
                     break;
-                case VerifyType.ChangeMobile:
                 case VerifyType.Register:
                     if (_UserRepository.Entities.Any(u => u.mobile == mobile.Trim()))
-                        throw new Flh.FlhException(ErrorCode.Exists, "该手机已被注册");
+                        throw new Flh.FlhException(ErrorCode.Exists, "改手机已被注册");
                     break;
             }
             var entity = GetValidityCode(mobile);

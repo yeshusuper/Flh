@@ -71,10 +71,6 @@
       <Private>True</Private>
       <HintPath>..\Flh\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\Flh\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -114,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\CookieFilter.cs" />
     <Compile Include="App_Start\InjectConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
@@ -134,6 +131,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
+    <Content Include="Resources\css\default.css" />
+    <Content Include="Resources\css\header.css" />
+    <Content Include="Resources\img\password.png" />
+    <Content Include="Resources\img\rectangle.png" />
+    <Content Include="Resources\img\register_bg.jpg" />
+    <Content Include="Resources\img\usermobile.png" />
+    <Content Include="Resources\img\userName.png" />
+    <Content Include="Resources\img\user_bg.jpg" />
+    <Content Include="Resources\Js\ajax.areaSelect.js" />
     <Content Include="Resources\Js\jquery-3.1.0.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -191,6 +197,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Product\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\ChangeMobile.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
