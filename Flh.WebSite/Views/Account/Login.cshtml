@@ -51,7 +51,7 @@
                 _ancestor = $('#usermain-login'),
                 lUserName = $.trim($('.v-UserName', _ancestor).val()),
                 lPassword = $.trim($('.v-Password', _ancestor).val()),
-                remember = autoLogin.is(":checked") ? 1 : 0;
+                remember = autoLogin.is(":checked") ? true : false;
             $('label', _ancestor).hide();
             if (lUserName == "") {
                 $('.UserName-error', _ancestor).html("请输入账号").show();
