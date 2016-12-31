@@ -87,6 +87,7 @@
     <Compile Include="BaseController.cs" />
     <Compile Include="CertCode.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="CookieService.cs" />
     <Compile Include="FlhAuthorizeAttribute.cs" />
     <Compile Include="HtmlHelperExtension.cs" />
     <Compile Include="JsonResultEntry.cs" />
