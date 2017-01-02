@@ -1,6 +1,8 @@
 ﻿@{
     Layout = "~/Views/Layout/_header.cshtml";
     ViewBag.Title = "注册";
+    string Area = ViewBag.Area;
+    string Trade = ViewBag.Trade;
 }
 <link href="/Resources/css/user.css" rel="stylesheet" />
 <script src="/Resources/Js/ajax.areaSelect.js" charset="gb2312"></script>
@@ -68,6 +70,7 @@
                 <div class="flh-register-list-nr">
                     <span id="area-selecter">
                         <input class="search-areaNo" type="hidden" name="areaNo" />
+                        <input type="hidden" value="@Html.Raw(Area)" />
                     </span>
                     <textarea class="flh-register-textarea v-Address" placeholder="详细地址" name="Address"></textarea>
                     <span class="register-prompt">(用于邮寄样本)</span>
@@ -93,6 +96,7 @@
                 <div class="flh-register-list-nr">
                     <input class="flh-register-input v-IndustryNo" type="text" name="IndustryNo" autocomplete="off" />
                     <label class="register-error e-IndustryNo"></label>
+                    <input type="hidden" value="@Html.Raw(Trade)" />
                 </div>
             </div>
             <div class="flh-register-list pl108">
@@ -120,7 +124,7 @@
             </div>
             <div class="flh-register-other">
                 <a class="other-submit fun-register-submit" href="javascript:;">完成注册</a>
-            </div>
+                <div>
         </div>
         <div class="flh-register-boxbg"></div>
     </div>

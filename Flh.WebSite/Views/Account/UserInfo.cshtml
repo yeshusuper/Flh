@@ -2,6 +2,8 @@
 @{
     Layout = "~/Views/Layout/_header.cshtml";
     ViewBag.Title = "修改资料";
+    string Area = ViewBag.Area;
+    string Trade = ViewBag.Trade;
 }
 <link href="/Resources/css/user.css" rel="stylesheet" />
 <script src="/Resources/Js/ajax.areaSelect.js" charset="gb2312"></script>
@@ -46,7 +48,8 @@
                 <span class="register-title">公司地址：</span>
                 <div class="flh-register-list-nr">
                     <span id="area-selecter">
-                        <input class="search-areaNo" type="hidden" name="areaNo" />
+                        <input class="search-areaNo" type="hidden" name="areaNo" value="@Model.AreaNo" />
+                        <input type="hidden" value="@Html.Raw(Area)" />
                     </span>
                     <textarea class="flh-register-textarea v-Address" placeholder="(用于邮寄样本)" name="Address">@Model.Address</textarea>
                     <label class="register-error e-Address"></label>
@@ -71,6 +74,7 @@
                 <div class="flh-register-list-nr">
                     <input class="flh-register-input v-IndustryNo" value="@Model.IndustryNo" type="text" name="IndustryNo" autocomplete="off" />
                     <label class="register-error e-IndustryNo"></label>
+                    <input type="hidden" value="@Html.Raw(Trade)" />
                 </div>
             </div>
             <div class="flh-register-list pl108">

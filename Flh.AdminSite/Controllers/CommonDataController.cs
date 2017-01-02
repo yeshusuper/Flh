@@ -21,8 +21,10 @@ namespace Flh.AdminSite.Controllers
             _TradeManager = tradeManager;
             _AreaManager = areaManager;
         }
+        [OutputCache(Duration = 100, VaryByParam = "deep;parent;callback")]
         public ActionResult Area(string parent,int deep=3)
         {
+            Response.Cache.SetOmitVaryStar(true);
             deep = Math.Max(1, deep);
             var maxLength = (parent??String.Empty).Trim().Length + 4 * deep;
 
@@ -38,10 +40,12 @@ namespace Flh.AdminSite.Controllers
                      ClassNo = t.area_no,
                  })
                 .ToArray().Stratification().ToArray();
-            return this.SuccessJsonResult(new { item = result });
+            return this.SuccessJsonResult(new { items = result });
         }
+        [OutputCache(Duration = 100, VaryByParam = "deep;parent;callback")]
         public ActionResult ProductClasses(string parent, int deep = 3)
         {
+            Response.Cache.SetOmitVaryStar(true);
             deep = Math.Max(1, deep);
             var maxLength = (parent ?? String.Empty).Length + 4 * deep;
 
@@ -57,10 +61,12 @@ namespace Flh.AdminSite.Controllers
                      ClassNo = t.no,
                  })
                 .ToArray().Stratification().ToArray();
-            return this.SuccessJsonResult(new { item = result });
+            return this.SuccessJsonResult(new { items = result });
         }
+        [OutputCache(Duration = 100, VaryByParam = "deep;parent;callback")]
         public ActionResult Trade(string parent, int deep = 2)
         {
+            Response.Cache.SetOmitVaryStar(true);
             deep = Math.Max(1, deep);
             var maxLength = (parent ?? String.Empty).Length + 4 * deep;
 
@@ -76,7 +82,7 @@ namespace Flh.AdminSite.Controllers
                      ClassNo = t.no,
                  })
                 .ToArray().Stratification().ToArray();
-            return this.SuccessJsonResult(new { item = result });
+            return this.SuccessJsonResult(new { items = result });
         }
     }
 }

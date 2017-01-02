@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Flh.Data;
 
 namespace Flh.WebSite.Controllers
 {
@@ -13,16 +14,28 @@ namespace Flh.WebSite.Controllers
     {
         private readonly IUserManager _UserManager;
         private readonly IMobileManager _MobileManager;
+        private readonly IClassesManager _ClassesManager;
+        private readonly ITradeManager _TradeManager;
+        private readonly IAreaManager _AreaManager;
 
-        public AccountController(IUserManager userManager, IMobileManager mobileManager)
+        public AccountController(IUserManager userManager,
+            IMobileManager mobileManager, 
+            IClassesManager classesManager, 
+            ITradeManager tradeManager, 
+            IAreaManager areaManager)
         {
             _UserManager = userManager;
             _MobileManager = mobileManager;
+            _ClassesManager = classesManager;
+            _TradeManager = tradeManager;
+            _AreaManager = areaManager;
         }
 
         [HttpGet]
         public ActionResult Register()
         {
+            ViewBag.Area = Area("0001", 2);
+            ViewBag.Trade = Trade(string.Empty);
             return View();
         }
 
@@ -117,6 +130,8 @@ namespace Flh.WebSite.Controllers
             var user = _UserManager.GetUsers(new long[] { this.CurrentUser.Uid }).FirstOrDefault();
             if (user == null)
                 throw new FlhException(ErrorCode.NotExists, "用户不存在");
+            ViewBag.Area = Area("0001", 2);
+            ViewBag.Trade = Trade(string.Empty);
             var model = new Models.Account.UserInfoModel(user);
             return View(model);
         }
@@ -138,6 +153,46 @@ namespace Flh.WebSite.Controllers
             Session.SetCurrentVerifyMobile(mobile);
             _UserManager.Get(this.CurrentUser.Uid).ChangeMobile(mobile);
             return SuccessJsonResult();
+        }
+        private string  Area(string parent, int deep = 3)
+        {
+            Response.Cache.SetOmitVaryStar(true);
+            deep = Math.Max(1, deep);
+            var maxLength = (parent ?? String.Empty).Trim().Length + 4 * deep;
+
+            var areaInfos = _AreaManager.EnabledAreas.Where(a => a.area_no.Length <= maxLength);
+            if (!String.IsNullOrWhiteSpace(parent))
+                areaInfos = areaInfos.Where(a => a.area_no.StartsWith(parent) && a.area_no.Length > parent.Length);
+
+            var result = areaInfos.OrderByDescending(a => a.order_by)
+                 .ThenBy(a => a.area_no)
+                 .Select(t => new Models.ClassTreeModel
+                 {
+                     ClassName = t.area_name,
+                     ClassNo = t.area_no,
+                 })
+                .ToArray().Stratification().ToArray();
+            return Newtonsoft.Json.JsonConvert.SerializeObject(result);
+        }
+        private  string Trade(string parent, int deep = 2)
+        {
+            Response.Cache.SetOmitVaryStar(true);
+            deep = Math.Max(1, deep);
+            var maxLength = (parent ?? String.Empty).Length + 4 * deep;
+
+            var areaInfos = _TradeManager.EnabledTrades.Where(c => c.no.Length <= maxLength);
+            if (!String.IsNullOrWhiteSpace(parent))
+                areaInfos = areaInfos.Where(c => c.no.StartsWith(parent) && c.no.Length > parent.Length);
+
+            var result = areaInfos.OrderByDescending(a => a.order_by)
+                 .ThenBy(c => c.no)
+                 .Select(t => new Models.ClassTreeModel
+                 {
+                     ClassName = t.name,
+                     ClassNo = t.no,
+                 })
+                .ToArray().Stratification().ToArray();
+            return Newtonsoft.Json.JsonConvert.SerializeObject(result);
         }
     }
 }
