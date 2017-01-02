@@ -17,7 +17,8 @@
                     @if (this.Session.GetCurrentUser() != null)
                     {
                         <span>欢迎你：</span>@(this.Session.GetCurrentUser().Name)
-                        <a href="@Url.Action("logout", "account")">退出</a>
+                        <a class="" href="@Url.Action("UserInfo", "account")">修改资料</a>
+                        <a class="" href="@Url.Action("logout", "account")">退出</a>
                     }
                     else
                     {   <span>您好，欢迎来到辅料汇！</span>

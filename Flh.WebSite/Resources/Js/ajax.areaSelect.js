@@ -2,7 +2,7 @@
 	var areaSelector=function(obj){
 		 var _this=this,
 			 urlParameter;
-	     this.idName=$('#'+obj.id);         //容器的ID
+	     this.idName=$('#'+obj.id);         //容器的ID21
 	     this.className=$('.'+obj.class);   //隐藏域类名
 	     this.modeNum=obj.areaType || 0;         //模式
 		 this.areaData="";                  //地区数据源

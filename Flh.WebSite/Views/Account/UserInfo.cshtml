@@ -5,7 +5,7 @@
 }
 <link href="/Resources/css/user.css" rel="stylesheet" />
 <script src="/Resources/Js/ajax.areaSelect.js" charset="gb2312"></script>
-<script src="/Resources/Js/ajax.InfinitePoleData.js"></script>
+<script src="/Resources/Js/InfinitePoleData.js"></script>
 <style>
     body {
         background: url("/Resources/img/register_bg.jpg") 50% 50% no-repeat;
@@ -17,7 +17,8 @@
         <div class="flh-register-content">
             <div class="flh-register-list pl108">
                 <span class="register-title">手机：</span>
-                <div class="flh-register-list-nr">
+                <div class="flh-register-list-nr list-nr-Mobile">
+
                     @Model.Mobile
                     <a href="javascript:;">修改手机</a>
                 </div>
@@ -70,7 +71,7 @@
             <div class="flh-register-list pl108">
                 <span class="register-title">从业类别：</span>
                 <div class="flh-register-list-nr" id="fun-IndustryNo">
-                    <input class="flh-register-input v-IndustryNo" value="@Model.IndustryNo" type="text" name="IndustryNo" autocomplete="off" />
+                    <input class=" v-IndustryNo" value="@Model.IndustryNo" type="hidden" name="IndustryNo" autocomplete="off" />
                     <label class="register-error e-IndustryNo"></label>
                 </div>
             </div>
@@ -112,7 +113,7 @@
             "areaType": "2",
             "defaultVal": $('[name="areaNo"]').val()   //默认地区,选填
         });
-        var illi_IndustryNo = $.trim($('.v-IndustryNo', _ancestor).val());
+        var illi_IndustryNo = $.trim($('.v-IndustryNo').val());
         illimitedSelect.init("#fun-IndustryNo", "IndustryNo", illi_IndustryNo);
         $('.fun-register-submit').on('click', function () {
             var _this = $(this),
