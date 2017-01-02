@@ -57,8 +57,12 @@
             </div>
             <div class="flh-index-main-right">
                 <ul>
-                    @foreach (var sub in item.Children)
+                    @{
+                        var lenght = item.Children.Length > 14 ? 14 : item.Children.Length;
+                    }
+                    @for (var i = 0; i < lenght; i++)
                     {
+                        var sub = item.Children[i];
                       <li>
                           <a href="/Product?no=@sub.No" target="_blank">
                               <div class="flh-index-main-list-subordinateImg">
