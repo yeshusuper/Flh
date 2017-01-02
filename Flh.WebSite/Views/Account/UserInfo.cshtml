@@ -60,11 +60,11 @@
                 <div class="flh-register-list-nr">
                     <select class="v-EmployeesCountRange" name="EmployeesCountRange">
                         <option>--公司从业人员数--</option>
-                        <option value="1">1-9人</option>
-                        <option value="2">10-99人</option>
-                        <option value="3">100-499人</option>
-                        <option value="4">500-999人</option>
-                        <option value="5">1000人及以上</option>
+                        <option value="1" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R1To9 ? "selected='selected'" : "")>1-9人</option>
+                        <option value="2" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R10To99 ? "selected='selected'" : "")>10-99人</option>
+                        <option value="3" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R100To499 ? "selected='selected'" : "")>100-499人</option>
+                        <option value="4" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R500To999 ? "selected='selected'" : "")>500-999人</option>
+                        <option value="5" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R1000More ? "selected='selected'" : "")>1000人及以上</option>
                     </select>
                     <label class="register-error e-EmployeesCountRange"></label>
                 </div>
