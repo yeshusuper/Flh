@@ -5,21 +5,27 @@
 		ParentNo:4,
 		getData:function(v_no){
 			var _this=illimitedSelect;
-			$.ajax({
-				url: "http://admin.t.fuliaohui.com/CommonData/Area?parent=0001&deep=2",
-				type: "get",
+			if(userTradeData!=""){
+				_this.Data=eval("(" + userTradeData+ ")");
+				_this.generateLayout(_this.Data);
+				_this.condition(v_no);
+			}else{
+				$.ajax({
+				url: "http://admin.t.fuliaohui.com/CommonData/Trade",
+				type: "GET",
 				dataType: "jsonp",
 				success: function (res) {
-					alert(res)
 					if(res.data){
-						_this.Data=res.data.item;
+						_this.Data=res.data.items;
 						_this.generateLayout(_this.Data);
 						_this.condition(v_no);
 					}else{
-						console.log(res.msg);
+						console.log(res.message);
 					}
 				}
 			});
+			}
+			
 		},
 		condition:function(v_no){
 			var _this=illimitedSelect,
@@ -35,11 +41,11 @@
 						var int_no=v_no.substr(0,_this.ParentNo*(i+1));
 						$.each(levelData,function(key){
 
-							if(levelData[key].ClassNo==int_no){
+							if(levelData[key].no==int_no){
 
-								if(levelData[key].Subs!=""){
+								if(levelData[key].subs!=""){
 
-									levelData=levelData[key].Subs;
+									levelData=levelData[key].subs;
 									var s_num=$('select',_this.Container).length;
 
 									if(i+1==s_num){
@@ -54,7 +60,7 @@
 							}
 
 						});
-						$('[value="'+int_no+'"]').prop("selected",true);
+						$('[value="'+int_no+'"]',_this.Container).prop("selected",true);
 					}
 				}
 			}
@@ -63,7 +69,7 @@
 			var _this=illimitedSelect,
 				html='<option value="">请选择</option>';
 			$.each(_data,function(key){
-				html+='<option value="'+_data[key].ClassNo+'">'+_data[key].ClassName+'</option>';
+				html+='<option value="'+_data[key].no+'">'+_data[key].name+'</option>';
 
 			})
 			_this.Container.append('<select>'+html+'</select>');

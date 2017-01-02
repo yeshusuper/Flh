@@ -15,8 +15,18 @@
 		 if( this.areaData &&  this.areaData !=""){
 			 //已有数据源
 		 }else{
-
-			 if(this.modeNum==1){         //省
+		 	if(userAreaData!=""){
+		 		_this.isReady=true;
+				_this.areaData=eval("(" + userAreaData+ ")");
+				_this._createSelect();
+				if(_this._change){
+					$("select",_this.idName).on("change",_this._change);
+				}
+				if(_this._val){
+					_this.val(_this._val);
+				}
+		 	}else{
+		 		if(this.modeNum==1){         //省
 				 urlParameter={"deep":"1","parent":"0001"};
 			 }else if(this.modeNum==2){   //省市
 				 urlParameter={"deep":"2","parent":"0001"};
@@ -47,7 +57,8 @@
 					 }
 				 }
 			 })
-
+		 	}
+			 
 		 }
 	 }
 
