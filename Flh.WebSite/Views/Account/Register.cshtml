@@ -32,7 +32,7 @@
                     <span class="register-title">验证码：</span>
                     <div class="flh-register-list-nr">
                         <input class="flh-register-input w203 v-VerifyCode" type="text" name="VerifyCode" autocomplete="off" />
-                        <a href="javascript:;">获取验证码</a>
+                        <a href="javascript:;" class="fun-getVerifyCode">获取验证码</a>
                         <label class="register-error e-VerifyCode"></label>
                     </div>
                 </div>
@@ -46,14 +46,14 @@
                 <div class="flh-register-list pl108">
                     <span class="register-title">密码：</span>
                     <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Password" type="text" name="Password" autocomplete="off" />
+                        <input class="flh-register-input v-Password" type="password" name="Password" autocomplete="off" />
                         <label class="register-error e-Password"></label>
                     </div>
                 </div>
                 <div class="flh-register-list pl108">
                     <span class="register-title">确认密码：</span>
                     <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-ConfirmPwd" type="text" name="ConfirmPwd" autocomplete="off" />
+                        <input class="flh-register-input v-ConfirmPwd" type="password" name="ConfirmPwd" autocomplete="off" />
                         <label class="register-error e-ConfirmPwd"></label>
                     </div>
                 </div>
@@ -136,6 +136,8 @@
 </div>
 <script>
     $(function () {
+        var rTel = /^1\d{6,20}$/,
+            rMobile = /^1\d{6,20}$/;
         var search_area = new areaSelect({
             "id": "area-selecter",
             "class": "search-areaNo",
@@ -144,6 +146,54 @@
         });
         var illi_IndustryNo = $.trim($('.v-IndustryNo').val());
         illimitedSelect.init("#fun-IndustryNo", "IndustryNo", illi_IndustryNo);
+        $('.fun-getVerifyCode').on('click', function () {
+            var _this = $(this),
+                _ancestor = $('#usermain-register'),
+                smobile = $('.v-Mobile', _ancestor).val();
+            $('.register-error', _ancestor).hide();
+            if (smobile == "") {
+                $('.e-VerifyCode', _ancestor).html("请输入手机").show();
+                return false;
+            } else if (!rMobile.test(smobile)) {
+                $('.e-VerifyCode', _ancestor).html("请输入有效的手机号码").show();
+                return false;
+            }
+
+            if (_this.text() != "获取验证码") {
+                return false;
+            } else {
+                _this.text("获取中...");
+            }
+            $.ajax({
+                url: '/Account/SendVerifyCode',
+                type: "post",
+                data: { "mobile": smobile,"kind":"3"},
+                dataType: "json",
+                success: function (res) {
+                    if (res.code == 0) {
+                        var wait = 60;
+                        function time() {
+                            if (wait == 0) {
+                                _this.text("获取验证码");
+                                wait = 60;
+                            } else {
+                                _this.text("重新发送(" + wait + ")");
+                                wait--;
+                                setTimeout(function () {
+                                    time()
+                                },
+                                1000)
+                            }
+                        }
+                        time();
+                    } else {
+                        $('.e-VerifyCode', _ancestor).html(res.msg).show();
+                        _this.text("获取验证码");
+                    }
+                }
+            })
+
+        })
         $('.fun-register-submit').on('click', function () {
             var _this = $(this),
                 _ancestor = $('#usermain-register'),
@@ -166,6 +216,10 @@
             $('.register-error', _ancestor).hide();
             if (Mobile == "") {
                 $('.e-VerifyCode', _ancestor).html("请输入手机").show();
+                isComplete = false;
+            }
+            if (!rMobile.test(Mobile)) {
+                $('.e-VerifyCode', _ancestor).html("请输入有效的手机号码").show();
                 isComplete = false;
             }
             if (VerifyCode == "") {
@@ -214,6 +268,10 @@
             }
             if (Tel == "") {
                 $('.e-Tel', _ancestor).html("请输入电话").show();
+                isComplete = false;
+            }
+            if (!rTel.test(Tel)) {
+                $('.e-Tel', _ancestor).html("请输入有效的电话").show();
                 isComplete = false;
             }
             if (!isComplete) {
