@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Flh.Data;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
-using Flh.Data;
-using Newtonsoft.Json;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Flh.AdminSite.Models
+namespace Flh.WebSite.Models
 {
     public class ClassTreeModel : IClassModel<ClassTreeModel>
     {
@@ -15,7 +15,6 @@ namespace Flh.AdminSite.Models
         [JsonProperty(PropertyName = "name")]
         public string ClassName { get; set; }
         [JsonProperty(PropertyName = "subs")]
-       public IEnumerable<ClassTreeModel>Subs { get; set; }
+        public IEnumerable<ClassTreeModel> Subs { get; set; }
     }
-
 }
