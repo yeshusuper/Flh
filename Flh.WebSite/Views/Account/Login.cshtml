@@ -1,41 +1,97 @@
 ﻿@{
     Layout = "~/Views/Layout/_header.cshtml";
-    ViewBag.Title = "登陆";
+    ViewBag.Title = "登录--辅料汇";
 }
-<div class="flh-layout-main" >
-    <div class="flh-login-bg-left"></div>
-    <div class="flh-login-main">
-        <form action="@Url.Action("Login")" method="post" enctype="application/x-www-form-urlencoded">
-            <div class="flh-login-list">
-                <div class="flh-login-list-th">用户名：</div>
-                <div class="flh-login-list-td">
-                    <input class="flh-login-default-input" name="UserName" placeholder="手机号/邮箱" />
-                    <label></label>
-                </div>
-            </div>
-            <div class="flh-login-list">
-                <div class="flh-login-list-th">密码：</div>
-                <div class="flh-login-list-td">
-                    <input class="flh-login-default-input" name="Password" />
-                    <label></label>
-                </div>
-            </div>
-            <div class="flh-login-list">
-                <div class="flh-login-list-th">验证码：</div>
-                <div class="flh-login-list-code">
-                    <input class="flh-login-input-code" name="Code" />
-                    <img alt="验证码" src="" />
-                    <label></label>
-                </div>
-            </div>
-            <div class="flh-login-submit"><input value="登录" type="submit" /></div>
-            <div class="flh-login-other">
-                <a class="flh-login-other-left" href="javascript:;">注册</a>
-                <a class="flh-login-other-right" href="javascript:;">忘记密码</a>
-                <div class="clear"></div>
-            </div>
-        </form>
-    </div>
-    <div class="flh-login-bg-right"></div>
-</div>
+<link href="/Resources/css/user.css" rel="stylesheet" />
 
+<div class="flh-user layout-width" >
+    <div class="flh-usermain" id="usermain-login">
+        <div class="flh-usermain-content">
+                <div class="flh-usermain-list pl40">
+                    <span class="icon-userName"></span>
+                    <div class="flh-usermain-list-nr">
+                        <input class="flh-usermain-input v-UserName" type="text" name="UserName" placeholder="用户名/手机/邮箱" />
+                        <label class="UserName-error"></label>
+                    </div>
+                </div>
+                <div class="flh-usermain-list pl40">
+                    <span class="icon-password"></span>
+                    <div class="flh-usermain-list-nr">
+                        <input class="flh-usermain-input v-Password fun-enter" type="password" name="Password" placeholder="密码" />
+                        <label class="password-error"></label>
+                    </div>
+                </div>
+                <div class="flh-usermain-list pl48 pr140" style="display:none">
+                    <img class="flh-usermain-code" alt="验证码" src="" />
+                    <div class="flh-usermain-list-nr">
+                        <input class="flh-usermain-input" type="text" name="Code" placeholder="验证码" />
+                        <label></label>
+                    </div>
+                </div>
+                <div class="flh-usermain-other">
+                    <a class="other-automaticLogin" id="automaticLogin"><i></i>自动登录</a>
+                    <a class="other-forgetPassword" href="javascript:;">忘记密码?</a>
+                    <a class="other-submit fun-submit" href="javascript:;">确定</a>
+                    <a class="other-registered" href="/account/register">马上注册新用户</a>
+                </div>
+        </div>
+        <div class="flh-user-boxbg"></div>
+    </div>
+</div>
+<script>
+    $(function () {
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+        //提交
+        $('.fun-submit').on('click', function () {
+            var _this = $(this),
+                _ancestor = $('#usermain-login'),
+                lUserName = $.trim($('.v-UserName', _ancestor).val()),
+                lPassword = $.trim($('.v-Password', _ancestor).val()),
+                remember = autoLogin.is(":checked") ? 1 : 0;
+            $('label', _ancestor).hide();
+            if (lUserName == "") {
+                $('.UserName-error', _ancestor).html("请输入账号").show();
+            }
+            if (lPassword == "") {
+                $('.password-error', _ancestor).html("请输入的密码").show();
+                return false;
+            }
+            if (lUserName != "" && lPassword != "" && _this.text() == "确定") {
+                _this.text("确定中...").css("letter-spacing", "0px");
+                $.ajax({
+                    url: '@Url.Action("Login")',
+                    type: "post",
+                    data: { "UserName": lUserName, "Password": lPassword, "remember": remember },
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code == "0") {
+                            var url = getUrlParam('u');
+                            if (url) {
+                                window.location.href = url;
+                            }else{
+                                window.location.href = "/index";
+                            }
+                           
+                            _this.text("确定").css("letter-spacing", "8px");
+                        } else {
+                            alert(res.msg)
+                            _this.text("确定").css("letter-spacing", "8px");
+                        }
+                    }
+                })
+            }
+        });
+        //回车提交
+        $(".fun-enter").keydown(function (e) {
+            var curKey = e.which;
+            if (curKey == 13) {
+                $(".fun-submit").click();
+                return false;
+            }
+        });
+    })
+</script>

@@ -14,6 +14,7 @@ namespace Flh.Business
         string Mobile { get; }
         void UpdateInfo(IUserInfo info);
         void ChangePassword(string oldPassword, string newPasswrod);
+        void ChangeMobile(string mobile);
     }
 
     internal class UserService : IUserService
@@ -88,6 +89,14 @@ namespace Flh.Business
             if (!new Security.MD5().Verify(oldPassword.Trim(), _LazyUser.Value.pwd))
                 throw new FlhException(ErrorCode.ErrorUserNoOrPwd, "账号或密码错误");
             _LazyUser.Value.pwd = new Security.MD5().Encrypt(newPasswrod);
+            _UserRepository.SaveChanges();
+        }
+        public void ChangeMobile(string mobile)
+        {
+            ExceptionHelper.ThrowIfNullOrEmpty(mobile, "mobile");
+            ExceptionHelper.ThrowIfTrue(!StringRule.VerifyMobile(mobile), "mobile", "手机号码格式不正确");
+            ExceptionHelper.ThrowIfTrue(!_UserManager.IsUsableMobile(mobile), "mobile", "此手机已经被注册");
+            _LazyUser.Value.mobile = mobile.Trim();
             _UserRepository.SaveChanges();
         }
     }
