@@ -15,7 +15,7 @@
             <ul>
                 @foreach (var item in Model.ClassItems)
                 {
-                <li class="@((String.IsNullOrWhiteSpace(Model.No) ? "0001":Model.No) == item.No ? "current" : String.Empty)"><a href="/Product?no=@item.No">@item.Name</a></li>
+                    <li class="@((String.IsNullOrWhiteSpace(Model.No) ? "0001":Model.No) == item.No ? "current" : String.Empty)"><a href="/Product?no=@item.No">@item.Name</a></li>
                 }
             </ul>
         </div>
@@ -47,7 +47,7 @@
             <div class="flh-productList-main-filter">
                 <div class="filter-left">
                     <span>颜色：</span>
-                    <a href="@Model.GetColorUrl("多色")" class="@(Model.Color == "多色" ? "current" : String.Empty)" >多色</a>
+                    <a href="@Model.GetColorUrl("多色")" class="@(Model.Color == "多色" ? "current" : String.Empty)">多色</a>
                     <a href="@Model.GetColorUrl("黑色")" class="@(Model.Color == "黑色" ? "current" : String.Empty)">黑色</a>
                     <a href="@Model.GetColorUrl("白色")" class="@(Model.Color == "白色" ? "current" : String.Empty)">白色</a>
                     <a href="@Model.GetColorUrl("蓝色")" class="@(Model.Color == "蓝色" ? "current" : String.Empty)">蓝色</a>
@@ -63,7 +63,7 @@
                 @foreach (var item in Model.Items)
                 {
                     <li>
-                        <a href="javascript:;"><img src="@item.Image" alt="@item.Name" /></a>
+                        <a href="javascript:;"><img src="http://img.fuliaohui.com/@item.Image" alt="@item.Name" /></a>
                         <div class="productList-main-name"><span>产品名称：</span><a href="javascript:;">@item.Name</a></div>
                         <div class="productList-main-Attributes">
                             <div class="Attributes-list">

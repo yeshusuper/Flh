@@ -44,7 +44,7 @@ namespace Flh.WebSite.Controllers
             }
             else if (no.Length > 8)
             {
-                classOneNo = no.Substring(8);
+                classOneNo = no.Substring(0,8);
                 classTwoNo = no.Left(12);
             }
             else if (no.Length == 8)
@@ -125,6 +125,7 @@ namespace Flh.WebSite.Controllers
         {
             var product = _ProductServiceFactory.CreateService(id);
             var items = GetRelationProducts(id,null,product.Entity.classNo);
+            product.AddViewCount();
             return View(new ProductDetailModel { Detail = product.Entity, Items = items });
         }
 

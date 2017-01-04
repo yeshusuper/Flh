@@ -87,6 +87,7 @@ namespace Flh.AdminSite.Controllers
         [HttpGet]
         public ActionResult BatchEdit(int? page, String pids, String classNo)
         {
+            ExceptionHelper.ThrowIfTrue(String.IsNullOrWhiteSpace(pids) && String.IsNullOrWhiteSpace(classNo), "pids, classNo", "pids, classNo不能同时为空");
             if (!page.HasValue || page.Value < 1)
             {
                 page = 1;
@@ -126,6 +127,7 @@ namespace Flh.AdminSite.Controllers
         [HttpPost]
         public ActionResult SaveBatchEdit(string models)
         {
+            models = models.Replace("\"pid\":\"\"","'pid':0");
             try
             {
                 var items = JsonConvert.DeserializeObject<Flh.Business.Data.Product[]>(models);

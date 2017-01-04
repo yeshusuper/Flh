@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="flh-usermain-other">
-                    <a class="other-automaticLogin" id="automaticLogin"><i></i>自动登录</a>
+                    <a class="other-automaticLogin fun-automaticLogin" id="automaticLogin"><i></i>自动登录</a>
                     <a class="other-forgetPassword" href="javascript:;">忘记密码?</a>
                     <a class="other-submit fun-submit" href="javascript:;">确定</a>
                     <a class="other-registered" href="/account/register">马上注册新用户</a>
@@ -45,13 +45,21 @@
             var r = window.location.search.substr(1).match(reg);  //匹配目标参数
             if (r != null) return unescape(r[2]); return null; //返回参数值
         }
+        $('.fun-automaticLogin').on('click', function () {
+            var sid = $(this).attr('id');
+            if (sid) {
+                $(this).removeAttr('id');
+            } else {
+                $(this).attr('id', 'automaticLogin');
+            }
+        })
         //提交
         $('.fun-submit').on('click', function () {
             var _this = $(this),
                 _ancestor = $('#usermain-login'),
                 lUserName = $.trim($('.v-UserName', _ancestor).val()),
                 lPassword = $.trim($('.v-Password', _ancestor).val()),
-                remember = autoLogin.is(":checked") ? 1 : 0;
+                remember = $('#automaticLogin').length>0 ? true : false;
             $('label', _ancestor).hide();
             if (lUserName == "") {
                 $('.UserName-error', _ancestor).html("请输入账号").show();
@@ -73,7 +81,7 @@
                             if (url) {
                                 window.location.href = url;
                             }else{
-                                window.location.href = "/index";
+                                window.location.href = "/";
                             }
                            
                             _this.text("确定").css("letter-spacing", "8px");
