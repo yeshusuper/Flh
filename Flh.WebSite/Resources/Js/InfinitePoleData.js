@@ -38,7 +38,7 @@
 					var floor_num=parseInt(v_no.length/_this.ParentNo);
 
 					for(var i=0;i<floor_num;i++){
-						var int_no=v_no.substr(0,_this.ParentNo*(i+1));
+						var int_no=v_no.substr(0,_this.ParentNo*(i+2));
 						$.each(levelData,function(key){
 
 							if(levelData[key].no==int_no){

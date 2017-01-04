@@ -75,7 +75,7 @@
 .flh-productList-main-filter .filter-right{ float: right;}
 .flh-productList-main-filter .filter-right a{ font-size: 16px; color: #666; line-height: 45px; display: block;}
 .flh-productList-main-filter .filter-right a:hover{color: #C7181F;}
-.flh-productList-main ul{ width: 100%; margin-left: -33px; margin-top: 33px;}
+.flh-productList-main ul{ margin-left: -33px; margin-top: 33px;}
 .flh-productList-main li{ float: left; width: 215px; height: 320px; overflow: hidden; background: #FFFFFF; margin-left: 33px; margin-bottom: 33px;}
 .flh-productList-main li img{ width: 215px; height: 215px; display: block;}
 .flh-productList-main li img:hover{opacity:0.8;filter:alpha(opacity=80);}

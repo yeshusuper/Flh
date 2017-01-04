@@ -117,6 +117,8 @@
 </div>
 <script>
     $(function () {
+        var rTel = /^1\d{6,20}$/,
+            rEmail = /^(\w-*\.*)+@@(\w-?)+(\.\w{2,})+$/;
         var search_area = new areaSelect({
             "id": "area-selecter",
             "class": "search-areaNo",
@@ -141,7 +143,7 @@
                 isComplete;
             isComplete = true;
             $('.register-error', _ancestor).hide();
-            if (Email == "") {
+            if (!rEmail.test(Email)) {
                 $('.e-Email', _ancestor).html("请输入邮箱").show();
                 isComplete = false;
             }
@@ -171,10 +173,6 @@
             }
             if (NeetInvoice == "") {
                 $('.e-NeetInvoice', _ancestor).html("请选择是否需要发票").show();
-                isComplete = false;
-            }
-            if (Tel == "") {
-                $('.e-Tel', _ancestor).html("请输入电话").show();
                 isComplete = false;
             }
             if (!rTel.test(Tel)) {
