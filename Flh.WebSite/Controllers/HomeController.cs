@@ -27,7 +27,7 @@ namespace Flh.WebSite.Controllers
 
             var model = new IndexPageClassModel();
             model.TopLeftItems = root.Children;
-            model.TopRightItems = root.Children.OrderByDescending(d=>d.Sort).ThenByDescending(d=>d.UpdateTime).ToArray();
+            model.TopRightItems = root.Children.OrderByDescending(d=>d.Sort).ThenByDescending(d=>d.UpdateTime).Take(8).ToArray();
             model.BottomLeftItems = root.Children;
             model.BottomRightItems = root.Children.OrderByDescending(d => d.Sort).ThenByDescending(d => d.UpdateTime).ToArray();
             model.CurrentClassNo = no;

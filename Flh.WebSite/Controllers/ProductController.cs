@@ -171,7 +171,7 @@ namespace Flh.WebSite.Controllers
             productFlowList.AddRange(previous.OrderByDescending(d=>d.pid).Take(left));
             productFlowList.Add(product.Entity);
             productFlowList.AddRange(next.Take(right));
-            return View(new ProductDetailModel { Detail = product.Entity, Items = productFlowList.ToArray(), BreadLine = sbNav.ToString() });          
+            return View(new ProductDetailModel { Detail = product.Entity, Items = productFlowList.ToArray(), BreadLine = sbNav.ToString(),IsLogin=base.CurrentUser!=null });          
         }
 
         public ActionResult RelationProducts(long excludePid,long excludeMinPid,string no)
