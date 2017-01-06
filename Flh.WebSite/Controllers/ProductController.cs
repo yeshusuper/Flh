@@ -92,7 +92,8 @@ namespace Flh.WebSite.Controllers
                 PriceMax = priceMax,
                 Limit = size,
                 Start = (page.Value - 1) * size,
-                Sort=sort
+                Sort=sort,
+                Color=color,
             }, out count);
             return View(new Models.Product.ListModel()
             {
