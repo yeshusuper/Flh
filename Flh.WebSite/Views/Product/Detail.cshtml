@@ -77,7 +77,7 @@
             $('.flh-bigImg').hide();
         })
         $('.fun-productDetail-previous').on('click', function () {
-            var obj = $('.productDetail-bottom .current').prev(),
+            var obj = $('.productDetail-bottom .current').parent().prev(),
                 url = $('a', obj).attr('href');
             if (url != "" && url != "javascript:;") {
                 window.location.href = url;
@@ -86,7 +86,7 @@
             }
         })
         $('.fun-productDetail-next').on('click', function () {
-            var obj = $('.productDetail-bottom .current').next(),
+            var obj = $('.productDetail-bottom .current').parent().next(),
                 url = $('a', obj).attr('href');
             if (url != "" && url != "javascript:;") {
                 window.location.href = url;
