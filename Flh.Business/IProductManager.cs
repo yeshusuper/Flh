@@ -104,6 +104,7 @@ namespace Flh.Business
                                 _FileStore.Copy(newProductFileId, newFileID);//将临时文件复制到永久文件处                     
                             scope.Complete();
                         }
+                        System.Threading.Thread.Sleep(300);//同时添加太多产品，搜索引擎更新太频繁会报错（阿里云限制每秒频率，除非加钱）,这里添加一个产品后先休眠几百毫秒
                     }
                 }
 
