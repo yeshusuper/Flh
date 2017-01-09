@@ -44,7 +44,7 @@ namespace Flh.WebSite.Controllers
             }
             else if (no.Length > 8)
             {
-                classOneNo = no.Substring(0,8);
+                classOneNo = no.Substring(8);
                 classTwoNo = no.Left(12);
             }
             else if (no.Length == 8)
@@ -90,7 +90,7 @@ namespace Flh.WebSite.Controllers
                 PriceMin = priceMin,
                 PriceMax = priceMax,
                 Limit = size,
-                Start = (page.Value - 1) * size,               
+                Start = (page.Value - 1) * size,
                 Sort=sort
             }, out count);
             return View(new Models.Product.ListModel()
@@ -125,7 +125,6 @@ namespace Flh.WebSite.Controllers
         {
             var product = _ProductServiceFactory.CreateService(id);
             var items = GetRelationProducts(id,null,product.Entity.classNo);
-            product.AddViewCount();
             return View(new ProductDetailModel { Detail = product.Entity, Items = items });
         }
 

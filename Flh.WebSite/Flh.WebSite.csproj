@@ -123,6 +123,7 @@
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\UserInfoModel.cs" />
+    <Compile Include="Models\ClassTreeModel.cs" />
     <Compile Include="Models\Product\ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

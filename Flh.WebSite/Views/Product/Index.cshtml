@@ -5,20 +5,20 @@
 }
 <link href="/Resources/css/default.css" rel="stylesheet" />
 @*<form>
-        <input type="text" name="kw" value="@Model.Keyword" />
-        <button type="submit">搜索</button>
+    <input type="text" name="kw" value="@Model.Keyword" />
+    <button type="submit">搜索</button>
     </form>*@
 <div class="flh-productList layout-width">
     <div class="flh-productList-left">
         <div class="flh-productList-breadCrumbs"><a href="/">首页</a> > <a href="/Product?no=@Model.ClassOneNo" style="@(String.IsNullOrWhiteSpace(Model.ClassOneNo)?"display:none;":String.Empty)">@Model.ClassOneName</a>@(!String.IsNullOrWhiteSpace(Model.ClassTwoName) ? " > " + Model.ClassTwoName : "") </div>
         <div class="flh-productList-classification">
             <ul>
-                @foreach (var item in Model.ClassItems)
-                {
-                    <li class="@((String.IsNullOrWhiteSpace(Model.No) ? "0001":Model.No) == item.No ? "current" : String.Empty)"><a href="/Product?no=@item.No">@item.Name</a></li>
-                }
-            </ul>
-        </div>
+        @foreach (var item in Model.ClassItems)
+        {
+                <li class="@((String.IsNullOrWhiteSpace(Model.No) ? "0001":Model.No) == item.No ? "current" : String.Empty)"><a href="/Product?no=@item.No">@item.Name</a></li>
+        }
+    </ul>
+</div>
     </div>
     <div class="flh-productList-right">
         <div class="flh-productList-condition">
@@ -60,8 +60,8 @@
                 </div>
             </div>
             <ul>
-                @foreach (var item in Model.Items)
-                {
+@foreach (var item in Model.Items)
+{
                     <li>
                         <a href="javascript:;"><img src="http://img.fuliaohui.com/@item.Image" alt="@item.Name" /></a>
                         <div class="productList-main-name"><span>产品名称：</span><a href="javascript:;">@item.Name</a></div>
@@ -75,12 +75,12 @@
                             <div class="Attributes-list">
                                 材质：@item.Material
                             </div>
-                        </div>
+    </div>
                     </li>
-                }
+}
                 <div class="clear"></div>
             </ul>
-            <div class="page">
+<div class="page">
                 @Html.Pager(Model.Items)
             </div>
         </div>
