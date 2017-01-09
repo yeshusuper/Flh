@@ -35,7 +35,7 @@ namespace Flh.WebSite.Controllers
         public ActionResult Register()
         {
             ViewBag.Area = Area("0001", 3);
-            ViewBag.Trade = Trade(string.Empty);
+            ViewBag.Trade = Trade("0001");
             return View();
         }
 
@@ -86,7 +86,7 @@ namespace Flh.WebSite.Controllers
         }
         [HttpPost]
         public ActionResult SendVerifyCode(string mobile, VerifyType kind)
-            {
+        {
             _MobileManager.SendVerifyCode(mobile, kind);
             return SuccessJsonResult();
         }
@@ -129,7 +129,7 @@ namespace Flh.WebSite.Controllers
             if (user == null)
                 throw new FlhException(ErrorCode.NotExists, "用户不存在");
             ViewBag.Area = Area("0001", 3);
-            ViewBag.Trade = Trade(string.Empty);
+            ViewBag.Trade = Trade("0001");
             var model = new Models.Account.UserInfoModel(user);
             return View(model);
         }

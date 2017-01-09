@@ -48,7 +48,7 @@ namespace Flh.Business
 
         public void AddViewCount()
         {
-            _LazyEntity.Value.viewCount+=1;
+            _LazyEntity.Value.viewCount = (_LazyEntity.Value.viewCount??0)+1;
             _Repository.SaveChanges();
             try
             {
@@ -57,7 +57,7 @@ namespace Flh.Business
                 if (entityFromSearch != null)
                 {
                     //每隔十次更新一下索引
-                    if ((entityFromSearch.viewCount ?? 0) - (_LazyEntity.Value.viewCount ?? 0) >= 10)
+                    if ((_LazyEntity.Value.viewCount ?? 0) - (entityFromSearch.viewCount ?? 0) >= 10)
                     {
                         _SearchManager.UpdateSearchIndex(_LazyEntity.Value);
                     }

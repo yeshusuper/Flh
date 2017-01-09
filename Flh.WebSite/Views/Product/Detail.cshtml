@@ -1,0 +1,98 @@
+﻿@model Flh.WebSite.Controllers.ProductDetailModel
+@{
+    ViewBag.Title = "产品详情";
+    Layout = "~/Views/Layout/_header.cshtml";
+}
+<link href="/Resources/css/default.css" rel="stylesheet" />
+<div class="btop-d7d7d7">
+    <div class="flh-productDetail layout-width">
+        <div class="flh-productDetail-breadCrumbs">
+            当前位置：@(Html.Raw(Model.BreadLine))<span>@Model.Detail.name</span>
+        </div>
+        <div class="productDetail-top">
+            <h2>@Model.Detail.name</h2>
+            <img alt="@Model.Detail.name" src="http://img.fuliaohui.com/@(Model.Detail.imagePath)?x-oss-process=style/product-detail-lv2" />
+        </div>
+        <div class="productDetail-middle">
+            <div class="productDetail-middle-btn">
+                <a class="lf fun-enlarge" href="javascript:;" data-url="http://img.fuliaohui.com/@(Model.Detail.imagePath)?x-oss-process=style/product-detail-lv1">查看大图</a>
+                <a class="rf" href="http://img.fuliaohui.com/@(Model.Detail.imagePath)" target="_blank">查看原图</a>
+            </div>
+            <div class="productDetail-middle-info">
+                <ul>
+                    <li>尺寸：@Model.Detail.size</li>
+                    <li>颜色：@Model.Detail.color</li>
+                    <li>材质：@Model.Detail.material</li>
+                    <li>工艺：@(Model.IsLogin ? Model.Detail.technique : "登录后可见")</li>
+                    <li>起订量：@(Model.IsLogin ? Model.Detail.minQuantity.ToString() : "登录后可见")</li>
+                    <li>发货日：@(Model.IsLogin ? Model.Detail.deliveryDay+"天" : "登录后可见")</li>
+                    <li class="w100">@Model.Detail.description</li>
+                    <div class="clear"></div>
+                </ul>
+            </div>
+        </div>
+        <div class="productDetail-bottom">
+            <ul>
+                <li class="productDetail-bottom-min fun-productDetail-previous"><a href="javascript:;">上一个</a></li>
+                @*这里没有js功能~~全TM点击跳转~~懒得写 Start*@
+                @foreach (var item in Model.Items)
+                {
+                    <li>
+                        <a href="/Product/Detail?id=@item.pid" class="@(item.pid==Model.Detail.pid?"current":String.Empty)">
+                            <img alt="@item.name" src="http://img.fuliaohui.com/@item.imagePath" />
+                        </a>
+                    </li>
+                }              
+                @*这里没有js功能~~全TM点击跳转~~懒得写 End*@
+                <li class="productDetail-bottom-min fun-productDetail-next"><a href="javascript:;">下一个</a></li>
+                <div class="clear"></div>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="flh-index-advisory">
+    <a href="javascript:;">欢迎咨询</a>
+</div>
+<div class="flh-bigImg-bg"></div>
+<div class="flh-bigImg">
+    <div class="flh-bigImg-title">查看大图 <a href="javascript:;">关闭</a></div>
+    <div class="flh-bigImg-main">
+        <img alt="查看大图" src="" width="1200" height="1200" />
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.fun-enlarge').on('click', function () {
+            var wh = $(window).height(),
+                imgUrl = $(this).attr("data-url");
+            $('.flh-bigImg').css('height', wh - 60 + 'px');
+            $('.flh-bigImg-main').css('height', wh - 92 + 'px');
+            $('.flh-bigImg-main img').attr('src', imgUrl);
+            $('.flh-bigImg-bg').show();
+            $('.flh-bigImg').show();
+        });
+        $('.flh-bigImg-title a').on('click', function () {
+            $('.flh-bigImg-bg').hide();
+            $('.flh-bigImg').hide();
+        })
+        $('.fun-productDetail-previous').on('click', function () {
+            var obj = $('.productDetail-bottom .current').parent().prev(),
+                url = $('a', obj).attr('href');
+            if (url != "" && url != "javascript:;") {
+                window.location.href = url;
+            } else {
+                alert('这已经是第一个了！')
+            }
+        })
+        $('.fun-productDetail-next').on('click', function () {
+            var obj = $('.productDetail-bottom .current').parent().next(),
+                url = $('a', obj).attr('href');
+            if (url != "" && url != "javascript:;") {
+                window.location.href = url;
+            } else {
+                alert('这已经是最后一个了！')
+            }
+        })
+    })
+</script>

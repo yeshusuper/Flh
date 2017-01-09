@@ -5,6 +5,7 @@ using Flh.WebSite.Models.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -44,7 +45,7 @@ namespace Flh.WebSite.Controllers
             }
             else if (no.Length > 8)
             {
-                classOneNo = no.Substring(8);
+                classOneNo = no.Substring(0,8);
                 classTwoNo = no.Left(12);
             }
             else if (no.Length == 8)
@@ -90,8 +91,9 @@ namespace Flh.WebSite.Controllers
                 PriceMin = priceMin,
                 PriceMax = priceMax,
                 Limit = size,
-                Start = (page.Value - 1) * size,
-                Sort=sort
+                Start = (page.Value - 1) * size,               
+                Sort=sort,
+                Color=color,
             }, out count);
             return View(new Models.Product.ListModel()
             {
@@ -124,8 +126,53 @@ namespace Flh.WebSite.Controllers
         public ActionResult Detail(long id)
         {
             var product = _ProductServiceFactory.CreateService(id);
-            var items = GetRelationProducts(id,null,product.Entity.classNo);
-            return View(new ProductDetailModel { Detail = product.Entity, Items = items });
+            //var items = GetRelationProducts(id,null,product.Entity.classNo);
+            product.AddViewCount();
+
+            //面包线导航
+            var levelSize=4;
+            var levelCount = (product.Entity.classNo ?? String.Empty).Length / levelSize;
+            var noes = new List<string>();
+            for (var i = 1; i < levelCount; i++)
+            {
+                var no = product.Entity.classNo.Substring(0, i * levelSize);
+                noes.Add(no);
+            }
+            var no_name_items =  _ClassesManager.EnabledClasses.Where(d => noes.Contains(d.no)).Select(d => new { no = d.no, name = d.name }).ToArray();
+            StringBuilder sbNav = new StringBuilder();
+            foreach (var item in no_name_items)
+            {
+                sbNav.Append("<a href='/Product?no=" + item.no + "'>" + item.name + "</a>&lt");
+            }
+            //上一批产品和下一批产品
+            var take=7;
+            var currentClassQuery = _ProductManager.EnabledProducts.Where(d=>d.classNo.StartsWith(product.Entity.classNo));
+            currentClassQuery = _ProductManager.EnabledProducts;
+            var next = currentClassQuery.Where(d => d.pid < product.Entity.pid).OrderByDescending(d => d.pid).Take(take).ToArray();
+            var previous = currentClassQuery.Where(d => d.pid > product.Entity.pid).OrderBy(d => d.pid).Take(take).ToArray();
+            List<IProduct> productFlowList = new List<IProduct>();           
+            var beside = 3;
+            var left = 0;
+            var right = 0;
+            if (previous.Length < beside)
+            {
+                left = previous.Length;
+                right = take - 1 - left;
+            }
+            else if (next.Length < beside)
+            {
+                right = next.Length;
+                left = take - 1 - right;
+            }
+            else
+            {
+                left = beside;
+                right = beside;
+            }
+            productFlowList.AddRange(previous.OrderByDescending(d=>d.pid).Take(left));
+            productFlowList.Add(product.Entity);
+            productFlowList.AddRange(next.Take(right));
+            return View(new ProductDetailModel { Detail = product.Entity, Items = productFlowList.ToArray(), BreadLine = sbNav.ToString(),IsLogin=base.CurrentUser!=null });          
         }
 
         public ActionResult RelationProducts(long excludePid,long excludeMinPid,string no)
@@ -151,6 +198,8 @@ namespace Flh.WebSite.Controllers
             Items = new Product[0];
         }
         public IProduct Detail { get; set; }
-        public Product[] Items { get; set; }
+        public IProduct[] Items { get; set; }
+        public bool IsLogin { get; set; }
+        public String BreadLine { get; set; }
     }
 }
