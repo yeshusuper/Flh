@@ -15,7 +15,7 @@
             <ul>
                 @foreach (var item in Model.ClassItems)
                 {
-                <li class="@((String.IsNullOrWhiteSpace(Model.No) ? "0001":Model.No) == item.No ? "current" : String.Empty)"><a href="/Product?no=@item.No">@item.Name</a></li>
+                    <li class="@((String.IsNullOrWhiteSpace(Model.No) ? "0001":Model.No) == item.No ? "current" : String.Empty)"><a href="/Product?no=@item.No">@item.Name</a></li>
                 }
             </ul>
         </div>

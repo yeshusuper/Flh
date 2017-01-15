@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "BatchEdit";
+    Layout = "~/Views/Layout/_Manager.cshtml";
+}
+<script>
+    var pageIndex = '@ViewBag.Page';// 页码
+    var pids = '@ViewBag.Pids'; //产品id数组，英文逗号隔开
+    var classNo = '@ViewBag.ClassNo';//产品分类
+</script>
+<script type="text/javascript" src="/Resources/Js/lrz.bundle.js"></script>
+<script type="text/javascript" src="/Resources/Js/product.js"></script>
+<script src="/Resources/Js/ajaxfileupload.js"></script>
+<div class="crumbs">您的位置：辅料汇后台 &gt;  产品管理 &gt; 产品添加</div>
+
+<div class="common-list" id="product-edit">
+    <div class="product-edit-top">
+        <a class="upload-img" href="javascript:;" style="display:none;">上传图片</a>
+        <a class="upload-images" href="javascript:;">上传图片</a>
+        <a class="fun-insert" href="javascript:;">把选中的第一个值应用到所有项中</a>
+        <input id="file" class="file_upload" style="display:none;" name="file" type="file">
+        <input id="inputfiles" multiple="multiple" style="display:none;" name="file" type="file">
+    </div>
+    <table class="common-list-table">
+        <tr class="product-edit-th">
+            <th width="30">序号</th>
+            <th width="60">图片</th>
+            <th width="120"><label>名称<input value="" name="name" type="checkbox" autocomplete="off" /></label></th>
+            <th ><label>详细说明<input value="" name="description" type="checkbox" autocomplete="off" /></label></th>
+            <th width="75"><label>尺寸<input value="" name="size" type="checkbox" autocomplete="off" /></label></th>
+            <th width="75"><label>颜色<input value="" name="color" type="checkbox" autocomplete="off" /></label>  </th>
+            <th width="75"><label>材质<input value="" name="material" type="checkbox" autocomplete="off" /></label></th>
+            <th width="75"><label>工艺<input value="" name="technique" type="checkbox" autocomplete="off" /></label></th>
+            <th width="75"><label>起订量<input value="" name="minQuantity" type="checkbox" autocomplete="off" /></label></th>
+            <th width="80"><label>发货日<input value="" name="deliveryDay" type="checkbox" autocomplete="off" /></label></th>
+            <th width="115"><label>关键字<input value="" name="keywords" type="checkbox" autocomplete="off" /></label></th>
+            <th width="80"><label>单价<input value="" name="unitPrice" type="checkbox" autocomplete="off" /></label></th>
+            <th width="40">排序</th>
+            <th width="55">操作</th>
+        </tr>
+        <tr class="product-edit-bottom">
+            <td colspan="14">
+                <a class="fun-save" href="javascript:;">保存</a>
+            </td>
+        </tr>
+        <tr class="product-hide-tr">
+            <td class="list_num"></td>
+            <td>
+                <img src="" width="50" height="50" />
+                <p>英文版：</p>
+                <input type="hidden" name="pid" />
+                <input type="hidden" name="imagePath" />
+                <input type="hidden" name="classNo" />
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="name" /></div>
+                <div class="product-edit-double"><input type="text" name="enName" /></div>
+            </td>
+            <td>
+                <div>
+                    <textarea name="description"></textarea>
+                </div>
+                <div>
+                    <textarea name="enDescription"></textarea>
+                </div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="size" /></div>
+                <div class="product-edit-double"><input type="text" name="enSize" /></div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="color" /></div>
+                <div class="product-edit-double"><input type="text" name="enColor" /></div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="material" /></div>
+                <div class="product-edit-double"><input type="text" name="enMaterial" /></div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="technique" /></div>
+                <div class="product-edit-double"><input type="text" name="enTechnique" /></div>
+            </td>
+            <td style="vertical-align: middle;">
+                <input type="text" name="minQuantity" />
+            </td>
+            <td style="vertical-align: middle;">
+                <div class="product-edit-unit"><input type="text" name="deliveryDay" /><span>天</span></div>
+            </td>
+            <td>
+                <div class="product-edit-double"><input type="text" name="keywords" placeholder="多个用“，”分隔" /></div>
+                <div class="product-edit-double"><input type="text" name="enKeywords" placeholder="多个用“，”分隔" /></div>
+            </td>
+            <td style="vertical-align: middle;">
+                <div class="product-edit-unit"><input type="text" name="unitPrice" onkeyup="clearNoNum(this)" /><span>元</span></div>
+            </td>
+            <td style="vertical-align: middle;">
+                <input type="text" name="sortNo" onkeyup="onlyNum(this)" />
+
+            </td>
+            <td align="center" style="vertical-align:middle;">
+                <a onclick="producDel(this)" href="javascript:;">取消</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="product-pop-bg product-pop-box"></div>
+<div class="product-pop-main product-pop-box">
+    <div class="loading-main">
+        <div class="loading-box">
+            <div class="loading-bg"></div>
+            <div class="loading-title">0%</div>
+        </div>
+        <div class="loading-text">上传中，请稍等...</div>
+    </div>
+</div>
+<script>
+    function clearNoNum(obj) {
+        obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符;
+    }
+    function onlyNum(obj) {
+        var num = $(obj).val().replace(/[^\d]/g, '');
+        if (num < 0) {
+            $(obj).val(0);
+        } else if (num > 255) {
+            $(obj).val(255);
+        } else {
+            $(obj).val(num);
+        }
+    }
+    //删除
+    function producDel(obj) {
+        $(obj).parents('.product-edit-tr').remove();
+        var list_num = $('.list_num'),
+            num = 1;
+        $.each(list_num, function (key, item) {
+            $(item).text(num++);
+        })
+    }
+</script>
+

@@ -7,7 +7,7 @@
     <div class="flh-usermain">
         <div id="flh-verification-mobile">
             <div class="flh-usermain-content">
-                <div class="flh-usermain-list pl48">
+                <div class="flh-usermain-list pl48" style="background:#fff;">
                     <span class="icon-usermobile"></span>
                     <div class="flh-usermain-list-nr">
                         <input class="flh-usermain-input v-UserMobile" type="text" name="UserMobile" placeholder="新手机" autocomplete="off" />
@@ -32,40 +32,8 @@
 
 <script>
     $(function () {
-        $('.fun-verificationPhone').on('click', function () {
-            var _mobile = $.trim($('.v-UserMobile').val()),
-                _code = $.trim($('.v-Code').val()),
-                _ancestor = $('#flh-verification-mobile'),
-                _this = $(this);
-            $('label', _ancestor).hide();
-            if (_mobile == "") {
-                $('.UserName-error', _ancestor).html("请输入手机号码").show();
-            }
-            if (_code == "") {
-                $('.Code-error', _ancestor).html("请输入验证码").show();
-                return false;
-            }
-            if (nPassword != "" && rPassword != "" && _this.text() == "确定") {
-                _this.text("确定中...").css("letter-spacing", "0px");
-                $.ajax({
-                    url: url,
-                    type: "post",
-                    data: {},
-                    dataType: "json",
-                    success: function (res) {
-                        if (res.state.code == "0x00000000") {
-                            window.location.href = "/account/login";
-                        } else {
-                            alert(res.message)
-                        }
-                        _this.text("确定").css("letter-spacing", "8px");
-                    }
-                })
-            }
-        })
+        var rMobile = /^1\d{6,20}$/;
 
-
-/*
         //获取校验码
         $('.fun-getMobileCode').on('click', function () {
             var _this = $(this),
@@ -73,22 +41,42 @@
                 _ancestor = $('#flh-verification-mobile'),
                 _mobile = $.trim($('.v-UserMobile', _ancestor).val());
             $('label', _ancestor).hide();
-            if (_mobile == "") {
+            if (!rMobile.test(_mobile)) {
                 $('.UserName-error', _ancestor).html("请输入手机号码").show();
                 return false;
             }
             if (!isclick) {
                 _this.data("isclick", true);
-                var success_event = function (data) {
-                    if (data.data) {
-                        alert("成功");
-                        _this.removeData("isclick");
-                    } else {
-                        alert("失败");
-                        _this.removeData("isclick");
+                $.ajax({
+                    url: "/Account/SendVerifyCode",
+                    type: "post",
+                    data: { "mobile": _mobile, "kind": 4 },
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code == 0) {
+                            var wait = 60;
+                            function time() {
+                                if (wait == 0) {
+                                    _this.text("获取验证码");
+                                    _this.removeData("isclick");
+                                    wait = 60;
+                                } else {
+                                    _this.text("重新发送(" + wait + ")");
+                                    wait--;
+                                    setTimeout(function () {
+                                        time()
+                                    },
+                                    1000)
+                                }
+                            }
+                            time();
+                        } else {
+                            $('.UserName-error', _ancestor).html(res.msg).show();
+                            _this.text("获取验证码");
+                            _this.removeData("isclick");
+                        }
                     }
-                }
-                //getData(url, type, data, success_event, dataType)
+                })
             }
 
         });
@@ -99,8 +87,9 @@
                 _ancestor = $('#flh-verification-mobile'),
                 _this = $(this);
             $('label', _ancestor).hide();
-            if (_mobile == "") {
+            if (!rMobile.test(_mobile)) {
                 $('.UserName-error', _ancestor).html("请输入手机号码").show();
+                return false;
             }
             if (_code == "") {
                 $('.Code-error', _ancestor).html("请输入验证码").show();
@@ -108,21 +97,21 @@
             }
             if (_this.text() == "确定") {
                 _this.text("确定中...").css("letter-spacing", "0px");
-                _ancestor.hide();
-                $('#flh-ResetPassword').fadeIn();
-                var success_event = function (data) {
-                    if (data.data) {
-                        _ancestor.hide();
-                        $('#flh-verification-mobile').fadeIn();
-                        _this.text("确定").css("letter-spacing", "8px");
-                    } else {
-                        alert("失败");
-                        _this.text("确定").css("letter-spacing", "8px");
+                $.ajax({
+                    url: "/Account/ChangeMobile",
+                    type: "post",
+                    data: { "mobile": _mobile, "code": _code },
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code == 0) {
+                            window.location.href = "/account/UserInfo";
+                        } else {
+                            alert(res.msg);
+                            _this.text("确定").css("letter-spacing", "8px");
+                        }
                     }
-                }
-                //getData(url, type, data, success_event, dataType)
+                })
             }
-        });*/
-
+        });
     })
 </script>

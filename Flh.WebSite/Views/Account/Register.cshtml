@@ -130,7 +130,7 @@
             </div>
             <div class="flh-register-other">
                 <a class="other-submit fun-register-submit" href="javascript:;">完成注册</a>
-                </div>
+            </div>
         </div>
         <div class="flh-register-boxbg"></div>
         </form>
@@ -139,7 +139,9 @@
 <script>
     $(function () {
         var rTel = /^1\d{6,20}$/,
-            rMobile = /^1\d{6,20}$/;
+            rMobile = /^1\d{6,20}$/,
+            rEmail = /^(\w-*\.*)+@@(\w-?)+(\.\w{2,})+$/,
+            rPassword = /^[0-9_a-zA-Z]{6,20}$/;
         var search_area = new areaSelect({
             "id": "area-selecter",
             "class": "search-areaNo",
@@ -228,11 +230,11 @@
                 $('.e-VerifyCode', _ancestor).html("请输入验证码").show();
                 isComplete = false;
             }
-            if (Email == "") {
+            if (!rEmail.test(Email)) {
                 $('.e-Email', _ancestor).html("请输入邮箱").show();
                 isComplete = false;
             }
-            if (Password == "") {
+            if (!rPassword.test(Password)) {
                 $('.e-Password', _ancestor).html("请输入密码").show();
                 isComplete = false;
             }
@@ -268,10 +270,6 @@
                 $('.e-NeetInvoice', _ancestor).html("请选择是否需要发票").show();
                 isComplete = false;
             }
-            if (Tel == "") {
-                $('.e-Tel', _ancestor).html("请输入电话").show();
-                isComplete = false;
-            }
             if (!rTel.test(Tel)) {
                 $('.e-Tel', _ancestor).html("请输入有效的电话").show();
                 isComplete = false;
@@ -287,7 +285,7 @@
                 dataType: "json",
                 success: function (res) {
                     if (res.code == "0") {
-                        window.location.href = "/login";
+                        window.location.href = "/Account/login";
                         _this.text("完成注册");
                     } else {
                         alert(res.msg)

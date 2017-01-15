@@ -34,8 +34,8 @@
                     </a>
                 </div>
                 <div class="flh-header-main-middle">
-                    <input type="text" name="flh-search" value="@(Request.QueryString["kw"])" />
-                    <a href="javascript:;">搜索</a>
+                    <input type="text" name="v-search" value="@(Request.QueryString["kw"])" />
+                    <a href="javascript:;" class="fun-search">搜索</a>
                 </div>
                 <div class="flh-header-main-right">
                     <div class="flh-header-main-ewm">
@@ -68,6 +68,14 @@
             var s = document.getElementsByTagName("script")[0];
             s.parentNode.insertBefore(hm, s);
         })();
+        $(function () {
+            $('.fun-search').on('click', function () {
+                var v_search = $.trim($('[name="v-search"]').val());
+                if (v_search != "") {
+                    window.location.href = "/Product?kw=" + v_search;
+                }
+            })
+        })
     </script>
 
 </body>

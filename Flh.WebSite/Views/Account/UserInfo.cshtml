@@ -68,11 +68,11 @@
                 <div class="flh-register-list-nr">
                     <select class="v-EmployeesCountRange" name="EmployeesCountRange">
                         <option>--公司从业人员数--</option>
-                        <option value="1" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R1To9 ? "selected='selected'" : "")>1-9人</option>
-                        <option value="2" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R10To99 ? "selected='selected'" : "")>10-99人</option>
-                        <option value="3" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R100To499 ? "selected='selected'" : "")>100-499人</option>
-                        <option value="4" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R500To999 ? "selected='selected'" : "")>500-999人</option>
-                        <option value="5" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R1000More ? "selected='selected'" : "")>1000人及以上</option>
+                            <option value="1" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R1To9 ? "selected='selected'" : "")>1-9人</option>
+                            <option value="2" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R10To99 ? "selected='selected'" : "")>10-99人</option>
+                            <option value="3" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R100To499 ? "selected='selected'" : "")>100-499人</option>
+                            <option value="4" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R500To999 ? "selected='selected'" : "")>500-999人</option>
+                            <option value="5" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R1000More ? "selected='selected'" : "")>1000人及以上</option>
                     </select>
                     <label class="register-error e-EmployeesCountRange"></label>
                 </div>
@@ -119,6 +119,8 @@
 </div>
 <script>
     $(function () {
+        var rTel = /^1\d{6,20}$/,
+            rEmail = /^(\w-*\.*)+@@(\w-?)+(\.\w{2,})+$/;
         var search_area = new areaSelect({
             "id": "area-selecter",
             "class": "search-areaNo",
@@ -143,7 +145,7 @@
                 isComplete;
             isComplete = true;
             $('.register-error', _ancestor).hide();
-            if (Email == "") {
+            if (!rEmail.test(Email)) {
                 $('.e-Email', _ancestor).html("请输入邮箱").show();
                 isComplete = false;
             }
@@ -173,10 +175,6 @@
             }
             if (NeetInvoice == "") {
                 $('.e-NeetInvoice', _ancestor).html("请选择是否需要发票").show();
-                isComplete = false;
-            }
-            if (Tel == "") {
-                $('.e-Tel', _ancestor).html("请输入电话").show();
                 isComplete = false;
             }
             if (!rTel.test(Tel)) {
