@@ -10,36 +10,38 @@
             <div class="flh-index-header-nav">
                 @foreach (var item in Model.TopLeftItems)
                 {
-                  <div class="flh-index-header-nav-list">
-                    <a class="flh-index-header-nav-lista" href="javascript:;">
-                        <i class="nav-icon-left" id="nav-icon-1"></i>
-                        @item.Name
-                        <i class="nav-icon-right">&gt;</i>
-                    </a>
-                    <div class="flh-index-header-nav-main">
-                        <ul>
-                            @foreach (var sub in item.Children)
-                            {
-                                <li><a href="/Product?no=@sub.No" target="_blank">@sub.Name</a></li>
-                            }                            
-                        </ul>
+                    <div class="flh-index-header-nav-list">
+                        <a class="flh-index-header-nav-lista" href="javascript:;">
+                            <i class="nav-icon-left" id="nav-icon-1"></i>
+                            @item.Name
+                            <i class="nav-icon-right">&gt;</i>
+                        </a>
+                        <div class="flh-index-header-nav-main">
+                            <ul>
+                                @foreach (var sub in item.Children)
+                                {
+
+                                    <li><a href="/Product?no=@sub.No" target="_blank">@sub.Name</a></li>
+
+                                }
+                            </ul>
+                        </div>
                     </div>
-                </div>       
-                }                        
+                }
             </div>
         </div>
         <div class="flh-index-header-right lf">
             <ul>
                 @foreach (var item in Model.TopRightItems)
                 {
-                <li>
-                    <a href="/Product?no=@item.No" target="_blank">
-                        <img alt="@item.Name" src="http://img.fuliaohui.com/@item.Img" />
-                        <div class="flh-index-header-right-bg"></div>
-                        <div class="flh-index-header-right-text">@item.Name</div>
-                    </a>
-                </li>    
-                }                
+                    <li>
+                        <a href="/Product?no=@item.No" target="_blank">
+                            <img alt="@item.Name" src="http://img.fuliaohui.com/@item.Img?x-oss-process=style/class-index-list" />
+                            <div class="flh-index-header-right-bg"></div>
+                            <div class="flh-index-header-right-text">@item.Name</div>
+                        </a>
+                    </li>
+                }
                 <div class="clear"></div>
             </ul>
         </div>
@@ -48,32 +50,32 @@
     <div class="flh-index-main layout-width">
         @foreach (var item in Model.BottomRightItems)
         {
-          <div class="flh-index-main-list" id="c@(item.No)">
-            <div class="flh-index-main-left">
-                <div class="flh-index-main-list-title">@item.Name</div>
-                <a href="/Product?no=@item.No" target="_blank">
-                    <img alt="@item.Name" src="http://img.fuliaohui.com/@item.Img" />
-                </a>
+            <div class="flh-index-main-list" id="list-@(item.No)">
+                <div class="flh-index-main-left">
+                    <div class="flh-index-main-list-title">@item.Name</div>
+                    <a href="/Product?no=@item.No" target="_blank">
+                        <img alt="@item.Name" src="http://img.fuliaohui.com/@item.Img?x-oss-process=style/class-index" />
+                    </a>
+                </div>
+                <div class="flh-index-main-right">
+                    <ul>
+                        @foreach (var sub in item.Children)
+                        {
+                            <li>
+                                <a href="/Product?no=@sub.No" target="_blank">
+                                    <div class="flh-index-main-list-subordinateImg">
+                                        <img alt="@sub.Name" src="http://img.fuliaohui.com/@sub.Img" />
+                                    </div>
+                                    <p>@sub.Name</p>
+                                </a>
+                            </li>
+                        }
+                        <div class="clear"></div>
+                    </ul>
+                </div>
+                <div class="clear"></div>
             </div>
-            <div class="flh-index-main-right">
-                <ul>
-                    @foreach (var sub in item.Children)
-                    {
-                      <li>
-                          <a href="/Product?no=@sub.No" target="_blank">
-                              <div class="flh-index-main-list-subordinateImg">
-                                  <img alt="@sub.Name" src="http://img.fuliaohui.com/@sub.Img" />
-                              </div>
-                              <p>@sub.Name</p>
-                          </a>
-                    </li>   
-                    }                   
-                    <div class="clear"></div>
-                </ul>
-            </div>
-            <div class="clear"></div>
-        </div>   
-        }       
+        }
     </div>
 </div>
 <div class="flh-index-horizontal">
@@ -81,7 +83,7 @@
         @for (var i = 0; i < Model.BottomRightItems.Length; i++)
         {
             var item = Model.BottomLeftItems[i];
-            <a class="@(item.No==Model.CurrentClassNo|| i==0 && String.IsNullOrWhiteSpace(Model.CurrentClassNo)?"current":String.Empty)" href="/?no=@item.No#c@(item.No)">@item.Name</a>
+            <a class="@(item.No==Model.CurrentClassNo|| i==0 && String.IsNullOrWhiteSpace(Model.CurrentClassNo)?"current":String.Empty)" title="@item.Name" href="javascript:;" data-no="@item.No">@item.Name</a>
         }
     </div>
 </div>
@@ -90,10 +92,19 @@
 </div>
 <script>
     $(function () {
+        function mScroll(id) {
+            $("html,body").stop(true);
+            $("html,body").animate({ scrollTop: $("#list-" + id).offset().top-35 }, 500);
+        }
         $('.flh-index-header-nav-list').hover(function () {
             $(this).addClass('nav-hover');
         }, function () {
             $(this).removeClass('nav-hover');
+        })
+        $('.flh-index-horizontal-main a').on('click', function () {
+            var _this = $(this),
+                listID = _this.attr("data-no");
+            mScroll(listID);
         })
     })
 </script>
