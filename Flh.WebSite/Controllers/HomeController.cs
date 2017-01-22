@@ -26,7 +26,7 @@ namespace Flh.WebSite.Controllers
             //下面的二级如果放不下就按他的两行，一级是全部展示的
 
             var model = new IndexPageClassModel();
-            model.TopLeftItems = root.Children;
+            model.TopLeftItems = root.Children.OrderByDescending(d => d.Sort).ThenByDescending(d => d.UpdateTime).Take(13).ToArray();
             model.TopRightItems = root.Children.OrderByDescending(d=>d.Sort).ThenByDescending(d=>d.UpdateTime).Take(8).ToArray();
             model.BottomLeftItems = root.Children;
             model.BottomRightItems = root.Children.OrderByDescending(d => d.Sort).ThenByDescending(d => d.UpdateTime).ToArray();
