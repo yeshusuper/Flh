@@ -4,10 +4,6 @@
     Layout = "~/Views/Layout/_header.cshtml";
 }
 <link href="/Resources/css/default.css" rel="stylesheet" />
-@*<form>
-        <input type="text" name="kw" value="@Model.Keyword" />
-        <button type="submit">搜索</button>
-    </form>*@
 <div class="flh-productList layout-width">
     <div class="flh-productList-left">
         <div class="flh-productList-breadCrumbs"><a href="/">首页</a> > <a href="/Product?no=@Model.ClassOneNo" style="@(String.IsNullOrWhiteSpace(Model.ClassOneNo)?"display:none;":String.Empty)">@Model.ClassOneName</a>@(!String.IsNullOrWhiteSpace(Model.ClassTwoName) ? " > " + Model.ClassTwoName : "") </div>
