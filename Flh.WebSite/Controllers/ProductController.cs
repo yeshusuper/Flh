@@ -138,7 +138,9 @@ namespace Flh.WebSite.Controllers
                 var no = product.Entity.classNo.Substring(0, i * levelSize);
                 noes.Add(no);
             }
-            var no_name_items =  _ClassesManager.EnabledClasses.Where(d => noes.Contains(d.no)).Select(d => new { no = d.no, name = d.name }).ToArray();
+            var no_name_items =  _ClassesManager.EnabledClasses.Where(d => noes.Contains(d.no))
+                .OrderByDescending(d => d.order_by).ThenByDescending(d => d.updated)
+                .Select(d => new { no = d.no, name = d.name }).ToArray();
             StringBuilder sbNav = new StringBuilder();
             foreach (var item in no_name_items)
             {

@@ -38,7 +38,7 @@
                 @foreach (var item in Model.Items)
                 {
                     <li>
-                        <a href="/Product/Detail?id=@item.pid" class="@(item.pid==Model.Detail.pid?"current":String.Empty)">
+                        <a href="/Product/Detail/@item.pid" class="@(item.pid==Model.Detail.pid?"current":String.Empty)">
                             <img alt="@item.name" src="http://img.fuliaohui.com/@item.imagePath" />
                         </a>
                     </li>
