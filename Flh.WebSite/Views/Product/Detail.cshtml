@@ -25,7 +25,7 @@
                     <li>材质：@Model.Detail.material</li>
                     <li>工艺：@(Model.IsLogin ? Model.Detail.technique : "登录后可见")</li>
                     <li>起订量：@(Model.IsLogin ? Model.Detail.minQuantity.ToString() : "登录后可见")</li>
-                    <li>发货日：@(Model.IsLogin ? Model.Detail.deliveryDay+"天" : "登录后可见")</li>
+                    <li>发货日：@(Model.IsLogin ? Model.Detail.deliveryDay + "天" : "登录后可见")</li>
                     <li class="w100">@Model.Detail.description</li>
                     <div class="clear"></div>
                 </ul>
@@ -37,8 +37,8 @@
                 @*这里没有js功能~~全TM点击跳转~~懒得写 Start*@
                 @foreach (var item in Model.Items)
                 {
-                    <li>
-                        <a href="/Product/Detail/@item.pid" class="@(item.pid==Model.Detail.pid?"current":String.Empty)">
+                    <li class="@(item.pid==Model.Detail.pid?"current":String.Empty)">
+                        <a href="/Product/Detail/@item.pid">
                             <img alt="@item.name" src="http://img.fuliaohui.com/@item.imagePath" />
                         </a>
                     </li>
