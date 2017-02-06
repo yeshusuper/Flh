@@ -123,8 +123,10 @@ namespace Flh.WebSite.Controllers
             });
         }
 
-        public ActionResult Detail(long id)
+        public ActionResult Detail(long id,long? rno)
         {
+            //index = index < 0 ? new Nullable<int>() : index;
+
             var product = _ProductServiceFactory.CreateService(id);
             //var items = GetRelationProducts(id,null,product.Entity.classNo);
             product.AddViewCount();
@@ -144,37 +146,33 @@ namespace Flh.WebSite.Controllers
             StringBuilder sbNav = new StringBuilder();
             foreach (var item in no_name_items)
             {
-                sbNav.Append("<a href='/Product?no=" + item.no + "'>" + item.name + "</a>&lt");
+                sbNav.Append("<a href='/Product?no=" + item.no + "'>" + item.name + "</a>&gt");
             }
+
             //上一批产品和下一批产品
-            var take=7;
-            var currentClassQuery = _ProductManager.EnabledProducts.Where(d=>d.classNo.StartsWith(product.Entity.classNo));
-            currentClassQuery = _ProductManager.EnabledProducts;
-            var next = currentClassQuery.Where(d => d.pid < product.Entity.pid).OrderByDescending(d => d.pid).Take(take).ToArray();
-            var previous = currentClassQuery.Where(d => d.pid > product.Entity.pid).OrderBy(d => d.pid).Take(take).ToArray();
-            List<IProduct> productFlowList = new List<IProduct>();           
-            var beside = 3;
-            var left = 0;
-            var right = 0;
-            if (previous.Length < beside)
+            var TAKE_SIZE=7;
+            if (!rno.HasValue)
             {
-                left = previous.Length;
-                right = take - 1 - left;
+                var entity = _ProductManager.GetProjectsWithRowNumber(new ProductWithRowNoItemArgs { ClassNo = product.Entity.classNo, Pid = id }).FirstOrDefault();
+                if (entity != null)
+                {
+                    rno = (int)entity.rno;
+                }
+                else
+                {
+                    rno = 0;
+                }
             }
-            else if (next.Length < beside)
-            {
-                right = next.Length;
-                left = take - 1 - right;
-            }
-            else
-            {
-                left = beside;
-                right = beside;
-            }
-            productFlowList.AddRange(previous.OrderByDescending(d=>d.pid).Take(left));
-            productFlowList.Add(product.Entity);
-            productFlowList.AddRange(next.Take(right));
-            return View(new ProductDetailModel { Detail = product.Entity, Items = productFlowList.ToArray(), BreadLine = sbNav.ToString(),IsLogin=base.CurrentUser!=null });          
+            var leftSize = (TAKE_SIZE - 1) / 2;
+            long min = Math.Max( rno.Value - leftSize,1);
+            var rithtSize = TAKE_SIZE-(rno.Value - min)-1;
+            long max = rno.Value + rithtSize;
+            var items = _ProductManager.GetProjectsWithRowNumber(new ProductWithRowNoItemArgs
+            { 
+                ClassNo=product.Entity.classNo,
+                MinRno=min,
+                MaxRno=max});
+            return View(new ProductDetailModel { Detail = product.Entity, Items = items, BreadLine = sbNav.ToString(), IsLogin = base.CurrentUser != null });          
         }
 
         public ActionResult RelationProducts(long excludePid,long excludeMinPid,string no)
@@ -197,10 +195,10 @@ namespace Flh.WebSite.Controllers
     {
         public ProductDetailModel()
         {
-            Items = new Product[0];
+            Items = new ProductWithRowNoItem[0];
         }
         public IProduct Detail { get; set; }
-        public IProduct[] Items { get; set; }
+        public ProductWithRowNoItem[] Items { get; set; }
         public bool IsLogin { get; set; }
         public String BreadLine { get; set; }
     }
