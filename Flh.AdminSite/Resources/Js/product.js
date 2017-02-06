@@ -18,25 +18,15 @@
         $('.product-pop-box').hide();
         alert("上传已由用户或浏览器取消删除连接.");
     }
-    //将base64编码转换为Blob
-   /* function convertBase64UrlToBlob(urlData){
-        var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte
-        //处理异常,将ascii码小于0的转换为大于0
-        var ab = new ArrayBuffer(bytes.length);
-        var ia = new Uint8Array(ab);
-        for (var i = 0; i < bytes.length; i++) {
-            ia[i] = bytes.charCodeAt(i);
-        }
-        return new Blob( [ab] , {type : 'image/png'});
-    }*/
     //图片压缩
-    function setcompression_img(uploadPicture,num){
+    function setcompression_img(uploadPicture,num,fileName){
         if(uploadPicture.length>0){
             lrz(uploadPicture[0], {width: 1240}).then(function (rst) {
-                load_upload(rst.base64,num);
+                load_upload(rst.base64,num,"",fileName[0]);
                 uploadPicture.shift();
+                fileName.shift();
                 if(uploadPicture.length>0){
-                    setcompression_img(uploadPicture,num);
+                    setcompression_img(uploadPicture,num,fileName);
                 }
                 
             })
@@ -47,16 +37,18 @@
         $(".product-pop-box").show();
         $('.loading-bg').css("width","0%");
         $('.loading-title').text("0%");
-        var uploadPicture=[];
+        var uploadPicture=[],
+        fileName=[];
         $.each(ofiles, function(i, file) {
-            if (/.(gif|jpg|jpeg|png|bmp|GIF|JPG|JPEG|PNG|BMP)$/.test(file.name)) {
+            if (/.(gif|jpg|jpeg|png|bmp)$/i.test(file.name)) {
                 uploadPicture.push(file);
+                fileName.push(file.name.replace(/.(gif|jpg|jpeg|png|bmp)$/i,""));
             }
         })
-        setcompression_img(uploadPicture,num);
+        setcompression_img(uploadPicture,num,fileName);
     }
     //图片上传
-    function load_upload(file,num,frequency_num){
+    function load_upload(file,num,frequency_num,fileName){
         //创建FormData对象
         var data = new FormData(),
         xhr = new XMLHttpRequest(),
@@ -83,6 +75,7 @@
                     $('[name="classNo"]',obj).val(classNo);
                     $('[name="imagePath"]',obj).val(img_data[i]);
                     $('img',obj).attr('src','http://img.fuliaohui.com/' + img_data[i] + '?x-oss-process=style/product-list');
+                    $('[name="name"]',obj).val(fileName);
                 }
                 if(uploadPicture_total==num){
                     $('.loading-text').text("选择了"+num+"张图片,成功上传："+completed_num+"张。");
@@ -92,7 +85,7 @@
                 }
             }else{
                 if(frequency<=3){
-                    load_upload(file,num,frequency);
+                    load_upload(file,num,frequency,fileName);
                 }else{
                     uploadPicture_total++
                     if(uploadPicture_total==num){
@@ -329,7 +322,8 @@
                         traditional: true,
                         success: function (res) {
                             if(res.code>0){
-                                alert(res.msg)
+                                alert(res.msg);
+                                _this.text('保存');
                             }else{
                                  window.location.href="/product/list";
                             }
