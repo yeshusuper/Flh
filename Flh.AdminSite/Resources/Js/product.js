@@ -147,7 +147,7 @@
         ofiles=$('#inputfiles')[0].files;
         $.each(ofiles, function(i, file) {
             all_num+=1;
-            if (!/.(gif|jpg|jpeg|png|bmp|GIF|JPG|JPEG|PNG|BMP)$/.test(file.name)) {
+            if (!/.(gif|jpg|jpeg|png|bmp)$/i.test(file.name)) {
                 UploadError+=file.name+"不是 .jpg .jpeg .bmp .gif .png格式的图片！\n"
             }else{
                 normal_num+=1;
@@ -211,7 +211,7 @@
                     $('[name="sortNo"]',obj).val(item.sortNo);
                     $('[name="classNo"]',obj).val(item.classNo);
                     $('[name="imagePath"]',obj).val(item.imagePath);
-                    $('img',obj).attr('src',item.imagePath);
+                    $('img',obj).attr('src','http://img.fuliaohui.com/' +item.imagePath + '?x-oss-process=style/product-list');
                })
            }
         });
