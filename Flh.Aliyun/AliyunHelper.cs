@@ -1,4 +1,5 @@
-﻿using HttpLease;
+﻿using Flh.Data;
+using HttpLease;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -116,7 +117,17 @@ namespace Flh.Aliyun
                     Newtonsoft.Json.JsonConvert.SerializeObject(otherQuerys)));
             }
         }
-
+        public static List<IFilter> RangeToFilters(List<IFilter> filters, string fieldName, Range<decimal?> range)
+        {
+            if (range != null)
+            {
+                if (range.Max.HasValue)
+                    filters.Add(Filter.LT(fieldName, range.Max.Value.ToString()));
+                if (range.Min.HasValue)
+                    filters.Add(Filter.GTE(fieldName, range.Min.Value.ToString()));
+            }
+            return filters;
+        }
         public static SearchResponse.SearchResult Search( IAliyunIndexer indexer, QueryBuilder query, string qp, ISummary summary = null, string formula_name = null, string[] fields = null)
         {
             var baseQuerys = new AliyunBaseQuerys();
@@ -193,9 +204,7 @@ namespace Flh.Aliyun
     public interface ISort
     {
     }
-    public interface IFilter
-    {
-    }
+   
     public interface IGroupBy
     {
     }

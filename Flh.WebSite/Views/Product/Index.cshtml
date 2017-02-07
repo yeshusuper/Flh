@@ -59,8 +59,8 @@
                 @foreach (var item in Model.Items)
                 {
                     <li>
-                        <a href="javascript:;"><img src="http://img.fuliaohui.com/@item.Image" alt="@item.Name" /></a>
-                        <div class="productList-main-name"><span>产品名称：</span><a href="javascript:;">@item.Name</a></div>
+                        <a href="/Product/Detail?id=@item.Pid" target="_blank"><img src="http://img.fuliaohui.com/@item.Image" alt="@item.Name" /></a>
+                        <div class="productList-main-name"><span>产品名称：</span><a target="_blank" href="/Product/Detail?id=@item.Pid">@item.Name</a></div>
                         <div class="productList-main-Attributes">
                             <div class="Attributes-list">
                                 尺寸：@item.Size

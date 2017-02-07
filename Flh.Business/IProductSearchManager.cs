@@ -1,4 +1,5 @@
 ﻿using Flh.Aliyun;
+using Flh.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,9 @@ namespace Flh.Business
                 querys.Add(Query.Or(queryItems.ToArray()));
             }
 
+            List<IFilter> filters = new List<IFilter>();
+            filters=AliyunHelper.RangeToFilters(filters, unitprice, new Range<decimal?>(args.PriceMin, args.PriceMax));
+
             //排序策略
             var sort = new SourtItemCollection(new SortItem(sortno, SortKinds.Desc), new SortItem(updated, SortKinds.Desc));//默认排序
             if (args.Sort == null)
@@ -63,6 +67,7 @@ namespace Flh.Business
             {
                 Config = new Config { Start = Math.Max(0, args.Start), Hit = Math.Max(1, args.Limit) },
                 Query = Query.And(querys.ToArray()),
+                Filter = filters.Count > 0 ? Filter.And(filters.ToArray()) : null,
                 Sort = sort,
             };
             var result = AliyunHelper.Search(new ProductAliyunIndexer(), query, String.Empty);

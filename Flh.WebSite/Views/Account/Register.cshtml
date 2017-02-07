@@ -20,117 +20,119 @@
 <div class="layout-width">
     <div class="flh-register" id="usermain-register">
         <form>
-            <div class="flh-register-content">
-                <div class="flh-register-list pl108">
-                    <span class="register-title">手机：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Mobile" type="text" name="Mobile" autocomplete="off" />
-                        <label class="register-error e-Mobile"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">验证码：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input w203 v-VerifyCode" type="text" name="VerifyCode" autocomplete="off" />
-                        <a href="javascript:;" class="fun-getVerifyCode">获取验证码</a>
-                        <label class="register-error e-VerifyCode"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">邮箱：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Email" type="text" name="Email" autocomplete="off" />
-                        <label class="register-error e-Email"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">密码：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Password" type="password" name="Password" autocomplete="off" />
-                        <label class="register-error e-Password"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">确认密码：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-ConfirmPwd" type="password" name="ConfirmPwd" autocomplete="off" />
-                        <label class="register-error e-ConfirmPwd"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">姓名：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Name" type="text" name="Name" autocomplete="off" />
-                        <label class="register-error e-Name"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">公司名称：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Company" type="text" name="Company" autocomplete="off" />
-                        <label class="register-error e-Company"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">公司地址：</span>
-                    <div class="flh-register-list-nr">
-                        <span id="area-selecter">
-                            <input class="search-areaNo" type="hidden" name="AreaNo" />
-                        </span>
-                        <textarea class="flh-register-textarea v-Address" placeholder="详细地址" name="Address"></textarea>
-                        <span class="register-prompt">(用于邮寄样本)</span>
-                        <label class="register-error e-Address"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">从业人数：</span>
-                    <div class="flh-register-list-nr">
-                        <select class="v-EmployeesCountRange" name="EmployeesCountRange">
-                            <option value="">--公司从业人员数--</option>
-                            <option value="1">1-9人</option>
-                            <option value="2">10-99人</option>
-                            <option value="3">100-499人</option>
-                            <option value="4">500-999人</option>
-                            <option value="5">1000人及以上</option>
-                        </select>
-                        <label class="register-error e-EmployeesCountRange"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">从业类别：</span>
-                    <div class="flh-register-list-nr" id="fun-IndustryNo">
-                        <input class="v-IndustryNo" type="hidden" name="IndustryNo" autocomplete="off" />
-                        <label class="register-error e-IndustryNo"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">采购权限：</span>
-                    <div class="flh-register-list-nr">
-                        <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="true" />有</label>
-                        <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="false" />无</label>
-                        <label class="register-error e-IsPurchaser"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">是否需要发票：</span>
-                    <div class="flh-register-list-nr">
-                        <label class="register-radio "><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="false" />不需要</label>
-                        <label class="register-radio"><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="true" />需要</label>
-                        <label class="register-error e-NeetInvoice"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">电话：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Tel" type="text" name="Tel" autocomplete="off" />
-                        <label class="register-error e-Tel"></label>
-                    </div>
-                </div>
-                <div class="flh-register-other">
-                    <a class="other-submit fun-register-submit" href="javascript:;">完成注册</a>
+        <div class="flh-register-content">
+            <div class="flh-register-list pl108">
+                <span class="register-title">手机：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Mobile" type="text" name="Mobile" autocomplete="off" />
+                    <label class="register-error e-Mobile"></label>
                 </div>
             </div>
-            <div class="flh-register-boxbg"></div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">验证码：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input w203 v-VerifyCode" type="text" name="VerifyCode" autocomplete="off" />
+                        <a href="javascript:;" class="fun-getVerifyCode">获取验证码</a>
+                    <label class="register-error e-VerifyCode"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">邮箱：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Email" type="text" name="Email" autocomplete="off" />
+                    <label class="register-error e-Email"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">密码：</span>
+                <div class="flh-register-list-nr">
+                        <input class="flh-register-input v-Password" type="password" name="Password" autocomplete="off" />
+                    <label class="register-error e-Password"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">确认密码：</span>
+                <div class="flh-register-list-nr">
+                        <input class="flh-register-input v-ConfirmPwd" type="password" name="ConfirmPwd" autocomplete="off" />
+                    <label class="register-error e-ConfirmPwd"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">姓名：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Name" type="text" name="Name" autocomplete="off" />
+                    <label class="register-error e-Name"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">公司名称：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Company" type="text" name="Company" autocomplete="off" />
+                    <label class="register-error e-Company"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">公司地址：</span>
+                <div class="flh-register-list-nr">
+                    <span id="area-selecter">
+                        <input class="search-areaNo" type="hidden" name="areaNo" />
+                        <input type="hidden" value="@Html.Raw(Area)" />
+                    </span>
+                    <textarea class="flh-register-textarea v-Address" placeholder="详细地址" name="Address"></textarea>
+                    <span class="register-prompt">(用于邮寄样本)</span>
+                    <label class="register-error e-Address"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">从业人数：</span>
+                <div class="flh-register-list-nr">
+                    <select class="v-EmployeesCountRange" name="EmployeesCountRange">
+                            <option value="">--公司从业人员数--</option>
+                        <option value="1">1-9人</option>
+                        <option value="2">10-99人</option>
+                        <option value="3">100-499人</option>
+                        <option value="4">500-999人</option>
+                        <option value="5">1000人及以上</option>
+                    </select>
+                    <label class="register-error e-EmployeesCountRange"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">从业类别：</span>
+                    <div class="flh-register-list-nr" id="fun-IndustryNo">
+                        <input class="v-IndustryNo" type="hidden" name="IndustryNo" autocomplete="off" />
+                    <label class="register-error e-IndustryNo"></label>
+                    <input type="hidden" value="@Html.Raw(Trade)" />
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">采购权限：</span>
+                <div class="flh-register-list-nr">
+                    <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="true" />有</label>
+                    <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="false" />无</label>
+                    <label class="register-error e-IsPurchaser"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">是否需要发票：</span>
+                <div class="flh-register-list-nr">
+                    <label class="register-radio "><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="false" />不需要</label>
+                    <label class="register-radio"><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="true" />需要</label>
+                    <label class="register-error e-NeetInvoice"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">电话：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Tel" type="text" name="Tel" autocomplete="off" />
+                    <label class="register-error e-Tel"></label>
+                </div>
+            </div>
+            <div class="flh-register-other">
+                <a class="other-submit fun-register-submit" href="javascript:;">完成注册</a>
+            </div>
+        </div>
+        <div class="flh-register-boxbg"></div>
         </form>
     </div>
 </div>

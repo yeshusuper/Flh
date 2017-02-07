@@ -22,95 +22,97 @@
 
     <div class="flh-register" id="usermain-register">
         <form>
-            <div class="flh-register-content">
-                <div class="flh-register-list pl108">
-                    <span class="register-title">手机：</span>
+        <div class="flh-register-content">
+            <div class="flh-register-list pl108">
+                <span class="register-title">手机：</span>
                     <div class="flh-register-list-nr list-nr-Mobile">
 
-                        @Model.Mobile
+                    @Model.Mobile
                         <a href="@Url.Action("ChangeMobile", "account")">修改手机</a>
-                    </div>
                 </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">邮箱：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Email" value="@Model.Email" type="text" name="Email" autocomplete="off" />
-                        <label class="register-error e-Email"></label>
-                    </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">邮箱：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Email" value="@Model.Email" type="text" name="Email" autocomplete="off" />
+                    <label class="register-error e-Email"></label>
                 </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">姓名：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Name" value="@Model.Name" type="text" name="Name" autocomplete="off" />
-                        <label class="register-error e-Name"></label>
-                    </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">姓名：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Name" value="@Model.Name" type="text" name="Name" autocomplete="off" />
+                    <label class="register-error e-Name"></label>
                 </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">公司名称：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Company" value="@Model.Company" type="text" name="Company" autocomplete="off" />
-                        <label class="register-error e-Company"></label>
-                    </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">公司名称：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Company" value="@Model.Company" type="text" name="Company" autocomplete="off" />
+                    <label class="register-error e-Company"></label>
                 </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">公司地址：</span>
-                    <div class="flh-register-list-nr">
-                        <span id="area-selecter">
-                            <input class="search-areaNo" type="hidden" name="AreaNo" value="@Model.AreaNo" />
-                        </span>
-                        <textarea class="flh-register-textarea v-Address" placeholder="(用于邮寄样本)" name="Address">@Model.Address</textarea>
-                        <label class="register-error e-Address"></label>
-                    </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">公司地址：</span>
+                <div class="flh-register-list-nr">
+                    <span id="area-selecter">
+                        <input class="search-areaNo" type="hidden" name="areaNo" value="@Model.AreaNo" />
+                        <input type="hidden" value="@Html.Raw(Area)" />
+                    </span>
+                    <textarea class="flh-register-textarea v-Address" placeholder="(用于邮寄样本)" name="Address">@Model.Address</textarea>
+                    <label class="register-error e-Address"></label>
                 </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">从业人数：</span>
-                    <div class="flh-register-list-nr">
-                        <select class="v-EmployeesCountRange" name="EmployeesCountRange">
-                            <option>--公司从业人员数--</option>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">从业人数：</span>
+                <div class="flh-register-list-nr">
+                    <select class="v-EmployeesCountRange" name="EmployeesCountRange">
+                        <option>--公司从业人员数--</option>
                             <option value="1" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R1To9 ? "selected='selected'" : "")>1-9人</option>
                             <option value="2" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R10To99 ? "selected='selected'" : "")>10-99人</option>
                             <option value="3" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R100To499 ? "selected='selected'" : "")>100-499人</option>
                             <option value="4" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R500To999 ? "selected='selected'" : "")>500-999人</option>
                             <option value="5" @(Model.EmployeesCountRange == Flh.Business.Users.EmployeesCountRanges.R1000More ? "selected='selected'" : "")>1000人及以上</option>
-                        </select>
-                        <label class="register-error e-EmployeesCountRange"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">从业类别：</span>
-                    <div class="flh-register-list-nr" id="fun-IndustryNo">
-                        <input class="v-IndustryNo" value="@Model.IndustryNo" type="hidden" name="IndustryNo" autocomplete="off" />
-                        <label class="register-error e-IndustryNo"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">采购权限：</span>
-                    <div class="flh-register-list-nr">
-                        <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="true" checked="@(Model.IsPurchaser)" />有</label>
-                        <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="false" checked="@(!Model.IsPurchaser)" />无</label>
-                        <label class="register-error e-IsPurchaser"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">是否需要发票：</span>
-                    <div class="flh-register-list-nr">
-                        <label class="register-radio "><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="false" checked="@(!Model.NeetInvoice)" />不需要</label>
-                        <label class="register-radio"><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="true" checked="@(Model.NeetInvoice)" />需要</label>
-                        <label class="register-error e-NeetInvoice"></label>
-                    </div>
-                </div>
-                <div class="flh-register-list pl108">
-                    <span class="register-title">电话：</span>
-                    <div class="flh-register-list-nr">
-                        <input class="flh-register-input v-Tel" value="@Model.Tel" type="text" name="Tel" autocomplete="off" />
-                        <label class="register-error e-Tel"></label>
-                    </div>
-                </div>
-                <div class="flh-register-other">
-                    <a class="other-submit fun-register-submit" href="javascript:;">完成修改</a>
+                    </select>
+                    <label class="register-error e-EmployeesCountRange"></label>
                 </div>
             </div>
-            <div class="flh-register-boxbg"></div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">从业类别：</span>
+                    <div class="flh-register-list-nr" id="fun-IndustryNo">
+                        <input class="v-IndustryNo" value="@Model.IndustryNo" type="hidden" name="IndustryNo" autocomplete="off" />
+                    <label class="register-error e-IndustryNo"></label>
+                    <input type="hidden" value="@Html.Raw(Trade)" />
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">采购权限：</span>
+                <div class="flh-register-list-nr">
+                        <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="true" checked="@(Model.IsPurchaser)" />有</label>
+                        <label class="register-radio"><input class="v-IsPurchaser" type="radio" name="IsPurchaser" value="false" checked="@(!Model.IsPurchaser)" />无</label>
+                    <label class="register-error e-IsPurchaser"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">是否需要发票：</span>
+                <div class="flh-register-list-nr">
+                    <label class="register-radio "><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="false" checked="@(!Model.NeetInvoice)" />不需要</label>
+                    <label class="register-radio"><input class="v-NeetInvoice" type="radio" name="NeetInvoice" value="true" checked="@(Model.NeetInvoice)" />需要</label>
+                    <label class="register-error e-NeetInvoice"></label>
+                </div>
+            </div>
+            <div class="flh-register-list pl108">
+                <span class="register-title">电话：</span>
+                <div class="flh-register-list-nr">
+                    <input class="flh-register-input v-Tel" value="@Model.Tel" type="text" name="Tel" autocomplete="off" />
+                    <label class="register-error e-Tel"></label>
+                </div>
+            </div>
+            <div class="flh-register-other">
+                <a class="other-submit fun-register-submit" href="javascript:;">完成修改</a>
+            </div>
+        </div>
+        <div class="flh-register-boxbg"></div>
         </form>
     </div>
 

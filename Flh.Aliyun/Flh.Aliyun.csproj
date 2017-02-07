@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AliyunAccessKey.cs" />
     <Compile Include="AliyunHelper.cs" />
+    <Compile Include="Filter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

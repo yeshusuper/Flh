@@ -104,6 +104,7 @@ namespace Flh.Business
                                 _FileStore.Copy(newProductFileId, newFileID);//将临时文件复制到永久文件处                     
                             scope.Complete();
                         }
+                        System.Threading.Thread.Sleep(300);//同时添加太多产品，搜索引擎更新太频繁会报错（阿里云限制每秒频率，除非加钱）,这里添加一个产品后先休眠几百毫秒
                     }
                 }
 
@@ -170,12 +171,10 @@ namespace Flh.Business
         public IEnumerable<Data.Product> Search(ProductSearchArgs args, out int count)
         {
             if (args != null
-                && args.Sort==null 
-                && !String.IsNullOrWhiteSpace(args.Keyword)
-                && args.ClassNo != "0001"
-                && String.IsNullOrWhiteSpace(args.Color)
+                && (!String.IsNullOrWhiteSpace(args.Keyword) || !String.IsNullOrWhiteSpace(args.Color))
                 )
             {
+                args.Keyword = ((args.Keyword ?? String.Empty) +" "+ args.Color).Trim();
                 return _SearchManager.Search(args, out count);
             }
             else
@@ -198,6 +197,14 @@ namespace Flh.Business
                     {
                         source = source.Where(d=>d.color.Contains(args.Color));
                     }
+                    if (args.PriceMin.HasValue)
+                    {
+                        source = source.Where(d => d.unitPrice >= args.PriceMin.Value);
+                    }
+                    if (args.PriceMax.HasValue)
+                    {
+                        source = source.Where(d => d.unitPrice <= args.PriceMax.Value);
+                    }
                     start = Math.Max(0, args.Start);
                     if (args.Limit > 0)
                         limit = args.Limit;
@@ -218,7 +225,7 @@ namespace Flh.Business
                 }
                 else if (args.Sort == SortType.ViewDesc)
                 {
-                    source = source.OrderBy(p => p.viewCount);
+                    source = source.OrderByDescending(p => p.viewCount);
                 }
                 return source.Skip(start).Take(limit).ToArray();
             }

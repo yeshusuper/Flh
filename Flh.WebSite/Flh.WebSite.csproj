@@ -123,6 +123,7 @@
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\UserInfoModel.cs" />
+    <Compile Include="Models\ClassTreeModel.cs" />
     <Compile Include="Models\Product\ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -201,9 +202,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\ChangeMobile.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Product\Index1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Product\BatchEdit.cshtml" />
