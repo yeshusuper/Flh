@@ -17,6 +17,7 @@ namespace Flh.Business
         IQueryable<Data.Product> EnabledProducts { get; }
         IQueryable<Data.Product> AllProducts { get; }
         void Delete(long uid, long[] pids);
+        Data.ProductWithRowNoItem[] GetProjectsWithRowNumber(Data.ProductWithRowNoItemArgs args);
     }
     public class ProductManager : IProductManager
     {
@@ -263,6 +264,11 @@ namespace Flh.Business
         public IQueryable<Data.Product> AllProducts
         {
             get { return _Repository.Entities; }
+        }
+
+        public Data.ProductWithRowNoItem[] GetProjectsWithRowNumber(Data.ProductWithRowNoItemArgs args)
+        {
+            return _Repository.GetProjectsWithRowNumber(args);
         }
     }
 
