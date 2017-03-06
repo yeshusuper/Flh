@@ -17,6 +17,8 @@ namespace Flh.Business.Data
         public User()
         {
             this.LoginHistory = new HashSet<LoginHistory>();
+            this.FollowUpRecord = new HashSet<FollowUpRecord>();
+            this.FollowUpRecord1 = new HashSet<FollowUpRecord>();
         }
     
         public long uid { get; set; }
@@ -39,5 +41,7 @@ namespace Flh.Business.Data
     
         public virtual Admin Admin { get; set; }
         public virtual ICollection<LoginHistory> LoginHistory { get; set; }
+        public virtual ICollection<FollowUpRecord> FollowUpRecord { get; set; }
+        public virtual ICollection<FollowUpRecord> FollowUpRecord1 { get; set; }
     }
 }

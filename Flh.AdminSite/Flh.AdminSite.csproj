@@ -114,10 +114,12 @@
   <ItemGroup>
     <Compile Include="App_Start\InjectConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdvertisementController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\CommonDataController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\FollowUpRecordController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
@@ -127,9 +129,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\LoginModel.cs" />
+    <Compile Include="Models\Advertisement\Advertisement.cs" />
+    <Compile Include="Models\Advertisement\AdvertisementEdit.cs" />
+    <Compile Include="Models\Advertisement\AdvertisementList.cs" />
     <Compile Include="Models\Classes\BatchAddModel.cs" />
     <Compile Include="Models\Classes\ListModel.cs" />
     <Compile Include="Models\ClassTreeModel.cs" />
+    <Compile Include="Models\FollowUpRecord\FollowUpRecord.cs" />
+    <Compile Include="Models\FollowUpRecord\FollowUpRecordEdit.cs" />
     <Compile Include="Models\Product\BatchEditListModel.cs" />
     <Compile Include="Models\Product\ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -305,6 +312,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Image\Test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Advertisement\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Advertisement\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FollowUpRecord\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FollowUpRecord\List.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
