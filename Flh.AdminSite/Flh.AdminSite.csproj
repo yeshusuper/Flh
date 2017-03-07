@@ -123,6 +123,7 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TradeController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -132,6 +133,8 @@
     <Compile Include="Models\ClassTreeModel.cs" />
     <Compile Include="Models\Product\BatchEditListModel.cs" />
     <Compile Include="Models\Product\ListModel.cs" />
+    <Compile Include="Models\Users\ListViewModel.cs" />
+    <Compile Include="Models\Users\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +308,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Image\Test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\Details.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

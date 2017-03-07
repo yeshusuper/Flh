@@ -1,0 +1,74 @@
+﻿@model Flh.AdminSite.Models.Users.ListViewModel
+@{
+    Layout = "~/Views/Layout/_Manager.cshtml";
+    ViewBag.Title = "用户列表";
+}
+<div class="crumbs">您的位置：辅料汇后台 &gt;  会员管理 &gt; 用户列表</div>
+<div class="layout-search">
+    <form>
+        手机号码：<input class="input-mobile" name="mobile" value="@ViewBag.Mobile" type="text" placeholder="输入手机号码 进行搜索" />
+        <button class="btn btn-default" type="submit">搜索</button>
+        <span style="margin-left:20px;color:#666;">若要【添加管理员】，请选输入手机号码，搜索出对应账号，然后点击右边的【设为管理员】按钮即可</span>
+    </form>
+</div>
+<div class="common-list">
+    <table class="common-list-table">
+        <tr>
+            <th width="20%">姓名</th>
+            <th width="20%">手机号码</th>
+            <th width="20%">管理员</th>
+            <th width="20%">设置时间</th>
+            <th>操作</th>
+        </tr>
+        @if (Model.Items.Any())
+        {
+            foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.name</td>
+                    <td>@item.mobile</td>
+                    <td>@(item.is_purchaser ? "是" : "否")</td>
+                    <td>@item.last_login_date.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        @item.address<br />
+                        @item.area_no<br />
+                        @item.company<br />
+                        @item.email<br />
+                        @item.employees_count_type<br />
+                        @item.enabled<br />
+                        @item.enabled_memo<br />
+                        @item.industry_no<br />
+                        @item.is_purchaser<br />
+                        @item.last_login_date<br />
+                        @item.mobile<br />
+                        @item.name<br />
+                        @item.neet_invoice<br />
+                        @item.pwd<br />
+                        @item.register_date<br />
+                        @item.tel
+                        @item.uid
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">
+                    @if (!String.IsNullOrWhiteSpace(ViewBag.Mobile))
+                    {
+                        <div style="text-align:center;padding:30px;">没有找到对应的账号</div>
+                    }
+                    else
+                    {
+                        <div style="text-align: center; padding: 30px;">还没有设置任何管理员</div>
+                    }
+                </td>
+            </tr>
+
+        }
+    </table>
+</div>
+<div class="page">
+    @Html.Pager(Model.Items);
+</div>
