@@ -22,16 +22,17 @@ namespace Flh.AdminSite.Controllers
             _FollowUpRecordManager = followUpRecordManager;
             _UserManager = userManager;
         }
-        public ActionResult Delete(string rids)
+        [HttpPost]
+        public ActionResult Delete(long rid)
         {
-            var _Rids = (rids ?? String.Empty).Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(id => long.Parse(id)).ToArray();
-            _FollowUpRecordManager.Delete(this.CurrentUser.Uid, _Rids);
+            var service = _FollowUpRecordManager.CreateService(rid);
+            service.Delete(this.CurrentUser.Uid);
             return SuccessJsonResult();
         }
         [HttpGet]
-        public ActionResult Edit(long uid)
+        public ActionResult Edit(long id)
         {
-            ViewBag.Uid = uid;
+            ViewBag.Uid = id;
             return View();
         }
         [HttpPost]
@@ -39,6 +40,8 @@ namespace Flh.AdminSite.Controllers
         {
             ExceptionHelper.ThrowIfNull(model, "model", "参数不能为空");
             var service = _FollowUpRecordManager.Add(model.uid, this.CurrentUser.Uid, model.content, model.kind);
+            var users = _UserManager.GetUsers(new long[] { model.uid, this.CurrentUser.Uid });
+
             var record = new Models.FollowUpRecord.FollowUpRecord
             {
                 uid = service.Uid,
@@ -48,24 +51,26 @@ namespace Flh.AdminSite.Controllers
                 kind = service.Kind,
                 rid = service.Rid,
                 isEnabled = service.IsEnabled,
-                administratorName = _UserManager.Get(service.Administrator).Name,
+                administratorName = users.Where(u => u.uid == service.Administrator).Select(u => u.name).FirstOrDefault(),
+                uname = users.Where(u => u.uid == service.Uid).Select(u => u.name).FirstOrDefault(),
             };
             return this.SuccessJsonResult<Models.FollowUpRecord.FollowUpRecord>(record);
         }
-        public ActionResult List(long uid, int? page)
+        public ActionResult List(long id, int? page)
         {
             if (!page.HasValue || page.Value < 1)
                 page = 1;
-            var size = 20;
+            var size = 2;
             var count = 0;
-            var records = _FollowUpRecordManager.GetFollowUpRecords(uid);
+            ViewBag.Uid = id;
+            var records = _FollowUpRecordManager.GetFollowUpRecords(id);
             count = records.Count();
             var models = records.OrderByDescending(a => a.created)
                  .Skip((page.Value - 1) * size)
                  .Take(size)
                  .ToArray();
             var admins = models.Select(r => r.administrator).ToArray();
-            var users = _UserManager.GetUsersByIds(admins).ToArray();
+            var users = _UserManager.GetUsersByIds(admins.Concat(new long[] { id }).ToArray()).ToArray();
             var result = models.Select(r => new Models.FollowUpRecord.FollowUpRecord
                   {
                       administrator = r.administrator,
@@ -76,9 +81,9 @@ namespace Flh.AdminSite.Controllers
                       created = r.created,
                       content = r.content,
                       uid = r.uid,
-                  }).ToArray();
-            return View(new PageModel<Models.FollowUpRecord.FollowUpRecord>(result, page.Value, (int)Math.Ceiling((double)count / (double)size))
-            );
+                      uname = users.Where(u => u.Uid == r.uid).Select(u => u.Name).FirstOrDefault(),
+                  });
+            return View(new PageModel<Models.FollowUpRecord.FollowUpRecord>(result, page.Value, (int)Math.Ceiling((double)count / (double)size)));
         }
     }
 }

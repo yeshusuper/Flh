@@ -14,6 +14,7 @@ namespace Flh.AdminSite.Models.FollowUpRecord
         public long administrator { get; set; }
         public string administratorName { get; set; }
         public long uid { get; set; }
+        public string  uname { get; set; }
         public bool isEnabled { get; set; }
         public Flh.Business.FollowUpRecord.FollowUpRecordKinds kind { get; set; }
     }

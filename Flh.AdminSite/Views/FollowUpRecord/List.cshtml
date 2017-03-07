@@ -1,1 +1,47 @@
-﻿
+﻿@model PageModel<Flh.AdminSite.Models.FollowUpRecord.FollowUpRecord>
+
+<a href="/FollowUpRecord/Edit/@ViewBag.Uid" target="_blank">新增跟进记录</a>
+<ul>
+    @foreach (var r in Model)
+    {
+        <li>
+            <p>
+                <span class="record-adminUserNam">@r.administratorName</span>跟进 @(r.kind == Flh.Business.FollowUpRecord.FollowUpRecordKinds.UserInitiative ? "(客户主动联系)" : "(管理员跟进)") <span class="record-userName">@r.uname</span>：<span class="record-time">@r.created.ToString("yyy-MM-dd HH:mm:ss")</span>
+                <a class="btn btn-default record-delete" href="javascript:;" data-id="@r.rid">删除</a>
+            </p>
+            <p>@r.content</p>
+        </li>
+    }
+</ul>
+<div class="page">
+    @Html.Pager(Model);
+</div>
+
+<script src="/Resources/Js/jquery-1.7.min.js"></script>
+<script>
+    $('.record-delete').on('click', function () {
+        var statu = confirm("删除之后不能撤销，确定要删除吗?");
+        if (!statu) {
+            return false;
+        }
+        var id = $(this).attr('data-id');
+        $.ajax({
+            type: "post",
+            url: "/FollowUpRecord/Delete",
+            data: { "rid": id },
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 0) {
+                    alert("删除成功！");
+                    window.location.reload();
+                }
+                else {
+                    alert("删除失败，请重试");
+                }
+            },
+            error: function (data, status, e) {
+                alert("删除失败，请重试");
+            }
+        });
+    });
+</script>
