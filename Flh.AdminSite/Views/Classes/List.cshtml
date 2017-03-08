@@ -3,7 +3,7 @@
     ViewBag.Title = "分类列表";
     Layout = "../Layout/_Manager.cshtml";
 }
-<script src="/Resources/Js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/Resources/Js/lrz.bundle.js"></script>
 <div class="crumbs">
     当前分类：
     @if (Model.ParentClasses != null)
@@ -86,9 +86,7 @@
                     </li>
                     <div class="clear"></div>
                 </ul>
-                <form>
-                    <input id="file" class="file_upload" data-class="" style="display:none;" name="file" type="file">
-                </form>
+                    <input id="inputfiles" class="file_upload" data-class="" style="display:none;" name="file" type="file">
 
             </div>
         </div>
@@ -104,15 +102,57 @@
     $(function () {
         function upload_check(filepath, _this) {
             var byteSize = _this.files[0].size;
-            if (!/.(gif|jpg|jpeg|png|bmp)$/.test(filepath)) {
-                alert('invoice_cover_main', '仅支持 .jpg .jpeg .bmp .gif .png格式照片！');
+            if (!/.(gif|jpg|jpeg|png|bmp)$/i.test(filepath)) {
+                alert('仅支持 .jpg .jpeg .bmp .gif .png格式照片！');
                 return false;
             } else if (byteSize > 2 * 1024 * 1024) {
-                alert('invoice_cover_main', '图片大小不超过2M！');
+                alert('图片大小不超过2M！');
                 return false;
             }
         }
+        function uploadFailed(evt) {
+            console.log('上传出错！')
+        }
 
+        function uploadCanceled(evt) {
+            $('.product-pop-box').hide();
+            alert("上传已由用户或浏览器取消删除连接.");
+        }
+        function setcompression_img(uploadPicture, imgClass) {
+            lrz(uploadPicture[0], { width: 1240 }).then(function (rst) {
+                load_upload(rst.base64, imgClass);
+            })
+        }
+        function load_upload(ofiles, imgClass, frequency_num) {
+            //创建FormData对象
+            var data = new FormData(),
+                xhr = new XMLHttpRequest(),
+                frequency = frequency_num || 0;
+            frequency++;
+            data.append('upload_file', ofiles);
+            //请求完成后执行的操作
+            xhr.addEventListener("load", function (evt) {
+                var message = evt.target.responseText,
+                    res = eval("(" + message + ")"),
+                    img_data = res.data;
+                if (res.code == 0) {
+                    $('.' + imgClass).attr('src', 'http://img.fuliaohui.com/' + img_data[0] + '?x-oss-process=style/product-list').attr('data-src', img_data[0]);
+                } else {
+                    if (frequency <= 3) {
+                        load_upload(file, imgClass, frequency);
+                    } else {
+                        alert("上传失败！")
+                    }
+                }
+            }, false);
+            //请求error
+            xhr.addEventListener("error", uploadFailed, false);
+            //请求中断
+            xhr.addEventListener("abort", uploadCanceled, false);
+            //发送请求
+            xhr.open("POST", "/Product/UploadImages");
+            xhr.send(data);
+        }
         $('.product-modify').on('click', function () {
             var no = $(this).attr('data-no');
             $.ajax({
@@ -122,7 +162,6 @@
                 dataType: "json",
                 traditional: true,
                 success: function (res) {
-                    console.log(res);
                     if (res.data) {
                         var Name = res.data.Name || "",
                             EnName = res.data.EnName || "",
@@ -155,11 +194,11 @@
             var filepath = $(this).val(),
                 imgClass = $(this).attr('data-class'),
                 _this = this,
-                type_data = $(this).data('type'),
-                ileObj = $(this).get(0).files;
+                ileObj = $('#inputfiles')[0].files;
             upload_check(filepath, _this);
-            $.ajaxFileUpload({
-                url: "/Image/UploadTemp",
+            setcompression_img(ileObj, imgClass)
+            /*$.ajaxFileUpload({
+                url: "/Product/UploadImages",
                 secureuri: false,
                 fileElementId: "file",//file标签的id
                 dataType: 'json',
@@ -174,7 +213,7 @@
                 error: function (data, status, e) {
                     //alert(e);
                 }
-            });
+            });*/
 
         })
         $('.fun_save').on('click', function () {
