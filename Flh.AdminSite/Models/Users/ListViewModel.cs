@@ -1,4 +1,5 @@
-﻿using Flh.Web;
+﻿using Flh.Business.Data;
+using Flh.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Flh.AdminSite.Models.Users
         public ListViewModel()
         {
         }
-        public PageModel<Flh.Business.Data.IUser> Items { get; set; }
+        public PageModel<ListItemViewModel> Items { get; set; }
         public int? page { get; set; }
         public int? limit { get; set; }
         public String mobile { get; set; }
@@ -23,5 +24,12 @@ namespace Flh.AdminSite.Models.Users
         public String industry_no { get; set; }
         public bool? is_purchaser { get; set; }
         public String area_no { get; set; }
+    }
+
+    public class ListItemViewModel
+    {
+        public IUser Item { get; set; }
+        public String industry { get; set; }
+        public String area { get; set; }
     }
 }
