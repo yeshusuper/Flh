@@ -39,6 +39,12 @@ namespace Flh.WebSite.Controllers
                     url = a.url,
                     order = a.orderBy,
                 }).ToArray();
+            int index = 1;
+            foreach (var m in model)
+            {
+                m.No = index;
+                index++;
+            }
             return View(model);
         }
         public ActionResult Detail(long  id)

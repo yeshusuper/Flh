@@ -1,11 +1,10 @@
 ﻿@model Flh.WebSite.Models.Advertisement.Advertisement[]
-<div>
     @foreach(var m in Model)
     {
         <p>
         <a href="@Url.Action("Detail",new {id=m.aid})" title="@m.title">
             <img src="http://img.fuliaohui.com/@m.image" alt="@m.title" style="width: 705px;height: 250px;" />
+            <span>@m.No</span>
         </a>
     </p>
     }
-</div>

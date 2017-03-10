@@ -15,5 +15,6 @@ namespace Flh.WebSite.Models.Advertisement
         public string image { get; set; }
         public string position { get; set; }
         public int order { get; set; }
+        public int No { get; set; }
     }
 }
