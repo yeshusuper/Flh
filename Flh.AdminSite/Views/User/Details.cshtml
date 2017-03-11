@@ -1,23 +1,63 @@
 ﻿@model Flh.AdminSite.Models.Users.UserViewModel
+@using Flh.Business
 @{
     Layout = "~/Views/Layout/_Manager.cshtml";
     ViewBag.Title = "用户详情";
 }
+<style>
+    .align-right {
+        text-align: right;
+    }
+</style>
 <div class="crumbs">您的位置：辅料汇后台 &gt;  会员管理 &gt; 用户详情</div>
-@item.address<br />
-@item.area_no<br />
-@item.company<br />
-@item.email<br />
-@item.employees_count_type<br />
-@item.enabled<br />
-@item.enabled_memo<br />
-@item.industry_no<br />
-@item.is_purchaser<br />
-@item.last_login_date<br />
-@item.mobile<br />
-@item.name<br />
-@item.neet_invoice<br />
-@item.pwd<br />
-@item.register_date<br />
-@item.tel
-@item.uid
+<table class="common-list-table">
+    <colgroup>
+        <col style="width:100px;" />
+        <col style="width:375px;" />
+        <col style="width:130px;" />
+    </colgroup>
+    <tr>
+        <td class="align-right">姓 名：</td>
+        <td>
+            <a title="点击查看详情页" href="/User/Details/@Model.Item.uid" target="_blank">@Model.Item.name</a>
+            <span style="color:#AAA;margin-left:10px;">(ID：@Model.Item.uid)</span>
+            <span>@(Model.Item.enabled ? "" : "已屏蔽")</span>
+            @if (!Model.Item.enabled)
+            {
+                <span>屏蔽备注：@Utility.GetBindStringValue(Model.Item.enabled_memo)</span>
+            }
+        </td>
+        <td class="align-right">公 司：</td>
+        <td>@Utility.GetBindStringValue(Model.Item.company) <span style="color:#AAA">（规模：@Flh.Business.Utility.GetEmployeesCount(Model.Item.employees_count_type)）</span></td>
+    </tr>
+    <tr>
+        <td class="align-right">地 区：</td>
+        <td>@Utility.GetBindStringValue(Model.area)</td>
+        <td class="align-right">行 业：</td>
+        <td>@Utility.GetBindStringValue(Model.industry)</td>
+    </tr>
+    <tr>
+        <td class="align-right">手 机：</td>
+        <td>@Utility.GetBindStringValue(Model.Item.mobile)</td>
+        <td class="align-right">邮 箱：</td>
+        <td>@Utility.GetBindStringValue(Model.Item.email)</td>
+    </tr>
+    <tr>
+        <td class="align-right">电 话：</td>
+        <td>@Utility.GetBindStringValue(Model.Item.tel)</td>
+        <td class="align-right">地 址：</td>
+        <td>@Utility.GetBindStringValue(Model.Item.address)</td>
+    </tr>
+    <tr>
+        <td class="align-right">注册时间：</td>
+        <td>@Model.Item.register_date.ToString("yyyy-MM-dd HH:mm:ss")</td>
+        <td class="align-right" title="最后登录时间">登录时间：</td>
+        <td>@Model.Item.last_login_date.ToString("yyyy-MM-dd HH:mm:ss")</td>
+    </tr>
+    <tr>
+        <td class="align-right">采购权限：</td>
+        <td>@(Model.Item.is_purchaser ? "有" : "无")</td>
+        <td class="align-right">发 票：</td>
+        <td>@(Model.Item.neet_invoice ? "需要" : "不需要")</td>
+    </tr>
+</table>

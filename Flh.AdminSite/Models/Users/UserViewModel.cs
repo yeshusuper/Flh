@@ -9,5 +9,7 @@ namespace Flh.AdminSite.Models.Users
     public class UserViewModel
     {
         public IUser Item { get; set; }
+        public String area { get; set; }
+        public String industry { get; set; }
     }
 }

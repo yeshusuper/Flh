@@ -19,6 +19,9 @@ namespace Flh.Business
         void ResetPassword(string mobile, string password);
         IUserService Get(long uid);
         IQueryable<Data.User> GetUsers(long[] uids);
+
+        IQueryable<Data.User> EnabledUsers { get; }
+        IQueryable<Data.User> AllUsers { get; }
     }
 
     internal class UserManager : IUserManager
@@ -163,6 +166,18 @@ namespace Flh.Business
             uids = (uids ?? Enumerable.Empty<long>()).Where(id => id > 0).Distinct().ToArray();
             if (uids.Length == 0) return Enumerable.Empty<Data.User>().AsQueryable();
             return _UserRepository.Entities.Where(u => uids.Contains(u.uid));
+        }
+
+
+        public IQueryable<Data.User> EnabledUsers
+        {
+            get { return _UserRepository.EnabledUsers; }
+        }
+
+
+        public IQueryable<Data.User> AllUsers
+        {
+            get { return _UserRepository.Entities; }
         }
     }
 
