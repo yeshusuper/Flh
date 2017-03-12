@@ -1,0 +1,139 @@
+﻿@model Flh.AdminSite.Models.Users.ListViewModel
+@using Flh.Business
+@{
+    Layout = "~/Views/Layout/_Manager.cshtml";
+    ViewBag.Title = "用户列表";
+}
+<style>
+    .form-table td {
+        padding: 10px;
+    }
+
+    .cb {
+        width: 30px;
+        height: 20px;
+    }
+    .align-right{
+        text-align:right;
+    }
+</style>
+<div class="crumbs">您的位置：辅料汇后台 &gt;  会员管理 &gt; 会员列表</div>
+<div class="layout-search">
+    <form>
+        <table class="form-table">
+            <tr>
+                <td class="align-right">姓 名：</td>
+                <td><input class="input-mobile" name="name" value="@Model.name" /></td>
+                <td class="align-right">手 机：</td>
+                <td><input class="input-mobile" name="mobile" value="@Model.mobile" type="text" placeholder="输入手机号码 进行搜索" /></td>
+
+                <td class="align-right">行 业：</td>
+                <td><input class="input-mobile" name="industry_no" value="@Model.industry_no" /></td>
+
+            </tr>
+            <tr>
+                <td class="align-right">注册时间：</td>
+                <td><input class="input-mobile" name="min_register_date" value="@Model.min_register_date" />-<input class="input-mobile" name="max_register_date" value="@Model.max_register_date" /></td>
+                <td class="align-right">登录时间：</td>
+                <td><input class="input-mobile" name="min_login_date" value="@Model.min_login_date" />-<input class="input-mobile" name="max_login_date" value="@Model.max_login_date" /></td>
+                <td class="align-right">采购权限：</td>
+                <td>
+                <label><input class="cb" type="radio" name="is_purchaser" @(Model.is_purchaser.HasValue && Model.is_purchaser.Value==true ? "checked" : String.Empty) value="True" />有</label>
+                &nbsp;&nbsp;<label><input class="cb" type="radio" name="is_purchaser" @(Model.is_purchaser.HasValue && Model.is_purchaser.Value == false ? "checked" : String.Empty) value="False" />无</label></td>
+            </tr>
+            <tr><td align="center" colspan="6"><button class="btn btn-default" type="submit">搜 索</button></td></tr>
+        </table>
+    </form>
+</div>
+<div class="common-list">
+    <table class="common-list-table">
+        <tr>
+            <th width="85%">用户信息</th>
+            <th width="25%">操作</th>
+        </tr>
+        @if (Model.Items.Any())
+        {
+            foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        <table class="common-list-table">
+                            <colgroup>
+                                <col style="width:100px;" />
+                                <col style="width:375px;" />
+                                <col style="width:130px;" />
+                            </colgroup>
+                            <tr>
+                                <td class="align-right">姓 名：</td>
+                            <td>
+                                <a title="点击查看详情页" href="/User/Details/@item.Item.uid" target="_blank">@item.Item.name</a>
+                               <span style="color:#AAA;margin-left:10px;">(ID：@item.Item.uid)</span> 
+                                <span>@(item.Item.enabled ? "" : "已屏蔽")</span>
+                                @if (!item.Item.enabled)
+                                {
+                                    <span>屏蔽备注：@Utility.GetBindStringValue(item.Item.enabled_memo)</span>
+                                }
+                                </td>
+                                <td class="align-right">公 司：</td>
+                                <td>@Utility.GetBindStringValue(item.Item.company) <span style="color:#AAA">（规模：@Flh.Business.Utility.GetEmployeesCount(item.Item.employees_count_type)）</span></td>
+                            </tr>
+                            <tr>
+                                <td class="align-right">地 区：</td>
+                                <td>@Utility.GetBindStringValue(item.area)</td>
+                                <td class="align-right">行 业：</td>
+                                <td>@Utility.GetBindStringValue(item.industry)</td>
+                            </tr>
+                            <tr>
+                                <td class="align-right">手 机：</td>
+                                <td>@Utility.GetBindStringValue(item.Item.mobile)</td>
+                                <td class="align-right">邮 箱：</td>
+                                <td>@Utility.GetBindStringValue(item.Item.email)</td>                           
+                            </tr>
+                            <tr>
+                                <td class="align-right">电 话：</td>
+                                <td>@Utility.GetBindStringValue(item.Item.tel)</td>
+                                <td class="align-right">地 址：</td>
+                                <td>@Utility.GetBindStringValue(item.Item.address)</td>
+                            </tr>
+                            <tr>
+                                <td class="align-right">注册时间：</td>
+                                <td>@item.Item.register_date.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                <td class="align-right" title="最后登录时间">登录时间：</td>
+                                <td>@item.Item.last_login_date.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            </tr>
+                            <tr>
+                                <td class="align-right">采购权限：</td>
+                                <td>@(item.Item.is_purchaser ? "有" : "无")</td>
+                                <td class="align-right">发 票：</td>
+                                <td>@(item.Item.neet_invoice?"需要":"不需要")</td>
+                            </tr>
+                        </table>
+                    </td>                      
+                    <td>
+                        <a href="javascript:;">添加跟进记录</a>
+                        <br /><a href="/User/Details/@item.Item.uid" target="_blank">查看详情</a>
+                    </td>             
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">
+                    @if (Request.QueryString.Count==0)
+                    {
+                        <div style="text-align:center;padding:30px;">请输入查询条件，点击搜索按钮进行搜索</div>
+                    }
+                    else
+                    {
+                        <div style="text-align: center; padding: 30px;">没查到任何记录，您可以改变搜索条件再试试</div>
+                    }
+                </td>
+            </tr>
+
+        }
+    </table>
+</div>
+<div class="page">
+    @Html.Pager(Model.Items);
+</div>
