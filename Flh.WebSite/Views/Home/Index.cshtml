@@ -4,6 +4,7 @@
     Layout = "~/Views/Layout/_header.cshtml";
 }
 <link href="/Resources/css/default.css" rel="stylesheet" />
+<script type="text/javascript" src="/Resources/js/scrollPic.js" charset="utf-8"></script>
 <div class="flh-index">
     <div class="flh-index-header layout-width">
         <div class="flh-index-header-left lf">
@@ -45,6 +46,12 @@
         </div>
         <div class="clear"></div>
     </div>
+
+    @*这是广告*@
+    <div class="flh-index-advertising layout-width">
+        @Html.Action("List", "Advertisement", new { id = "Index" })
+    </div>
+
     <div class="flh-index-main layout-width">
         @foreach (var item in Model.BottomRightItems)
         {
@@ -107,6 +114,41 @@
             var _this = $(this),
                 listID = _this.attr("data-no");
             mScroll(listID);
-        })
+        });
+        $(function () {
+
+            var hq_Width = $("#scroll-mian").width(),
+                focusScroll = new ScrollPic();
+            focusScroll.scrollContId = "scroll-mian"; //内容容器ID
+            focusScroll.dotListId = "slide_dot";
+            focusScroll.dotClassName = "";
+            focusScroll.dotOnClassName = "on";
+            focusScroll.listType = "number";//列表类型(number:数字，其它为空)
+            focusScroll.listEvent = "onmouseover"; //切换事件
+            focusScroll.frameWidth = hq_Width;//显示框宽度
+            focusScroll.pageWidth = hq_Width; //翻页宽度
+            focusScroll.upright = false; //垂直滚动
+            focusScroll.speed = 10; //移动速度(单位毫秒，越小越快)
+            focusScroll.space = 40; //每次移动像素(单位px，越大越快)
+            focusScroll.autoPlay = true; //自动播放
+            focusScroll.autoPlayTime = 5; //自动播放间隔时间(秒)
+            focusScroll.circularly = true;
+            focusScroll.initialize(); //初始化
+            function mScroll(id) {
+                $("html,body").stop(true);
+                $("html,body").animate({ scrollTop: $("#list-" + id).offset().top - 35 }, 500);
+            }
+            $('.flh-index-header-nav-list').hover(function () {
+                $(this).addClass('nav-hover');
+            }, function () {
+                $(this).removeClass('nav-hover');
+            })
+            $('.flh-index-horizontal-main a').on('click', function () {
+                var _this = $(this),
+                    listID = _this.attr("data-no");
+                mScroll(listID);
+            })
+
+        });
     })
 </script>

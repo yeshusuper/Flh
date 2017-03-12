@@ -1,0 +1,12 @@
+﻿@model Flh.WebSite.Models.Advertisement.Advertisement[]
+<div id="scroll-mian">
+    @foreach(var m in Model)
+    {
+        <div class="scroll-mian-1">
+        <a href="@Url.Action("Detail",new {id=m.aid})" title="@m.title" target="_blank">
+            <img src="http://img.fuliaohui.com/@m.image" alt="@m.title" width="1200" height="80" />
+        </a>
+    </div>
+    }
+   <div class="scrDotList_wrap" style="display:none;"> <span class="scrDotList" id="slide_dot"> <span></span> </span> </div>
+</div>
