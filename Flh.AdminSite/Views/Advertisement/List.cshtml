@@ -1,0 +1,99 @@
+﻿@model Flh.AdminSite.Models.Advertisement.AdvertisementList
+@{
+    ViewBag.Title = "广告列表";
+    Layout = "../Layout/_Manager.cshtml";
+}
+<div class="crumbs">您的位置：广告管理</div>
+<div class="layout-search">
+    <form method="get" class="common-form">
+        广告搜索：
+        <input class="input-keyword" name="key" value="@Model.key" type="text" placeholder="广告标题/跳转地址" />
+        <select name="position">
+            <option value="">--请选择广告位置--</option>
+            <option value="Index" @(Model.position=="Index"? "selected='selected'":"")>首页广告</option>
+        </select>
+        <button class="btn btn-default" type="submit">搜索</button>
+    </form>
+</div>
+<div class="common-list" id="adv-list">
+    <table class="common-list-table">
+        <tr>
+            <td style="vertical-align:top;"><label><input value="" name="" type="checkbox" class="check-all">全选</label></td>
+            <td colspan="7">
+                <a class="btn btn-default adv-list-delete">批量删除</a>&nbsp;
+                <a href="/Advertisement/Edit">添加广告</a>
+                <div class="clear"></div>
+            </td>
+        </tr>
+        <tr>
+            <th width="50"></th>
+            <th width="70">图片</th>
+            <th>标题</th>
+            <th>跳转地址</th>
+            <th>位置</th>
+            <th>内容</th>
+            <th>时间</th>
+            <th width="50">排序</th>
+            <th width="50">点击量</th>
+            <th width="50">修改</th>
+        </tr>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td style="vertical-align:middle; padding:0px;" align="center">
+                    <input value="@item.aid" name="aid" type="checkbox" class="check-monomer">
+                </td>
+                <td>
+                    <img src="http://img.fuliaohui.com/@item.image" alt="广告图片" width="60" height="60" />
+                </td>
+                <td style="vertical-align:middle;">@item.title</td>
+                <td style="vertical-align:middle;"><a href="@item.url">@item.url</a></td>
+                <td style="vertical-align:middle;">@item.positionName</td>
+                <td style="vertical-align:middle;">@item.content</td>
+                <td style="vertical-align:middle;">@item.updated.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td style="vertical-align:middle;">@item.order</td>
+                <td style="vertical-align:middle;">@item.clickCount</td>
+                <td style="vertical-align:middle;"><a href="@Url.Action("Edit",new{id=item.aid})">编辑</a></td>
+            </tr>
+        }
+    </table>
+    <div class="page">
+        @Html.Pager(Model.Items);
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(".check-all").click(function () {
+        if (this.checked) {
+            $("input[name='aid']").attr("checked", true);
+        } else {
+            $("input[name='aid']").attr("checked", false);
+        }
+    });
+
+    $(".adv-list-delete").click(function () {
+        var pids = new Array();
+        $("input[name='aid']").each(function (i) {
+            if (this.checked == true) {
+                pids[i] = $(this).val();
+            }
+        });
+        $.post('@Url.Action("Delete")', { "aids":pids.join(',') }, function (data) {
+            if (data) {
+                alert('删除成功！')
+            window.location.reload();
+            } else {
+                alert('删除失败！')
+            }
+        })
+    });
+
+        //获取选择的广告id
+    function getCheckedIds() {
+        return $("input[name='aid']:checked").map(function () {
+            return $(this).val(aid);
+        }).get();
+    };
+</script>

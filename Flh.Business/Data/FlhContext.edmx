@@ -23,6 +23,24 @@
           <Property Name="created" Type="datetime" Nullable="false" />
           <Property Name="operatorUid" Type="bigint" Nullable="false" />
         </EntityType>
+        <EntityType Name="Advertisement">
+          <Key>
+            <PropertyRef Name="aid" />
+          </Key>
+          <Property Name="aid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="content" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="url" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="clickCount" Type="int" Nullable="false" />
+          <Property Name="created" Type="datetime" Nullable="false" />
+          <Property Name="creater" Type="bigint" Nullable="false" />
+          <Property Name="updater" Type="bigint" Nullable="false" />
+          <Property Name="updated" Type="datetime" Nullable="false" />
+          <Property Name="isEnabled" Type="bit" Nullable="false" />
+          <Property Name="image" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="position" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="orderBy" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Area">
           <Key>
             <PropertyRef Name="area_no" />
@@ -57,6 +75,20 @@
           <Property Name="indexImage" Type="nvarchar" MaxLength="200" />
           <Property Name="listImage" Type="nvarchar" MaxLength="200" />
           <Property Name="introduce" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="FollowUpRecord">
+          <Key>
+            <PropertyRef Name="rid" />
+          </Key>
+          <Property Name="rid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="content" Type="nvarchar" MaxLength="2000" Nullable="false" />
+          <Property Name="created" Type="datetime" Nullable="false" />
+          <Property Name="administrator" Type="bigint" Nullable="false" />
+          <Property Name="uid" Type="bigint" Nullable="false" />
+          <Property Name="isEnabled" Type="bit" Nullable="false" />
+          <Property Name="kind" Type="tinyint" Nullable="false" />
+          <Property Name="updater" Type="bigint" />
+          <Property Name="updated" Type="datetime" />
         </EntityType>
         <EntityType Name="LoginHistory">
           <Key>
@@ -215,6 +247,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_FollowUpRecord_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="FollowUpRecord" Type="Self.FollowUpRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="uid" />
+            </Principal>
+            <Dependent Role="FollowUpRecord">
+              <PropertyRef Name="uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FollowUpRecord_User1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="FollowUpRecord" Type="Self.FollowUpRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="uid" />
+            </Principal>
+            <Dependent Role="FollowUpRecord">
+              <PropertyRef Name="administrator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_LoginHistory_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="LoginHistory" Type="Self.LoginHistory" Multiplicity="*" />
@@ -254,8 +310,10 @@
         <EntityContainer Name="TestModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AdminModifyHistory" EntityType="Self.AdminModifyHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Advertisement" EntityType="Self.Advertisement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Classes" EntityType="Self.Classes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FollowUpRecord" EntityType="Self.FollowUpRecord" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoginHistory" EntityType="Self.LoginHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SmsHistory" EntityType="Self.SmsHistory" Schema="dbo" store:Type="Tables" />
@@ -281,6 +339,14 @@
           <AssociationSet Name="FK_Classes_Admin_updater" Association="Self.FK_Classes_Admin_updater">
             <End Role="Admin" EntitySet="Admin" />
             <End Role="Classes" EntitySet="Classes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FollowUpRecord_User" Association="Self.FK_FollowUpRecord_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="FollowUpRecord" EntitySet="FollowUpRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FollowUpRecord_User1" Association="Self.FK_FollowUpRecord_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="FollowUpRecord" EntitySet="FollowUpRecord" />
           </AssociationSet>
           <AssociationSet Name="FK_LoginHistory_User" Association="Self.FK_LoginHistory_User">
             <End Role="User" EntitySet="User" />
@@ -414,6 +480,8 @@
           <Property Name="enabled_memo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Admin" Relationship="Self.FK_Admin_User" FromRole="User" ToRole="Admin" />
           <NavigationProperty Name="LoginHistory" Relationship="Self.FK_LoginHistory_User" FromRole="User" ToRole="LoginHistory" />
+          <NavigationProperty Name="FollowUpRecord" Relationship="TestModel.FK_FollowUpRecord_User" FromRole="User" ToRole="FollowUpRecord" />
+          <NavigationProperty Name="FollowUpRecord1" Relationship="TestModel.FK_FollowUpRecord_User1" FromRole="User" ToRole="FollowUpRecord" />
         </EntityType>
         <EntityType Name="VerifyCode">
           <Key>
@@ -563,6 +631,16 @@
           </AssociationSet>
           <EntitySet Name="SmsHistory" EntityType="TestModel.SmsHistory" />
           <EntitySet Name="Product" EntityType="TestModel.Product" />
+          <EntitySet Name="Advertisement" EntityType="TestModel.Advertisement" />
+          <EntitySet Name="FollowUpRecord" EntityType="TestModel.FollowUpRecord" />
+          <AssociationSet Name="FK_FollowUpRecord_User" Association="TestModel.FK_FollowUpRecord_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="FollowUpRecord" EntitySet="FollowUpRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FollowUpRecord_User1" Association="TestModel.FK_FollowUpRecord_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="FollowUpRecord" EntitySet="FollowUpRecord" />
+          </AssociationSet>
         </EntityContainer>
         <EnumType Name="EmployeesCountRanges" UnderlyingType="Byte" a:ExternalTypeName="Flh.Business.Users.EmployeesCountRanges" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EntityType Name="SmsHistory">
@@ -606,6 +684,65 @@
           <Property Name="updater" Type="Int64" />
           <Property Name="viewCount" Type="Int32" />
         </EntityType>
+        <EntityType Name="Advertisement">
+          <Key>
+            <PropertyRef Name="aid" />
+          </Key>
+          <Property Name="aid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="content" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="url" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="clickCount" Type="Int32" Nullable="false" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="creater" Type="Int64" Nullable="false" />
+          <Property Name="updater" Type="Int64" Nullable="false" />
+          <Property Name="updated" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="isEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="image" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="position" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="orderBy" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FollowUpRecord">
+          <Key>
+            <PropertyRef Name="rid" />
+          </Key>
+          <Property Name="rid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="content" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="administrator" Type="Int64" Nullable="false" />
+          <Property Name="uid" Type="Int64" Nullable="false" />
+          <Property Name="isEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="kind" Type="TestModel.FollowUpRecordKinds" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="TestModel.FK_FollowUpRecord_User" FromRole="FollowUpRecord" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="TestModel.FK_FollowUpRecord_User1" FromRole="FollowUpRecord" ToRole="User" />
+          <Property Name="updater" Type="Int64" />
+          <Property Name="updated" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_FollowUpRecord_User">
+          <End Type="TestModel.User" Role="User" Multiplicity="1" />
+          <End Type="TestModel.FollowUpRecord" Role="FollowUpRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="uid" />
+            </Principal>
+            <Dependent Role="FollowUpRecord">
+              <PropertyRef Name="uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FollowUpRecord_User1">
+          <End Type="TestModel.User" Role="User" Multiplicity="1" />
+          <End Type="TestModel.FollowUpRecord" Role="FollowUpRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="uid" />
+            </Principal>
+            <Dependent Role="FollowUpRecord">
+              <PropertyRef Name="administrator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EnumType Name="FollowUpRecordKinds" UnderlyingType="Byte" a:ExternalTypeName="Flh.Business.FollowUpRecord.FollowUpRecordKinds" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -768,6 +905,40 @@
                 <ScalarProperty Name="enName" ColumnName="enName" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="pid" ColumnName="pid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Advertisement">
+            <EntityTypeMapping TypeName="TestModel.Advertisement">
+              <MappingFragment StoreEntitySet="Advertisement">
+                <ScalarProperty Name="orderBy" ColumnName="orderBy" />
+                <ScalarProperty Name="position" ColumnName="position" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="isEnabled" ColumnName="isEnabled" />
+                <ScalarProperty Name="updated" ColumnName="updated" />
+                <ScalarProperty Name="updater" ColumnName="updater" />
+                <ScalarProperty Name="creater" ColumnName="creater" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="clickCount" ColumnName="clickCount" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="aid" ColumnName="aid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FollowUpRecord">
+            <EntityTypeMapping TypeName="TestModel.FollowUpRecord">
+              <MappingFragment StoreEntitySet="FollowUpRecord">
+                <ScalarProperty Name="updated" ColumnName="updated" />
+                <ScalarProperty Name="updater" ColumnName="updater" />
+                <ScalarProperty Name="kind" ColumnName="kind" />
+                <ScalarProperty Name="isEnabled" ColumnName="isEnabled" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="administrator" ColumnName="administrator" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="rid" ColumnName="rid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Edit";
+}
+@using (Html.BeginForm("Edit", "FollowUpRecord", FormMethod.Post))
+{
+    <div class="popup" style="width:390px;">
+        <table>
+            <tr>
+                <td>内容：</td>
+                <td>
+                    <input type="hidden" name="uid" value="@ViewBag.Uid" />
+                    <input type="text" name="content" autocomplete="off" />
+                </td>
+            </tr>
+            <tr>
+                <td>类型：</td>
+                <td>
+                    <select name="kind">
+                        <option value="">--请选择类型--</option>
+                        <option value="1">用户主动联系</option>
+                        <option value="2">管理员主动联系</option>
+                    </select>
+                </td>
+            </tr>
+        <tr>
+            <td><input type="submit" value="确定"></td>
+            <td><input type="button" value=" 取消" /> </td>
+        </tr>
+    </table>
+</div>
+}

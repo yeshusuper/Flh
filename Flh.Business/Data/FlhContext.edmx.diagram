@@ -23,6 +23,10 @@
         <AssociationConnector Association="TestModel.FK_LoginHistory_User" ManuallyRouted="false" />
         <EntityTypeShape EntityType="TestModel.SmsHistory" Width="1.5" PointX="7.375" PointY="7.75" />
         <EntityTypeShape EntityType="TestModel.Product" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="TestModel.Advertisement" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="TestModel.FollowUpRecord" Width="1.5" PointX="3" PointY="10.75" />
+        <AssociationConnector Association="TestModel.FK_FollowUpRecord_User" />
+        <AssociationConnector Association="TestModel.FK_FollowUpRecord_User1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

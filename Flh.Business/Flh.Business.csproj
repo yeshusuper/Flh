@@ -61,12 +61,25 @@
   <ItemGroup>
     <Compile Include="Admins\IAdmin.cs" />
     <Compile Include="Admins\IAdminManager.cs" />
+    <Compile Include="Advertisement\AdvertisementManager.cs" />
+    <Compile Include="Advertisement\AdvertisementService.cs" />
+    <Compile Include="Data\Advertisement.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\AdvertisementRepository.cs" />
+    <Compile Include="Data\FollowUpRecord.cs">
+      <DependentUpon>FlhContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\FollowUpRecordRepository.cs" />
     <Compile Include="Data\SmsHistory.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\VerifyCode.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="FollowUpRecord\FollowUpRecordKinds.cs" />
+    <Compile Include="FollowUpRecord\FollowUpRecordManager.cs" />
+    <Compile Include="FollowUpRecord\FollowUpRecordService.cs" />
     <Compile Include="IProductManager.cs" />
     <Compile Include="Data\Area.cs">
       <DependentUpon>FlhContext.tt</DependentUpon>

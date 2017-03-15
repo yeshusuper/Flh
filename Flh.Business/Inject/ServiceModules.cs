@@ -24,7 +24,8 @@ namespace Flh.Business.Inject
             Bind<IProductManager>().To<ProductManager>();
             Bind<IProductServiceFactory>().To<ProductServiceFactory>();
             Bind<IProductSearchManager>().To<ProductSearchManager>();
-            Bind<Mobile.IMobileManager>().To<Mobile.MobileManager>();
+            Bind<Advertisement.IAdvertisementManager>().To<Advertisement.AdvertisementManager>();
+            Bind<FollowUpRecord.IFollowUpRecordManager>().To<FollowUpRecord.FollowUpRecordManager>();
         }
     }
 }

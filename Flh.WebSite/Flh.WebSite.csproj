@@ -113,6 +113,7 @@
     <Compile Include="App_Start\CookieFilter.cs" />
     <Compile Include="App_Start\InjectConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdvertisementController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\UserInfoModel.cs" />
+    <Compile Include="Models\Advertisement\Advertisement.cs" />
     <Compile Include="Models\ClassTreeModel.cs" />
     <Compile Include="Models\Product\ListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -207,6 +209,9 @@
     <Content Include="Views\Product\BatchEdit.cshtml" />
     <Content Include="Views\Product\Detail.cshtml" />
     <Content Include="Views\Product\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Advertisement\List.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
