@@ -13,6 +13,9 @@
 .nav-icon-right{position: absolute;top:10px; right: 40px; display: block;height: 20px; line-height: 20px; color: #808080; font-style: normal; font-size: 18px;}
 .nav-hover .flh-index-header-nav-lista{ background: #C7181F;  color: #fff;}
 .nav-hover .nav-icon-right{ color: #fff;}
+/*广告轮播*/
+.flh-index-advertising{margin-top: 20px; margin-bottom: -20px;}
+.scroll-mian-1{width: 1200px;height: 80px;float: left;text-align: center;}
 .flh-index-header-nav-main{ display: none; position: absolute; top: -2px; left: 192px;  height: 508px; z-index: 10; background: #fafafa;}
 .flh-index-header-nav-main ul{width: 100px; height: 100%; border: 1px solid #C7181F;}
 .flh-index-header-nav-main li{ text-align: center;}

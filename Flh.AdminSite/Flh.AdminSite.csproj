@@ -140,6 +140,8 @@
     <Compile Include="Models\FollowUpRecord\FollowUpRecordEdit.cs" />
     <Compile Include="Models\Product\BatchEditListModel.cs" />
     <Compile Include="Models\Product\ListModel.cs" />
+    <Compile Include="Models\Users\ListViewModel.cs" />
+    <Compile Include="Models\Users\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -327,7 +329,10 @@
     <Content Include="Views\FollowUpRecord\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\Detail.cshtml" />
+    <Content Include="Views\User\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\Details.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

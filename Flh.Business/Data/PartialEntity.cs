@@ -47,4 +47,27 @@ namespace Flh.Business.Data
     public partial class Product : IProduct
     {
     }
+    public interface IUser
+    {
+        long uid { get; }
+        string mobile { get; }
+        string email { get; }
+        string pwd { get; }
+        string name { get; }
+        string company { get; }
+        string area_no { get; }
+        string address { get; }
+        Flh.Business.Users.EmployeesCountRanges employees_count_type { get; }
+        string industry_no { get; }
+        bool is_purchaser { get; }
+        bool neet_invoice { get; }
+        string tel { get; }
+        System.DateTime register_date { get; }
+        System.DateTime last_login_date { get; }
+        bool enabled { get; }
+        string enabled_memo { get; }
+    }
+    public partial class User:IUser
+    {
+    }
 }
