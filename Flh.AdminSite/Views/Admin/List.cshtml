@@ -27,7 +27,7 @@
             foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.UserName</td>
+                    <td><a href="@Url.Action("Detail","User",new {id=item.Uid})"> @item.UserName</a></td>
                     <td>@item.Mobile</td>
                     <td>@(item.IsAdmin ? "是" : "否")</td>
                     <td>@(item.CreateDate.HasValue ? item.CreateDate.Value.ToString("yyyy-MM-dd") : "--")</td>

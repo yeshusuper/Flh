@@ -20,7 +20,8 @@
             <a href="@Url.Action("list", "classes", new { pno = String.Empty })" >分类管理</a>
             <a href="@Url.Action("list", "area", new { pno = String.Empty })">地区管理</a>
             <a href="@Url.Action("list", "trade", new { pno = String.Empty })" >行业类型管理</a>
-            <a href="@Url.Action("list", "product")" >产品管理</a>
+            <a href="@Url.Action("list", "product")">产品管理</a>
+            <a href="@Url.Action("list", "Advertisement")" >广告管理</a>
         </nav>
     </div>
     <div class="layout-center">
@@ -46,6 +47,10 @@
                 <div class="layout-left-tub">产品管理</div>
                 <div class="layout-left-subclass"><a href="@Url.Action("list", "product")" @(Url.IsCurrent("list", "product") ? "class=\"current\"" : String.Empty)>产品列表</a></div>
                 @*<div class="layout-left-subclass"><a href="@Url.Action("BatchEdit", "product")" @(Url.IsCurrent("BatchEdit", "product") ? "class=\"current\"" : String.Empty)>批量添加</a></div>*@
+            </div>
+            <div class="layout-left-list">
+                <div class="layout-left-tub">广告管理</div>
+                <div class="layout-left-subclass"><a href="@Url.Action("list", "Advertisement", new { pno = String.Empty })" @(Url.IsCurrent("list", "Advertisement") ? "class=\"current\"" : String.Empty)>广告列表</a></div>
             </div>
         </div>
         <div class="layout-right">

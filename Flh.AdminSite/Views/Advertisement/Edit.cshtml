@@ -1,0 +1,43 @@
+﻿@model Flh.AdminSite.Models.Advertisement.AdvertisementEdit
+@{
+    ViewBag.Title = "Edit";
+    string no = ViewBag.No;
+}
+@using (Html.BeginForm("Edit", "Advertisement", FormMethod.Post))
+{
+    <div class="popup" style="width:390px;">
+        <table>
+            <tr>
+                <td>标题：</td>
+                <td>@Html.HiddenFor(m => m.aid) @Html.TextBoxFor(m => m.title)</td>
+            </tr>
+            <tr>
+                <td>地址：</td>
+                <td>@Html.TextBoxFor(m => m.url)</td>
+            </tr>
+            <tr>
+                <td>说明：</td>
+                <td>@Html.TextBoxFor(m => m.content)</td>
+            </tr>
+            <tr>
+                <td>排序：</td>
+                <td>@Html.TextBoxFor(m => m.order)</td>
+            </tr>
+            <tr>
+                <td>位置：</td>
+                <td>@Html.DropDownList("position", new SelectListItem[]
+                       {
+                           new SelectListItem {  Text="首页广告", Value="Index", Selected= Model.position=="Index"} 
+                       })</td>
+            </tr>
+            <tr>
+                <td>图&nbsp;&nbsp;片：</td>
+                <td><img src="http://img.fuliaohui.com/@Model.image" alt="广告图片" width="60" height="60" />&nbsp;@Html.TextBoxFor(m => m.image)</td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="确定"></td>
+                <td><input type="button" value=" 取消" /> </td>
+            </tr>
+        </table>
+    </div>
+}

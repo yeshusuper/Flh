@@ -1,0 +1,10 @@
+﻿@{
+    long uid = ViewBag.Uid;
+    ViewBag.Title = "用户详情页";
+}
+
+<h2>这是用户详情页</h2>
+<div>
+    <h3>这个回访记录列表</h3>
+   @Html.Action("List", "FollowUpRecord", new { id =uid });
+</div>

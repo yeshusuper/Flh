@@ -35,5 +35,7 @@ namespace Flh.Business.Data
         public virtual DbSet<VerifyCode> VerifyCode { get; set; }
         public virtual DbSet<SmsHistory> SmsHistory { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<Advertisement> Advertisement { get; set; }
+        public virtual DbSet<FollowUpRecord> FollowUpRecord { get; set; }
     }
 }
