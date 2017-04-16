@@ -20,7 +20,7 @@
                 <td class="align-right" width="7%">姓 名：</td>
                 <td width="20%"><input class="input-99" name="name" value="@Model.name" placeholder="输入姓名进行搜索" /></td>
                 <td class="align-right" width="7%">手 机：</td>
-                <td width="20%"><input class="input-99" name="mobile" value="@Model.mobile" type="text" placeholder="输入手机号码进行搜索" /></td>
+                <td width="20%"><input class="input-99" name="mobile" value="@Model.mobile" type="text" placeholder="" /></td>
 
                 <td class="align-right" width="7%">行 业：</td>
                 <td width="29%">
@@ -76,10 +76,10 @@
                         <th width="70">公 司：</th>
                         <td width="200">
                             <span class="v-Company">@Utility.GetBindStringValue(item.Item.company)</span>
-                            <span class="v-Employeesno" style="color:#AAA" data-employeesno="2" @*绑定从业人数编号*@>（规模：@Flh.Business.Utility.GetEmployeesCount(item.Item.employees_count_type)）</span> 
+                            <span class="v-Employeesno" style="color:#AAA" data-employeesno="@((byte)item.Item.employees_count_type)">（规模：@Flh.Business.Utility.GetEmployeesCount(item.Item.employees_count_type)）</span> 
                         </td>
                         <th width="70">地 区：</th>
-                        <td width="200" class="v-AreaNo" data-areano="0001001100120003" @*绑定地区编号*@>
+                        <td width="200" class="v-AreaNo" data-areano="@item.Item.area_no">
 
                             @Utility.GetBindStringValue(item.area)
                         </td>
@@ -110,7 +110,7 @@
                         <th>地 址：</th>
                         <td class="v-Address">@Utility.GetBindStringValue(item.Item.address)</td>
                         <th>行 业：</th>
-                        <td class="v-industry" data-industryno="000100010002" @*绑定行业编号*@>@Utility.GetBindStringValue(item.industry)</td>
+                        <td class="v-industry" data-industryno="@item.Item.industry_no">@Utility.GetBindStringValue(item.industry)</td>
                         <th>采购权限：</th>
                         <td class="v-IsPurchaser">@(item.Item.is_purchaser ? "有" : "无")</td>
                     </tr>

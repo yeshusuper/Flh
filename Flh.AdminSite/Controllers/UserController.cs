@@ -118,6 +118,13 @@ namespace Flh.AdminSite.Controllers
             return SuccessJsonResult();
         }
 
+        [HttpPost]
+        public ActionResult ShieldUser(long uid,String remark)
+        {
+            var userService = _UserManager.Get(uid);
+            userService.ShieldUser(uid, remark);
+            return SuccessJsonResult();
+        }
         void LoadUserAreaName(IEnumerable<ListItemViewModel> items)
         {
             var areaNoes = items.Select(d => d.Item.area_no).Where(d => !String.IsNullOrWhiteSpace(d)).Distinct().ToArray();
