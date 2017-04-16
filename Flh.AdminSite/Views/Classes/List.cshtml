@@ -196,25 +196,7 @@
                 _this = this,
                 ileObj = $('#inputfiles')[0].files;
             upload_check(filepath, _this);
-            setcompression_img(ileObj, imgClass)
-            /*$.ajaxFileUpload({
-                url: "/Product/UploadImages",
-                secureuri: false,
-                fileElementId: "file",//file标签的id
-                dataType: 'json',
-                success: function (data, status) {
-                    if (typeof data == "string") {
-                        data = JSON.parse(data);
-                    }
-                    $('.' + imgClass).attr('src', 'http://img.fuliaohui.com/' + data.data.id + '?x-oss-process=style/product-list').attr('data-src', data.data.id);
-
-
-                },
-                error: function (data, status, e) {
-                    //alert(e);
-                }
-            });*/
-
+            setcompression_img(ileObj, imgClass);
         })
         $('.fun_save').on('click', function () {
             var no = $('.main-list-no').val() || "",

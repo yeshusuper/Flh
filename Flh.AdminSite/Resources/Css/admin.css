@@ -1,6 +1,7 @@
 body{font: 12px/1.75 arial, "宋体", sans-serif;}
 .p-20{ padding: 20px;}
 .login-main{ display: none;}
+.text-red{ color: red;}
 .clear{ clear: both; width: 0px; height: 0px;}
 .product-pop-bg{position: fixed; top: 0px; left: 0px; background: #000;opacity:0.6;filter:alpha(opacity=60);z-index: 1002; width: 100%; height: 100%; z-index: 1001;}
 .product-pop-main{position: fixed; top: 0px; left: 0px;width: 100%; height: 100%;z-index: 1002;}
@@ -180,6 +181,7 @@ color: #fff;
 .popBox-bg{ position: fixed; top: 0px; left: 0px;background: #000;opacity: 0.5; z-index: 100; display: none; width: 100%; height: 100%;}
 .popBox{width: 450px;position: fixed; top: 50%; left: 50%; margin-left: -225px;z-index: 101; background: #fff;padding: 0px 20px 30px 20px;border-radius: 6px; margin-top: -260px;display: none;}
 .popBox .title{padding: 16px 0px;font-size: 16px;font-family: "Microsoft YaHei", Helvetica, sans-serif;color: #4D4D4D;border-bottom: 1px solid #c5c5c5;position: relative;}
+.popBox .title i{font-style:normal;}
 .popBox .title .span_close {display: block;width: 44px;height: 44px;background: url("http://img.tgimg.cn/Common/pop-close.png") no-repeat;position: absolute;top: 0px;right: -20px;cursor: pointer;}
 .popBox .title .span_close:hover {background: url("http://img.tgimg.cn/Common/pop-close-hover.png") no-repeat;}
 .popBox .main{ width: 100%;}
@@ -202,3 +204,26 @@ color: #fff;
 .popBox .save-btn:hover,.popBox .cancel-btn:hover{opacity:0.8;filter:alpha(opacity=80)}
 /*地区与行业类型弹出框*/
 #popArea,#popTrade{margin-top: -130px;}
+/*广告编辑样式*/
+/*会员列表*/
+.member-list-search td{ padding-bottom: 10px;}
+.input-49{ width: 92px;padding: 0px 0px 0px 10px;border: 1px solid #999;color: #333;height: 28px;}
+.input-99{ width: 200px;padding: 0px 0px 0px 10px;border: 1px solid #999;color: #333;height: 28px;}
+.member-list-table{ width: 100%;}
+.member-list-table thead th{border: 1px solid #ddd;padding: 6px 0px 6px 10px;background: #C1D9F3;}
+.member-list-table tbody td,.member-list-table tbody th{border: 1px solid #ddd;padding: 6px 0px 6px 10px;}
+.member-list-table tbody th{ text-align: right}
+.member-list-table tbody{ border-top: 2px solid #dadada;}
+.member-list-table tbody:nth-child(2n){background: #f9fafd;}
+.User-dataEditor{ display:none;}
+.User-dataEditor .bottom,.User-shieldPop .bottom,.User-followRecord .bottom{ margin-left: 95px;}
+.dataEditor-main{ width: 100%;}
+.dataEditor-main-list{padding-left: 95px;position: relative;margin-bottom: 10px;}
+.dataEditor-main-list .dataEditor-main-th {position: absolute;display: block;top: 0px;left: 0px;height: 30px;line-height: 30px;color: #333;font-size: 14px;}
+.default-input-ui{width: 335px;padding: 0px 0px 0px 10px;height: 28px;border: 1px solid #AAA;border-radius: 4px;}
+.dataEditor-Mobile a{ position: absolute; top: 1px; right: 10px; width: 60px; height: 28px; line-height: 28px; color: #f80; text-align: center; display: none;}
+.default-textarea-ui{width: 335px;padding: 0px 0px 0px 10px;height: 48px;border: 1px solid #AAA;border-radius: 4px;}
+.default-radio-ui{ height: 30px;}
+.default-radio-ui label{ display: block; float: left; position: relative; margin-right: 10px; padding-left: 20px; height: 30px; line-height: 30px; font-size: 14px; width: 70px;}
+.default-radio-ui label input{width: 14px; height: 14px;position: absolute; top: 50%; left: 0px; margin-top: -7px;}
+.popBox .bottom .noClick{ background: #dadada; border: 1px solid #dadada; color: #999;}
