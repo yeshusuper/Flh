@@ -155,11 +155,13 @@
     <Content Include="Resources\Css\jquery.datetimepicker.min.css" />
     <Content Include="Resources\Css\magnific-popup.css" />
     <Content Include="Resources\Css\style.css" />
+    <Content Include="Resources\Js\ajax.areaSelect.js" />
     <Content Include="Resources\Js\ajaxfileupload.js" />
     <Content Include="Resources\Js\ckeditor\build-config.js" />
     <Content Include="Resources\Js\ckeditor\ckeditor.js" />
     <Content Include="Resources\Js\ckeditor\config.js" />
     <Content Include="Resources\Js\ckeditor\contents.css" />
+    <Content Include="Resources\Js\InfinitePoleData.js" />
     <Content Include="Resources\Js\ckeditor\lang\zh-cn.js" />
     <Content Include="Resources\Js\ckeditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
     <Content Include="Resources\Js\ckeditor\plugins\a11yhelp\dialogs\lang\zh-cn.js" />
@@ -333,6 +335,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\User\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Advertisement\Edit.cshtml" />
+    <Content Include="Views\Advertisement\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FollowUpRecord\Edit.cshtml" />
+    <Content Include="Views\FollowUpRecord\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\User\Details.cshtml" />
