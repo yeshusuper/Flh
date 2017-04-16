@@ -18,6 +18,8 @@ namespace Flh.Business
         void UpdateByAdmin(String name, String mobile, String email, String tel,
             String company, String area_no, String address, String industry_no, bool? is_purchaser, bool? neet_invoice,
             bool? enabled, String enabled_memo, EmployeesCountRanges? employees_count_type);
+
+        void ShieldUser(long uid, String remark);
     }
 
     internal class UserService : IUserService
@@ -161,6 +163,18 @@ namespace Flh.Business
             {
                 _LazyUser.Value.employees_count_type = employees_count_type.Value;
             }
+            _UserRepository.SaveChanges();
+        }
+
+        /// <summary>
+        /// 屏蔽用户
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="remark"></param>
+        public void ShieldUser(long uid, string remark)
+        {
+            _LazyUser.Value.enabled = false;
+            _LazyUser.Value.enabled_memo = remark;
             _UserRepository.SaveChanges();
         }
     }

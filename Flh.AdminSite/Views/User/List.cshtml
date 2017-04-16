@@ -4,132 +4,145 @@
     Layout = "~/Views/Layout/_Manager.cshtml";
     ViewBag.Title = "用户列表";
 }
-<style>
-    .form-table td {
-        padding: 10px;
-    }
+<script>
+    var userAreaData = "",
+        userTradeData = '[{"no":"00010001","name":"制造业","subs":[{"no":"000100010001","name":"鞋包服饰业","subs":[]},{"no":"000100010002","name":"纺织服装业","subs":[]},{"no":"000100010003","name":"印染业","subs":[]},{"no":"000100010004","name":"纺织业","subs":[]},{"no":"000100010005","name":"手制工艺品业","subs":[]},{"no":"000100010006","name":"皮革毛皮及其它制品","subs":[]},{"no":"000100010007","name":"家纺制造业","subs":[]},{"no":"000100010008","name":"文教工美体育和娱乐用品制造业","subs":[]},{"no":"000100010009","name":"灯饰业","subs":[]},{"no":"000100010010","name":"机械业","subs":[]},{"no":"000100010011","name":"玩具业","subs":[]},{"no":"000100010012","name":"其它制造业","subs":[]}]},{"no":"00010002","name":"非制造业","subs":[{"no":"000100020001","name":"贸易公司","subs":[]},{"no":"000100020002","name":"学校","subs":[]},{"no":"000100020003","name":"设计公司","subs":[]},{"no":"000100020004","name":"科学研究和技术服务","subs":[]},{"no":"000100020005","name":"建筑业","subs":[]},{"no":"000100020006","name":"文化体育和娱乐业","subs":[]},{"no":"000100020007","name":"国际组织","subs":[]},{"no":"000100020008","name":"其它非制造业","subs":[]}]}]';
+</script>
+<script src="http://js.tgimg.cn/jQuery/base/widgets/jquery.calendarV5.js" charset="gb2312"></script>
+<script src="/Resources/Js/ajax.areaSelect.js" charset="gb2312"></script>
+<script src="/Resources/Js/InfinitePoleData.js"></script>
 
-    .cb {
-        width: 30px;
-        height: 20px;
-    }
-    .align-right{
-        text-align:right;
-    }
-</style>
 <div class="crumbs">您的位置：辅料汇后台 &gt;  会员管理 &gt; 会员列表</div>
 <div class="layout-search">
     <form>
-        <table class="form-table">
+        <table class="member-list-search" width="100%">
             <tr>
-                <td class="align-right">姓 名：</td>
-                <td><input class="input-mobile" name="name" value="@Model.name" /></td>
-                <td class="align-right">手 机：</td>
-                <td><input class="input-mobile" name="mobile" value="@Model.mobile" type="text" placeholder="输入手机号码 进行搜索" /></td>
+                <td class="align-right" width="7%">姓 名：</td>
+                <td width="20%"><input class="input-99" name="name" value="@Model.name" placeholder="输入姓名进行搜索" /></td>
+                <td class="align-right" width="7%">手 机：</td>
+                <td width="20%"><input class="input-99" name="mobile" value="@Model.mobile" type="text" placeholder="" /></td>
 
-                <td class="align-right">行 业：</td>
-                <td><input class="input-mobile" name="industry_no" value="@Model.industry_no" /></td>
+                <td class="align-right" width="7%">行 业：</td>
+                <td width="29%">
+                    <div class="flh-register-list-nr" id="fun-industry_no">
+                        <input class="v-industry_no" type="hidden" name="industry_no" autocomplete="off" value="@Model.industry_no" />
+                        <label class="register-error e-IndustryNo"></label>
+                    </div>
 
             </tr>
             <tr>
                 <td class="align-right">注册时间：</td>
-                <td><input class="input-mobile" name="min_register_date" value="@Model.min_register_date" />-<input class="input-mobile" name="max_register_date" value="@Model.max_register_date" /></td>
+                <td><input class="input-49 calendar" name="min_register_date" value="@Model.min_register_date" />-<input class="input-49 calendar" name="max_register_date" value="@Model.max_register_date" /></td>
                 <td class="align-right">登录时间：</td>
-                <td><input class="input-mobile" name="min_login_date" value="@Model.min_login_date" />-<input class="input-mobile" name="max_login_date" value="@Model.max_login_date" /></td>
+                <td><input class="input-49 calendar" name="min_login_date" value="@Model.min_login_date" />-<input class="input-49 calendar" name="max_login_date" value="@Model.max_login_date" /></td>
                 <td class="align-right">采购权限：</td>
                 <td>
-                <label><input class="cb" type="radio" name="is_purchaser" @(Model.is_purchaser.HasValue && Model.is_purchaser.Value==true ? "checked" : String.Empty) value="True" />有</label>
-                &nbsp;&nbsp;<label><input class="cb" type="radio" name="is_purchaser" @(Model.is_purchaser.HasValue && Model.is_purchaser.Value == false ? "checked" : String.Empty) value="False" />无</label></td>
+                    <label><input class="cb" type="radio" name="is_purchaser" @(Model.is_purchaser.HasValue && Model.is_purchaser.Value == true ? "checked" : String.Empty) value="True" />有</label>
+                    &nbsp;&nbsp;<label><input class="cb" type="radio" name="is_purchaser" @(Model.is_purchaser.HasValue && Model.is_purchaser.Value == false ? "checked" : String.Empty) value="False" />无</label>
+                </td>
             </tr>
-            <tr><td align="center" colspan="6"><button class="btn btn-default" type="submit">搜 索</button></td></tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td align="left" colspan="5"><button class="btn btn-default" type="submit">搜 索</button></td>
+            </tr>
         </table>
     </form>
 </div>
 <div class="common-list">
-    <table class="common-list-table">
-        <tr>
-            <th width="85%">用户信息</th>
-            <th width="25%">操作</th>
-        </tr>
+    <table class="member-list-table">
+        <thead>
+            <tr>
+                <th width="90%" colspan="6">用户信息</th>
+                <th width="10%">操作</th>
+            </tr>
+        </thead>
+
         @if (Model.Items.Any())
         {
             foreach (var item in Model.Items)
             {
-                <tr>
-                    <td>
-                        <table class="common-list-table">
-                            <colgroup>
-                                <col style="width:100px;" />
-                                <col style="width:375px;" />
-                                <col style="width:130px;" />
-                            </colgroup>
-                            <tr>
-                                <td class="align-right">姓 名：</td>
-                            <td>
-                                <a title="点击查看详情页" href="/User/Details/@item.Item.uid" target="_blank">@item.Item.name</a>
-                               <span style="color:#AAA;margin-left:10px;">(ID：@item.Item.uid)</span> 
-                                <span>@(item.Item.enabled ? "" : "已屏蔽")</span>
-                                @if (!item.Item.enabled)
-                                {
-                                    <span>屏蔽备注：@Utility.GetBindStringValue(item.Item.enabled_memo)</span>
-                                }
-                                </td>
-                                <td class="align-right">公 司：</td>
-                                <td>@Utility.GetBindStringValue(item.Item.company) <span style="color:#AAA">（规模：@Flh.Business.Utility.GetEmployeesCount(item.Item.employees_count_type)）</span></td>
-                            </tr>
-                            <tr>
-                                <td class="align-right">地 区：</td>
-                                <td>@Utility.GetBindStringValue(item.area)</td>
-                                <td class="align-right">行 业：</td>
-                                <td>@Utility.GetBindStringValue(item.industry)</td>
-                            </tr>
-                            <tr>
-                                <td class="align-right">手 机：</td>
-                                <td>@Utility.GetBindStringValue(item.Item.mobile)</td>
-                                <td class="align-right">邮 箱：</td>
-                                <td>@Utility.GetBindStringValue(item.Item.email)</td>                           
-                            </tr>
-                            <tr>
-                                <td class="align-right">电 话：</td>
-                                <td>@Utility.GetBindStringValue(item.Item.tel)</td>
-                                <td class="align-right">地 址：</td>
-                                <td>@Utility.GetBindStringValue(item.Item.address)</td>
-                            </tr>
-                            <tr>
-                                <td class="align-right">注册时间：</td>
-                                <td>@item.Item.register_date.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                                <td class="align-right" title="最后登录时间">登录时间：</td>
-                                <td>@item.Item.last_login_date.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                            </tr>
-                            <tr>
-                                <td class="align-right">采购权限：</td>
-                                <td>@(item.Item.is_purchaser ? "有" : "无")</td>
-                                <td class="align-right">发 票：</td>
-                                <td>@(item.Item.neet_invoice?"需要":"不需要")</td>
-                            </tr>
-                        </table>
-                    </td>                      
-                    <td>
-                        <a href="javascript:;">添加跟进记录</a>
-                        <br /><a href="/User/Details/@item.Item.uid" target="_blank">查看详情</a>
-                    </td>             
-                </tr>
+                <tbody>
+                    <tr>
+                        <th width="70">姓 名：</th>
+                        <td width="200">
+                            <a class="v-Name" title="点击查看详情页" href="/User/Details/@item.Item.uid" target="_blank">@item.Item.name</a>
+                            <span style="color:#AAA;margin-left:10px;">(ID：<span class="v-Uid">@item.Item.uid</span>)</span>
+                            @if (!item.Item.enabled)
+                            {
+                                <span style="color:red">@(item.Item.enabled ? "" : "已屏蔽")</span>
+                                <span>屏蔽备注：@Utility.GetBindStringValue(item.Item.enabled_memo)</span>
+                            }
+                        </td>
+                        <th width="70">公 司：</th>
+                        <td width="200">
+                            <span class="v-Company">@Utility.GetBindStringValue(item.Item.company)</span>
+                            <span class="v-Employeesno" style="color:#AAA" data-employeesno="@((byte)item.Item.employees_count_type)">（规模：@Flh.Business.Utility.GetEmployeesCount(item.Item.employees_count_type)）</span> 
+                        </td>
+                        <th width="70">地 区：</th>
+                        <td width="200" class="v-AreaNo" data-areano="@item.Item.area_no">
+
+                            @Utility.GetBindStringValue(item.area)
+                        </td>
+                        <td rowspan="4">
+                            <a class="fun-Modify" href="javascript:;">修改资料</a><br />
+                            <a href="/User/Details/@item.Item.uid" target="_blank">查看详情</a><br />
+                            <a class="fun-addRecord" href="javascript:;">添加跟进记录</a><br />
+                            @if (item.Item.enabled)
+                            {
+                                <a class="fun-shieldUser" href="javascript:;">屏蔽该用户</a>
+                            }
+                            else
+                            {
+                                <a class="text-red fun-openUser" href="javascript:;">取消屏蔽</a>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <th>手 机：</th>
+                        <td class="v-Mobile">@Utility.GetBindStringValue(item.Item.mobile)</td>
+                        <th>电 话：</th>
+                        <td class="v-Tel">@Utility.GetBindStringValue(item.Item.tel)</td>
+                        <th>邮 箱：</th>
+                        <td class="v-Email">@Utility.GetBindStringValue(item.Item.email)</td>
+                    </tr>
+                    <tr>
+                        <th>地 址：</th>
+                        <td class="v-Address">@Utility.GetBindStringValue(item.Item.address)</td>
+                        <th>行 业：</th>
+                        <td class="v-industry" data-industryno="@item.Item.industry_no">@Utility.GetBindStringValue(item.industry)</td>
+                        <th>采购权限：</th>
+                        <td class="v-IsPurchaser">@(item.Item.is_purchaser ? "有" : "无")</td>
+                    </tr>
+                    <tr>
+                        <th>注册时间：</th>
+                        <td>@item.Item.register_date.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <th title="最后登录时间">登录时间：</th>
+                        <td>@item.Item.last_login_date.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <th>发 票：</th>
+                        <td class="v-NeetInvoice">@(item.Item.neet_invoice ? "需要" : "不需要")</td>
+                    </tr>
+                </tbody>
+
             }
         }
         else
         {
-            <tr>
-                <td colspan="5">
-                    @if (Request.QueryString.Count==0)
-                    {
-                        <div style="text-align:center;padding:30px;">请输入查询条件，点击搜索按钮进行搜索</div>
-                    }
-                    else
-                    {
-                        <div style="text-align: center; padding: 30px;">没查到任何记录，您可以改变搜索条件再试试</div>
-                    }
-                </td>
-            </tr>
+            <tbody>
+                <tr>
+                    <td colspan="7">
+                        @if (Request.QueryString.Count == 0)
+                        {
+                            <div style="text-align:center;padding:30px;">请输入查询条件，点击搜索按钮进行搜索</div>
+                        }
+                        else
+                        {
+                            <div style="text-align: center; padding: 30px;">没查到任何记录，您可以改变搜索条件再试试</div>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+
 
         }
     </table>
@@ -137,3 +150,340 @@
 <div class="page">
     @Html.Pager(Model.Items);
 </div>
+<div class="popBox-bg"></div>
+<div class="User-dataEditor popBox">
+    <div class="title" style="border:0px;padding: 16px 0px;">用户资料编辑<span class="btn_close span_close fun_close"></span></div>
+    <div class="dataEditor-main">
+        <div class="dataEditor-main-list dataEditor-Mobile">
+            <span class="dataEditor-main-th">手机：</span>
+            <input class="default-input-ui" type="text" value="" name="Mobile" />
+            <a class="fun-openModify" href="javascript:;">开启修改</a>
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">邮箱：</span>
+            <input class="default-input-ui" type="text" value="" name="Email" placeholder="请输入邮箱" />
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">电话：</span>
+            <input class="default-input-ui" type="text" value="" name="Tel" placeholder="请输入电话号码" />
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">姓名：</span>
+            <input class="default-input-ui" type="text" value="" name="Name" placeholder="请输入姓名" />
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">公司：</span>
+            <input class="default-input-ui" type="text" value="" name="Company" placeholder="请输入公司名称" />
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">地区：</span>
+            <span id="area-selecter">
+                <input class="search-areaNo" type="hidden" name="AreaNo" />
+            </span>
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">详细地址：</span>
+            <textarea class="v-Address default-textarea-ui" placeholder="请输入公司详细地址" name="Address"></textarea>
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">从业人数：</span>
+            <div class="dataEditor-select-nr">
+                <select class="v-EmployeesCountRange" name="EmployeesCountRange">
+                    <option value="">--公司从业人员数--</option>
+                    <option value="1">1-9人</option>
+                    <option value="2">10-99人</option>
+                    <option value="3">100-499人</option>
+                    <option value="4">500-999人</option>
+                    <option value="5">1000人及以上</option>
+                </select>
+            </div>
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">从业类别：</span>
+            <div class="dataEditor-select-nr" id="fun-IndustryNo">
+                <input class="v-IndustryNo" name="IndustryNo" autocomplete="off" value="000100010002" type="hidden">
+            </div>
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">采购权限：</span>
+            <div class="dataEditor-radio-nr default-radio-ui">
+                <label><input class="v-IsPurchaser" name="IsPurchaser" value="true" type="radio">有</label>
+                <label><input class="v-IsPurchaser" name="IsPurchaser" value="false" type="radio">无</label>
+            </div>
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">是否需要发票：</span>
+            <div class="dataEditor-radio-nr default-radio-ui">
+                <label><input class="v-Invoice" name="NeetInvoice" value="false" type="radio">不需要</label>
+                <label><input class="v-Invoice" name="NeetInvoice" value="true" type="radio">需要</label>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <a class="save-btn fun_save" href="javascript:;">保存</a><a class="cancel-btn fun_close" href="javascript:;">取消</a>
+        <input type="hidden" value="" name="Uid" />
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="User-shieldPop popBox">
+    <div class="title" style="border:0px;padding: 16px 0px;">填写屏蔽备注<span class="btn_close span_close fun_close"></span></div>
+    <div class="dataEditor-main">
+        <div class="dataEditor-main-list Module-shieldRemark">
+            <span class="dataEditor-main-th">屏蔽原因：</span>
+            <textarea class="v-shieldRemark default-textarea-ui" placeholder="请填写屏蔽原因" name="enabledMeno"></textarea>
+        </div>
+    </div>
+    <div class="bottom">
+        <a class="save-btn fun-determine " href="javascript:;">确定</a><a class="cancel-btn fun_close" href="javascript:;">取消</a>
+        <input type="hidden" value="" name="Uid" />
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="User-followRecord popBox">
+    <div class="title" style="border:0px;padding: 16px 0px;">填写跟进记录<span class="btn_close span_close fun_close"></span></div>
+    <div class="dataEditor-main">
+        <div class="dataEditor-main-list Module-shieldRemark">
+            <span class="dataEditor-main-th">跟进内容：</span>
+            <textarea class="v-content default-textarea-ui" placeholder="请填写跟进内容" name="content"></textarea>
+        </div>
+        <div class="dataEditor-main-list">
+            <span class="dataEditor-main-th">跟进类型：</span>
+            <div class="dataEditor-radio-nr default-radio-ui">
+                <label style="width:110px;"><input class="v-kind" name="kind" value="1" type="radio">用户主动联系</label>
+                <label style="width:110px;"><input class="v-kind" name="kind" value="2" type="radio">管理员跟进</label>
+            </div>
+        </div>
+    </div>
+    <div class="bottom" style="margin-top:20px;">
+        <a class="save-btn fun-saveRecord " href="javascript:;">保存</a><a class="cancel-btn fun_close" href="javascript:;">取消</a>
+        <input type="hidden" value="" name="Uid" />
+        <div class="clear"></div>
+    </div>
+</div>
+<script>
+    $(function () {
+        //时间控件
+        var calendar = new Calendar({ "bgHover": "#0b69b3", "bgSelect": "#0b69b3", "weekHeaderColor": "#0b69b3", "selector": ".calendar" });
+        calendar.draw();
+        //地区插件
+        var search_area = new areaSelect({
+            "id": "area-selecter",
+            "class": "search-areaNo",
+            "areaType": "3",
+            "defaultVal": $('[name="AreaNo"]').val()   //默认地区,选填
+        });
+        var illi_IndustryNo = $.trim($('.v-industry_no').val());
+        illimitedSelect.init("#fun-industry_no", "industry_no", illi_IndustryNo);
+
+        var IndustryNo = $.trim($('.v-IndustryNo').val());
+        illimitedSelect_two.init("#fun-IndustryNo", "IndustryNo", IndustryNo);
+
+        $('.fun_close').on("click", function () {
+            $('.popBox-bg').hide();
+            $('.popBox').hide();
+        });
+
+        $('.fun-openModify').on('click', function () {
+            $(this).hide();
+            $('.dataEditor-Mobile input').prop("disabled", false);
+        });
+
+        $('.fun-shieldUser').on('click', function () {
+            var _father = $(this).parents("tr"),
+                uid = $('.v-Uid', _father).text(),
+                $pop = $('.User-shieldPop'),
+                pop_mt = $pop.outerHeight() / 2;
+            $('[name="Uid"]', $pop).val(uid);
+            $('[name="enabledMeno"]', $pop).val("");
+            $('.popBox-bg').show();
+            $pop.css("margin-top", "-" + pop_mt + "px").show();
+        });
+
+        $('.fun-addRecord').on('click', function () {
+            var _father = $(this).parents("tr"),
+                uid = $('.v-Uid', _father).text(),
+                $pop = $('.User-followRecord'),
+                pop_mt = $pop.outerHeight() / 2;
+            $('[name="Uid"]', $pop).val(uid);
+            $('[name="content"]', $pop).val("");
+            $('[name="kind"]', $pop).prop("checked", false);
+            $('.popBox-bg').show();
+            $pop.css("margin-top", "-" + pop_mt + "px").show();
+        });
+
+        $('.fun-openUser').on('click', function () {
+            var _this = $(this),
+                _father = _this.parents("tr"),
+                uid = $('.v-Uid', _father).text();
+            _this.text("取消屏蔽中...");
+            $.ajax({
+                type: "post",
+                url: "/User/Update",
+                data: { "userId": v_id, "enabled": false, },
+                dataType: "json",
+                success: function (res) {
+                    window.location.reload();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest);
+                    _this.text("取消屏蔽");
+                }
+            });
+        });
+        function popBoxAdjustment() {
+            var $pop = $('.User-dataEditor'),
+                pop_mt = $pop.outerHeight() / 2;
+            $pop.css("margin-top", "-" + pop_mt + "px");
+        }
+        $('.fun-Modify').on('click', function () {
+            var _this = $(this),
+                _father = _this.parents("tbody"),
+                $pop = $('.User-dataEditor'),
+                pop_mt = $pop.outerHeight() / 2,
+                uid = $('.v-Uid', _father).text(),
+                v_Mobile = $('.v-Mobile', _father).text(),
+                v_Email = $('.v-Email', _father).text(),
+                v_Tel = $('.v-Tel', _father).text(),
+                v_Name = $('.v-Name', _father).text(),
+                v_company = $('.v-Company', _father).text(),
+                v_AreaNo = $('.v-AreaNo', _father).attr("data-areano"),
+                v_Address = $('.v-Address', _father).text(),
+                v_industry = $('.v-industry', _father).attr("data-industryno"),
+                v_Employeesno = $('.v-Employeesno', _father).attr("data-employeesno"),
+                v_IsPurchaser = $('.v_IsPurchaser', _father).text() == "有" ? true : false,
+                v_NeetInvoice = $('.v-NeetInvoice', _father).text() == "需要" ? true : false;
+            $('[name="Uid"]', $pop).val(uid);
+            $('[name="Mobile"]', $pop).val(v_Mobile == "--" ? "" : v_Mobile);
+            $('.dataEditor-Mobile input').prop("disabled", true);
+            $('.dataEditor-Mobile a').show();
+            $('[name="Email"]', $pop).val(v_Email == "--" ? "" : v_Email);
+            $('[name="Tel"]', $pop).val(v_Tel == "--" ? "" : v_Tel);
+            $('[name="Name"]', $pop).val(v_Name);
+            $('[name="Company"]', $pop).val(v_company);
+            search_area.val(v_AreaNo != "" ? v_AreaNo : "");
+            $('[name="Address"]', $pop).val(v_Address == "--" ? "" : v_Address);
+            $('.v-EmployeesCountRange [value="' + v_Employeesno + '"]', $pop).prop("selected", true);
+            illimitedSelect_two.val(v_industry != "" ? v_industry : "");
+            $('.v-IsPurchaser[value="' + v_IsPurchaser + '"]', $pop).prop("checked", true);
+            $('.v-Invoice[value="' + v_NeetInvoice + '"]', $pop).prop("checked", true);
+            $('.popBox-bg').show();
+            $pop.css("margin-top", "-" + pop_mt + "px").show();
+
+        });
+
+        $('.fun-saveRecord').on("click", function () {
+            var $pop = $('.User-followRecord'),
+                _this = $(this),
+                v_id = $('[name="Uid"]', $pop).val() || "",
+                v_content = $('[name="content"]', $pop).val() || "",
+                v_kind = $('[name="kind"]:checked', $pop).val() || "";
+            if (_this.text() != "保存") {
+                return false;
+            } else {
+                if (v_content != "" && v_kind != "") {
+                    _this.text("保存中...")
+                    $.ajax({
+                        type: "post",
+                        url: "/FollowUpRecord/Edit",
+                        data: { "uid": v_id, "content": v_content, "kind": v_kind },
+                        dataType: "json",
+                        success: function (res) {
+                            if (res.code > 0) {
+                                alert(res.msg);
+                                _this.text("保存");
+                            } else {
+                                alert("添加成功!");
+                                _this.text("保存");
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert(XMLHttpRequest);
+                            _this.text("保存");
+                        }
+                    });
+                } else {
+                    alert("请填写内容与类型，谢谢！")
+                }
+            }
+        });
+
+        $('.fun-determine').on('click', function () {
+            var $pop = $('.User-shieldPop'),
+                _this = $(this),
+                v_id = $('[name="Uid"]', $pop).val() || "",
+                v_enabledMeno = $('[name="enabledMeno"]', $pop).val() || "";
+            if (v_enabledMeno == "") {
+                alert("请输入屏蔽备注");
+            } else {
+                _this.text("确定中...");
+                $.ajax({
+                    type: "post",
+                    url: "/User/Update",
+                    data: { "id": v_id, "enabled": true, "enabled_memo": v_enabledMeno },
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code > 0) {
+                            alert(res.msg);
+                            _this.text("确定");
+                        } else {
+                            window.location.reload();
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest);
+                        _this.text("确定");
+                    }
+                });
+            }
+        });
+
+        $('.fun_save').on('click', function () {
+            var _this = $(this),
+                $pop = $('.User-dataEditor'),
+                v_Mobile = $('[name="Mobile"]', $pop).val(),
+                v_Email = $('[name="Email"]', $pop).val(),
+                v_Tel = $('[name="Tel"]', $pop).val(),
+                v_Name = $('[name="Name"]', $pop).val(),
+                v_Company = $('[name="Company"]', $pop).val(),
+                v_AreaNo = $('[name="AreaNo"]', $pop).val(),
+                v_Address = $('[name="Address"]', $pop).val(),
+                v_EmployeesCountRange = $('[name="EmployeesCountRange"]', $pop).val(),
+                v_IndustryNo = $('[name="IndustryNo"]', $pop).val(),
+                v_IsPurchaser = $('[name="IsPurchaser"]:checked', $pop).val(),
+                v_NeetInvoice = $('[name="NeetInvoice"]:checked', $pop).val(),
+                v_uid = $('[name="Uid"]', $pop).val();
+            if (v_Mobile != "" && v_Email != "" && v_Name != "" && v_Company != "" && v_AreaNo != "" && v_EmployeesCountRange != "" && v_IndustryNo != "" && v_IsPurchaser != "" && v_NeetInvoice) {
+                _this.text("保存中...");
+                $.ajax({
+                    type: "post",
+                    url: "/User/Update",
+                    data: {
+                        "id": v_uid,
+                        "mobile": v_Mobile,
+                        "email": v_Email,
+                        "tel": v_Tel,
+                        "name": v_Name,
+                        "company": v_Company,
+                        "area_no": v_AreaNo,
+                        "address": v_Address,
+                        "employees_count_type": v_Mobile,
+                        "industry_no": v_IndustryNo,
+                        "is_purchaser": v_IsPurchaser,
+                        "neet_invoice": v_NeetInvoice
+                    },
+                    dataType: "json",
+                    success: function (res) {
+                        _this.text("保存");
+                        window.location.reload();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest);
+                        _this.text("保存");
+                    }
+                });
+            } else {
+                alert("为了客户资料完善，请填写补全全部信息。")
+            }
+        });
+    });
+</script>

@@ -1,10 +1,11 @@
-﻿@{
+﻿@*说明：已经改为Details.cshtml这个视图*@
+@*@{
     long uid = ViewBag.Uid;
-    ViewBag.Title = "用户详情页";
+    ViewBag.Title = "用户详情页,已经改为Details.cshtml这个视图";
 }
 
-<h2>这是用户详情页</h2>
+<h2>已经换成Details.cshtml这个视图</h2>
 <div>
     <h3>这个回访记录列表</h3>
    @Html.Action("List", "FollowUpRecord", new { id =uid });
-</div>
+</div>*@
