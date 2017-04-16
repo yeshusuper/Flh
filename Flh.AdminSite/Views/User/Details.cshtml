@@ -19,7 +19,7 @@
     <tr>
         <td class="align-right">姓 名：</td>
         <td>
-            <a title="点击查看详情页" href="/User/Details/@Model.Item.uid" target="_blank">@Model.Item.name</a>
+            @Model.Item.name
             <span style="color:#AAA;margin-left:10px;">(ID：@Model.Item.uid)</span>
             <span>@(Model.Item.enabled ? "" : "已屏蔽")</span>
             @if (!Model.Item.enabled)
@@ -61,3 +61,8 @@
         <td>@(Model.Item.neet_invoice ? "需要" : "不需要")</td>
     </tr>
 </table>
+<div>
+    <br />
+    <h2>跟进记录</h2>
+    @Html.Action("List", "FollowUpRecord", new { id = Model.Item.uid });
+</div>
