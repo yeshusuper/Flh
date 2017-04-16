@@ -332,7 +332,7 @@
     <Content Include="Views\User\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\User\Detail.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
